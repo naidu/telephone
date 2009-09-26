@@ -46,6 +46,7 @@
 #import "iTunes.h"
 
 #import "AccountController.h"
+#import "ActiveAccountViewController.h"
 #import "CallController.h"
 #import "PreferenceController.h"
 
@@ -2169,19 +2170,18 @@ static void NameserversChanged(SCDynamicStoreRef store,
 #pragma mark Address Book plug-in notifications
 
 // TODO(eofster): Here we receive contact's name and call destination (phone or
-// SIP address). Then we set text field string value as when the user types in
-// the name directly and Telephone autocomplets input. The result is that
-// Address Book is being searched to find the person record. As an alternative
-// we could send person and selected call destination identifiers and only
-// get another destinations here (no new AB search).
+// SIP address). Then we set text field string value as when the user typed in
+// the name directly and Telephone autocompleted the input. The result is that
+// Address Book is searched for the person record. As an alternative we could
+// send person and selected call destination identifiers and get another
+// destinations here (no new AB search).
 // If we change it to work with identifiers, we'll probably want to somehow
-// change AccountController's tokenField:representedObjectForEditingString:.
+// change ActiveAccountViewController's
+// tokenField:representedObjectForEditingString:.
 - (void)addressBookDidDialCallDestination:(NSNotification *)notification {
-  // Do nothing if there is a modal window.
   if ([NSApp modalWindow] != nil)
     return;
   
-  // Do nothing is there are no accounts in use.
   if ([[self enabledAccountControllers] count] == 0)
     return;
   
@@ -2201,8 +2201,8 @@ static void NameserversChanged(SCDynamicStoreRef store,
   AccountController *firstEnabledAccountController
     = [[self enabledAccountControllers] objectAtIndex:0];
   
-  [[firstEnabledAccountController callDestinationField]
-   setTokenStyle:NSRoundedTokenStyle];
+  [[[firstEnabledAccountController activeAccountViewController]
+    callDestinationField] setTokenStyle:NSRoundedTokenStyle];
   
   [NSApp activateIgnoringOtherApps:YES];
   
@@ -2214,8 +2214,8 @@ static void NameserversChanged(SCDynamicStoreRef store,
     theString = callDestination;
   }
 
-  [[firstEnabledAccountController callDestinationField]
-   setStringValue:theString];
+  [[[firstEnabledAccountController activeAccountViewController]
+    callDestinationField] setStringValue:theString];
   
   if ([[firstEnabledAccountController account] identifier] ==
       kAKSIPUserAgentInvalidIdentifier) {
@@ -2224,8 +2224,7 @@ static void NameserversChanged(SCDynamicStoreRef store,
     [firstEnabledAccountController setAccountRegistered:YES];
     
   } else {
-    [firstEnabledAccountController makeCall:
-     [firstEnabledAccountController callDestinationField]];
+    [[firstEnabledAccountController activeAccountViewController] makeCall:nil];
   }
 }
 
@@ -2242,12 +2241,13 @@ static void NameserversChanged(SCDynamicStoreRef store,
   AccountController *firstEnabledAccountController
     = [[self enabledAccountControllers] objectAtIndex:0];
   
-  NSString *URLString = [[event paramDescriptorForKeyword:keyDirectObject]
-                         stringValue];
+  NSString *URLString
+    = [[event paramDescriptorForKeyword:keyDirectObject] stringValue];
   
   [firstEnabledAccountController setCatchedURLString:URLString];
   
-  if ([[firstEnabledAccountController account] identifier] == kAKSIPUserAgentInvalidIdentifier) {
+  if ([[firstEnabledAccountController account] identifier] ==
+      kAKSIPUserAgentInvalidIdentifier) {
     // Go Available if it's Offline. Make call from the callback.
     [firstEnabledAccountController setAccountRegistered:YES];
   } else {

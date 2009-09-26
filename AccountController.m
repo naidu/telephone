@@ -46,6 +46,7 @@
 #import "AKSIPUserAgent.h"
 #import "AKTelephoneNumberFormatter.h"
 
+#import "ActiveAccountViewController.h"
 #import "AppController.h"
 #import "CallController.h"
 #import "PreferenceController.h"
@@ -71,10 +72,6 @@ static const CGFloat kAccountStatePopUpAvailableGermanWidth = 74.0;
 static const CGFloat kAccountStatePopUpUnavailableGermanWidth = 101.0;
 static const CGFloat kAccountStatePopUpConnectingGermanWidth = 88.0;
 
-// Call destination keys.
-static NSString * const kURI = @"URI";
-static NSString * const kPhoneLabel = @"PhoneLabel";
-
 NSString * const kEmailSIPLabel = @"sip";
 
 NSString * const AKAccountControllerDidChangeUsernameAndPasswordNotification
@@ -85,9 +82,6 @@ NSString * const AKAccountControllerDidChangeUsernameAndPasswordNotification
 
 // Timer for account re-registration in case of registration error.
 @property(nonatomic, assign) NSTimer *reRegistrationTimer;
-
-// Index of a URI in a call destination token.
-@property(nonatomic, assign) NSUInteger callDestinationURIIndex;
 
 // Method to be called when account re-registration timer fires.
 - (void)reRegistrationTimerTick:(NSTimer *)theTimer;
@@ -112,11 +106,9 @@ NSString * const AKAccountControllerDidChangeUsernameAndPasswordNotification
 @synthesize substitutesPlusCharacter = substitutesPlusCharacter_;
 @synthesize plusCharacterSubstitution = plusCharacterSubstitution_;
 
-@synthesize activeAccountView = activeAccountView_;
-@synthesize offlineAccountView = offlineAccountView_;
+@dynamic activeAccountViewController;
+
 @synthesize accountStatePopUp = accountStatePopUp_;
-@synthesize callDestinationField = callDestinationField_;
-@synthesize callDestinationURIIndex = callDestinationURIIndex_;
 
 @synthesize authenticationFailureSheet = authenticationFailureSheet_;
 @synthesize authenticationFailureInformativeText = authenticationFailureInformativeText_;
@@ -235,6 +227,13 @@ NSString * const AKAccountControllerDidChangeUsernameAndPasswordNotification
   }
 }
 
+- (ActiveAccountViewController *)activeAccountViewController {
+  if (activeAccountViewController_ == nil)
+    activeAccountViewController_ = [[ActiveAccountViewController alloc] init];
+  
+  return activeAccountViewController_;
+}
+
 - (id)initWithSIPAccount:(AKSIPAccount *)anAccount {
   self = [super initWithWindowNibName:@"Account"];
   if (self == nil)
@@ -295,10 +294,9 @@ NSString * const AKAccountControllerDidChangeUsernameAndPasswordNotification
   [registrarReachability_ release];
   [plusCharacterSubstitution_ release];
   
-  [activeAccountView_ release];
-  [offlineAccountView_ release];
+  [activeAccountViewController_ release];
+  
   [accountStatePopUp_ release];
-  [callDestinationField_ release];
   [authenticationFailureSheet_ release];
   [authenticationFailureInformativeText_ release];
   [updatedUsernameField_ release];
@@ -316,12 +314,6 @@ NSString * const AKAccountControllerDidChangeUsernameAndPasswordNotification
 - (void)awakeFromNib {
   [self setShouldCascadeWindows:NO];
   [[self window] setFrameAutosaveName:[[self account] SIPAddress]];
-  
-  // Exclude comma from the callDestination tokenizing character set.
-  [[self callDestinationField] setTokenizingCharacterSet:
-   [NSCharacterSet characterSetWithCharactersInString:@""]];
-  
-  [[self callDestinationField] setCompletionDelay:0.4];
 }
 
 - (void)removeAccountFromUserAgent {
@@ -337,102 +329,90 @@ NSString * const AKAccountControllerDidChangeUsernameAndPasswordNotification
   [[[NSApp delegate] userAgent] removeAccount:[self account]];
 }
 
-- (IBAction)makeCall:(id)sender {
-  if ([[[self callDestinationField] objectValue] count] == 0)
-    return;
-  
-  NSDictionary *primaryDestinationDict
-    = [[[[self callDestinationField] objectValue] objectAtIndex:0]
-       objectAtIndex:[self callDestinationURIIndex]];
-  
-  AKSIPURI *originalURI
-    = [[[primaryDestinationDict objectForKey:kURI] copy] autorelease];
-  
-  NSString *phoneLabel = [primaryDestinationDict objectForKey:kPhoneLabel];
-  
-  AKSIPURI *firstURI
-    = [[[[[self callDestinationField] objectValue] objectAtIndex:0]
-        objectAtIndex:0] objectForKey:kURI];
-  
-  if ([[originalURI user] length] == 0)
-    return;
-  
-  AKSIPURI *uri = [[originalURI copy] autorelease];
-  if (![uri isKindOfClass:[AKSIPURI class]])
-    return;
-  
-  if ([[uri user] length] == 0)
-    return;
-  
-  if ([[uri host] length] == 0)
-    [uri setHost:[[[self account] registrationURI] host]];
-  
+- (void)makeCallToURI:(AKSIPURI *)destinationURI
+           phoneLabel:(NSString *)phoneLabel {
   NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-  
   AKTelephoneNumberFormatter *telephoneNumberFormatter
     = [[[AKTelephoneNumberFormatter alloc] init] autorelease];
   [telephoneNumberFormatter setSplitsLastFourDigits:
    [defaults boolForKey:kTelephoneNumberFormatterSplitsLastFourDigits]];
   
-  // Get the clean string of contiguous digits if the user part doesn't contain
-  // letters.
-  if (![[uri user] ak_hasLetters])
-    [uri setUser:[telephoneNumberFormatter telephoneNumberFromString:[uri user]]];
+  NSString *enteredCallDestinationString
+    = [[[destinationURI user] copy] autorelease];
   
-  // Actually, the call will be made to the copy of the URI without display-name
-  // part to prevent another call party from seeing local Address Book records.
-  AKSIPURI *cleanURI = [[uri copy] autorelease];
-  [cleanURI setDisplayName:nil];
+  // Make user part a string of contiguous digits if needed.
+  if (![[destinationURI user] ak_hasLetters]) {
+    [destinationURI setUser:
+     [telephoneNumberFormatter telephoneNumberFromString:
+      [destinationURI user]]];
+  }
   
-  // Substitute plus character if needed.
-  if ([self substitutesPlusCharacter] && [[cleanURI user] hasPrefix:@"+"]) {
-    [cleanURI setUser:
-     [[cleanURI user]
+  // Replace plus character if needed.
+  if ([self substitutesPlusCharacter] &&
+      [[destinationURI user] hasPrefix:@"+"]) {
+    [destinationURI setUser:
+     [[destinationURI user]
       stringByReplacingCharactersInRange:NSMakeRange(0, 1)
                               withString:[self plusCharacterSubstitution]]];
-    [originalURI setUser:
-     [[originalURI user]
-      stringByReplacingCharactersInRange:NSMakeRange(0, 1)
-                              withString:[self plusCharacterSubstitution]]];
+    enteredCallDestinationString
+      = [enteredCallDestinationString
+         stringByReplacingCharactersInRange:NSMakeRange(0, 1)
+                                 withString:[self plusCharacterSubstitution]];
   }
   
   CallController *aCallController
     = [[[CallController alloc] initWithAccountController:self] autorelease];
-  [aCallController setNameFromAddressBook:[firstURI displayName]];
+  [aCallController setNameFromAddressBook:[destinationURI displayName]];
   [aCallController setPhoneLabelFromAddressBook:phoneLabel];
-  [aCallController setEnteredCallDestination:[originalURI user]];
+  [aCallController setEnteredCallDestination:enteredCallDestinationString];
   [[self callControllers] addObject:aCallController];
   
   // Set title.
-  if ([[originalURI host] length] == 0 && ![[originalURI user] ak_hasLetters]) {
-    if ([[originalURI user] ak_isTelephoneNumber] &&
+  if ([[destinationURI host] length] > 0) {
+    [[aCallController window] setTitle:[destinationURI SIPAddress]];
+    
+  } else if (![[destinationURI user] ak_hasLetters]) {
+    if ([[destinationURI user] ak_isTelephoneNumber] &&
         [defaults boolForKey:kFormatTelephoneNumbers]) {
       [[aCallController window] setTitle:
-       [telephoneNumberFormatter stringForObjectValue:[originalURI user]]];
+       [telephoneNumberFormatter stringForObjectValue:[destinationURI user]]];
     } else {
-      [[aCallController window] setTitle:[originalURI user]];
+      [[aCallController window] setTitle:[destinationURI user]];
     }
   } else {
-    [[aCallController window] setTitle:[uri SIPAddress]];
+    NSString *SIPAddress = [NSString stringWithFormat:@"%@@%@",
+                            [destinationURI user],
+                            [[[self account] registrationURI] host]];
+    [[aCallController window] setTitle:SIPAddress];
   }
   
   // Set displayed name.
-  if ([[firstURI displayName] length] == 0) {
-    if ([[originalURI host] length] > 0) {
-      [aCallController setDisplayedName:[uri SIPAddress]];
-    } else if ([[originalURI user] ak_isTelephoneNumber] &&
+  if ([[destinationURI displayName] length] > 0) {
+    [aCallController setDisplayedName:[destinationURI displayName]];
+    
+  } else {
+    if ([[destinationURI host] length] > 0) {
+      [aCallController setDisplayedName:[destinationURI SIPAddress]];
+      
+    } else if ([[destinationURI user] ak_isTelephoneNumber] &&
                [defaults boolForKey:kFormatTelephoneNumbers]) {
       [aCallController setDisplayedName:
-       [telephoneNumberFormatter stringForObjectValue:[originalURI user]]];
+       [telephoneNumberFormatter stringForObjectValue:[destinationURI user]]];
+      
     } else {
-      [aCallController setDisplayedName:[originalURI user]];
+      [aCallController setDisplayedName:[destinationURI user]];
     }
-  } else {
-    [aCallController setDisplayedName:[firstURI displayName]];
   }
   
+  // Clean display-name part of the destination URI to prevent another call
+  // party from seeing local Address Book records.
+  [destinationURI setDisplayName:nil];
+  
+  if ([[destinationURI host] length] == 0)
+    [destinationURI setHost:[[[self account] registrationURI] host]];
+  
   // Set URI for redial.
-  [aCallController setRedialURI:cleanURI];
+  [aCallController setRedialURI:destinationURI];
   
   [[aCallController window] setContentView:[aCallController activeCallView]];
   
@@ -452,7 +432,7 @@ NSString * const AKAccountControllerDidChangeUsernameAndPasswordNotification
   [[aCallController callProgressIndicator] startAnimation:self];
   
   // Finally, make a call.
-  AKSIPCall *aCall = [[self account] makeCallTo:cleanURI];
+  AKSIPCall *aCall = [[self account] makeCallTo:destinationURI];
   if (aCall != nil) {
     [aCallController setCall:aCall];
     [aCallController setCallActive:YES];
@@ -560,10 +540,6 @@ NSString * const AKAccountControllerDidChangeUsernameAndPasswordNotification
   [[sender window] orderOut:self];
 }
 
-- (IBAction)changeCallDestinationURIIndex:(id)sender {
-  [self setCallDestinationURIIndex:[sender tag]];
-}
-
 - (void)showRegistrarConnectionErrorSheetWithError:(NSString *)error {
   NSAlert *alert = [[[NSAlert alloc] init] autorelease];
   [alert addButtonWithTitle:@"OK"];
@@ -611,10 +587,14 @@ NSString * const AKAccountControllerDidChangeUsernameAndPasswordNotification
     itemWithTag:kSIPAccountAvailable] setState:NSOnState];
   [[[[self accountStatePopUp] menu]
     itemWithTag:kSIPAccountUnavailable] setState:NSOffState];
-  [[self window] setContentView:[self activeAccountView]];
   
-  if ([[self callDestinationField] acceptsFirstResponder])
-    [[self window] makeFirstResponder:[self callDestinationField]];
+  [[self window] setContentView:[[self activeAccountViewController] view]];
+  
+  if ([[[self activeAccountViewController] callDestinationField]
+       acceptsFirstResponder]) {
+    [[self window] makeFirstResponder:
+     [[self activeAccountViewController] callDestinationField]];
+  }
 }
 
 - (void)showUnavailableState {
@@ -639,10 +619,14 @@ NSString * const AKAccountControllerDidChangeUsernameAndPasswordNotification
     itemWithTag:kSIPAccountAvailable] setState:NSOffState];
   [[[[self accountStatePopUp] menu]
     itemWithTag:kSIPAccountUnavailable] setState:NSOnState];
-  [[self window] setContentView:[self activeAccountView]];
   
-  if ([[self callDestinationField] acceptsFirstResponder])
-    [[self window] makeFirstResponder:[self callDestinationField]];
+  [[self window] setContentView:[[self activeAccountViewController] view]];
+  
+  if ([[[self activeAccountViewController] callDestinationField]
+       acceptsFirstResponder]) {
+    [[self window] makeFirstResponder:
+     [[self activeAccountViewController] callDestinationField]];
+  }
 }
 
 - (void)showOfflineState {
@@ -667,7 +651,12 @@ NSString * const AKAccountControllerDidChangeUsernameAndPasswordNotification
     itemWithTag:kSIPAccountAvailable] setState:NSOffState];
   [[[[self accountStatePopUp] menu]
     itemWithTag:kSIPAccountUnavailable] setState:NSOffState];
-  [[self window] setContentView:[self offlineAccountView]];
+  
+  NSRect frame = [[[self window] contentView] frame];
+  NSView *emptyView = [[[NSView alloc] initWithFrame:frame] autorelease];
+  NSUInteger autoresizingMask = NSViewWidthSizable | NSViewHeightSizable;
+  [emptyView setAutoresizingMask:autoresizingMask];
+  [[self window] setContentView:emptyView];
 }
 
 - (void)showConnectingState {
@@ -701,7 +690,8 @@ NSString * const AKAccountControllerDidChangeUsernameAndPasswordNotification
   if ([[uri user] length] == 0)
     return;
   
-  [[self callDestinationField] setTokenStyle:NSPlainTextTokenStyle];
+  [[[self activeAccountViewController] callDestinationField]
+   setTokenStyle:NSPlainTextTokenStyle];
   
   NSString *theString;
   if ([[uri host] length] > 0)
@@ -709,8 +699,10 @@ NSString * const AKAccountControllerDidChangeUsernameAndPasswordNotification
   else
     theString = [uri user];
   
-  [[self callDestinationField] setStringValue:theString];
-  [self makeCall:[self callDestinationField]];
+  [[[self activeAccountViewController] callDestinationField]
+   setStringValue:theString];
+  
+  [[self activeAccountViewController] makeCall:nil];
 }
 
 
@@ -769,7 +761,7 @@ NSString * const AKAccountControllerDidChangeUsernameAndPasswordNotification
         [[self window] display];
         
         [self setShouldMakeCall:NO];
-        [self makeCall:[self callDestinationField]];
+        [[self activeAccountViewController] makeCall:nil];
       }
       
       // The user could click a URL.
@@ -1198,834 +1190,6 @@ NSString * const AKAccountControllerDidChangeUsernameAndPasswordNotification
     [self setAttemptingToRegisterAccount:YES];
     [self setAccountRegistered:YES];
   }
-}
-
-
-#pragma mark -
-#pragma mark NSTokenField delegate
-
-// Returns completions based on the Address Book search.
-// A completion string can be in one of two formats: Display Name <1234567> for 
-// person or company name searches, 1234567 (Display Name) for the phone number
-// searches.
-// Sets tokenField sytle to NSRoundedTokenStyle if the substring is found in
-// the Address Book; otherwise, sets tokenField sytle to NSPlainTextTokenStyle.
-- (NSArray *)tokenField:(NSTokenField *)tokenField
-completionsForSubstring:(NSString *)substring
-           indexOfToken:(NSInteger)tokenIndex
-    indexOfSelectedItem:(NSInteger *)selectedIndex {
-  
-  ABAddressBook *AB = [ABAddressBook sharedAddressBook];
-  NSMutableArray *searchElements = [NSMutableArray array];
-  NSArray *substringComponents = [substring componentsSeparatedByString:@" "];
-  
-  ABSearchElement *isPersonRecord
-    = [ABPerson searchElementForProperty:kABPersonFlags
-                                   label:nil
-                                     key:nil
-                                   value:[NSNumber
-                                          numberWithInteger:kABShowAsPerson]
-                              comparison:kABBitsInBitFieldMatch];
-  
-  // Entered substring matches the first name prefix.
-  ABSearchElement *firstNamePrefixMatch
-    = [ABPerson searchElementForProperty:kABFirstNameProperty
-                                   label:nil
-                                     key:nil
-                                   value:substring
-                              comparison:kABPrefixMatchCaseInsensitive];
-  
-  ABSearchElement *firstNamePrefixPersonMatch
-    = [ABSearchElement searchElementForConjunction:kABSearchAnd
-                                          children:[NSArray arrayWithObjects:
-                                                    firstNamePrefixMatch,
-                                                    isPersonRecord,
-                                                    nil]];
-  
-  [searchElements addObject:firstNamePrefixPersonMatch];
-  
-  // Entered substring matches the last name prefix.
-  ABSearchElement *lastNamePrefixMatch
-    = [ABPerson searchElementForProperty:kABLastNameProperty
-                                   label:nil
-                                     key:nil
-                                   value:substring
-                              comparison:kABPrefixMatchCaseInsensitive];
-  
-  ABSearchElement *lastNamePrefixPersonMatch
-    = [ABSearchElement searchElementForConjunction:kABSearchAnd
-                                          children:[NSArray arrayWithObjects:
-                                                    lastNamePrefixMatch,
-                                                    isPersonRecord,
-                                                    nil]];
-  
-  [searchElements addObject:lastNamePrefixPersonMatch];
-  
-  
-  // If entered substring consists of several words separated by spaces,
-  // add searches for all possible combinations of the first and the last names.
-  for (NSUInteger i = 0; i < [substringComponents count] - 1; ++i) {
-    NSMutableString *firstPart = [[[NSMutableString alloc] init] autorelease];
-    NSMutableString *secondPart = [[[NSMutableString alloc] init] autorelease];
-    NSUInteger j;
-    
-    for (j = 0; j <= i; ++j) {
-      if ([firstPart length] > 0)
-        [firstPart appendFormat:@" %@", [substringComponents objectAtIndex:j]];
-      else
-        [firstPart appendString:[substringComponents objectAtIndex:j]];
-    }
-    
-    for (j = i + 1; j < [substringComponents count]; ++j) {
-      if ([secondPart length] > 0)
-        [secondPart appendFormat:@" %@", [substringComponents objectAtIndex:j]];
-      else
-        [secondPart appendString:[substringComponents objectAtIndex:j]];
-    }
-    
-    ABSearchElement *firstNameMatch
-      = [ABPerson searchElementForProperty:kABFirstNameProperty
-                                     label:nil
-                                       key:nil
-                                     value:firstPart
-                                comparison:kABEqualCaseInsensitive];
-    
-    if ([secondPart length] > 0) {
-      // Search element for the prefix match of the last name.
-      lastNamePrefixMatch
-        = [ABPerson searchElementForProperty:kABLastNameProperty
-                                       label:nil
-                                         key:nil
-                                       value:secondPart
-                                  comparison:kABPrefixMatchCaseInsensitive];
-    } else {
-      // Search element for the existence of the last name.
-      lastNamePrefixMatch
-        = [ABPerson searchElementForProperty:kABLastNameProperty
-                                       label:nil
-                                         key:nil
-                                       value:nil
-                                  comparison:kABNotEqual];
-    }
-    
-    ABSearchElement *firstNameAndLastNamePrefixMatch
-      = [ABSearchElement searchElementForConjunction:kABSearchAnd
-                                            children:[NSArray arrayWithObjects:
-                                                      firstNameMatch,
-                                                      lastNamePrefixMatch,
-                                                      isPersonRecord,
-                                                      nil]];
-    
-    [searchElements addObject:firstNameAndLastNamePrefixMatch];
-    
-    // Swap the first and the last names in search.
-    ABSearchElement *lastNameMatch
-      = [ABPerson searchElementForProperty:kABLastNameProperty
-                                     label:nil
-                                       key:nil
-                                     value:firstPart
-                                comparison:kABEqualCaseInsensitive];
-    
-    if ([secondPart length] > 0) {
-      // Search element for the prefix match of the first name.
-      firstNamePrefixMatch
-        = [ABPerson searchElementForProperty:kABFirstNameProperty
-                                       label:nil
-                                         key:nil
-                                       value:secondPart
-                                  comparison:kABPrefixMatchCaseInsensitive];
-    } else {
-      // Search element for the existence of the first name.
-      firstNamePrefixMatch
-        = [ABPerson searchElementForProperty:kABFirstNameProperty
-                                       label:nil
-                                         key:nil
-                                       value:nil
-                                  comparison:kABNotEqual];
-    }
-    
-    ABSearchElement *lastNameAndFirstNamePrefixMatch
-      = [ABSearchElement searchElementForConjunction:kABSearchAnd
-                                            children:[NSArray arrayWithObjects:
-                                                      lastNameMatch,
-                                                      firstNamePrefixMatch,
-                                                      isPersonRecord,
-                                                      nil]];
-    
-    [searchElements addObject:lastNameAndFirstNamePrefixMatch];
-  }
-  
-  ABSearchElement *isCompanyRecord
-    = [ABPerson searchElementForProperty:kABPersonFlags
-                                   label:nil
-                                     key:nil
-                                   value:[NSNumber
-                                          numberWithInteger:kABShowAsCompany]
-                              comparison:kABBitsInBitFieldMatch];
-  
-  // Entered substring matches company name prefix.
-  ABSearchElement *companyPrefixMatch
-    = [ABPerson searchElementForProperty:kABOrganizationProperty
-                                   label:nil
-                                     key:nil
-                                   value:substring
-                              comparison:kABPrefixMatchCaseInsensitive];
-  
-  // Don't bother if the AB record is not a company record.
-  ABSearchElement *companyPrefixAndIsCompanyRecord
-    = [ABSearchElement searchElementForConjunction:kABSearchAnd
-                                          children:[NSArray arrayWithObjects:
-                                                    companyPrefixMatch,
-                                                    isCompanyRecord,
-                                                    nil]];
-  
-  [searchElements addObject:companyPrefixAndIsCompanyRecord];
-  
-  // Entered substring matches phone number prefix.
-  ABSearchElement *phoneNumberPrefixMatch
-    = [ABPerson searchElementForProperty:kABPhoneProperty
-                                   label:nil
-                                     key:nil
-                                   value:substring
-                              comparison:kABPrefixMatch];
-  
-  [searchElements addObject:phoneNumberPrefixMatch];
-  
-  // Entered substing matches SIP address prefix. (SIP address is the email
-  // with AKEmailSIPLabel label.) If you set the label to AKEmailSIPLabel,
-  // it will find only the first email with that label. So, find all emails and
-  // filter them later.
-  ABSearchElement *SIPAddressPrefixMatch
-    = [ABPerson searchElementForProperty:kABEmailProperty
-                                   label:nil
-                                     key:nil
-                                   value:substring
-                              comparison:kABPrefixMatchCaseInsensitive];
-  
-  [searchElements addObject:SIPAddressPrefixMatch];
-  
-  ABSearchElement *compoundMatch
-    = [ABSearchElement searchElementForConjunction:kABSearchOr
-                                          children:searchElements];
-  
-  // Perform Address Book search.
-  NSArray *recordsFound = [AB recordsMatchingSearchElement:compoundMatch];
-  
-
-  // Populate the completions array.
-  
-  NSMutableArray *completions
-    = [NSMutableArray arrayWithCapacity:[recordsFound count]];
-  
-  for (id theRecord in recordsFound) {
-    if (![theRecord isKindOfClass:[ABPerson class]])
-      continue;
-    
-    NSString *firstName = [theRecord valueForProperty:kABFirstNameProperty];
-    NSString *lastName = [theRecord valueForProperty:kABLastNameProperty];
-    NSString *company = [theRecord valueForProperty:kABOrganizationProperty];
-    ABMultiValue *phones = [theRecord valueForProperty:kABPhoneProperty];
-    ABMultiValue *emails = [theRecord valueForProperty:kABEmailProperty];
-    NSInteger personFlags = [[theRecord valueForProperty:kABPersonFlags] integerValue];
-    BOOL isPerson = (personFlags & kABShowAsMask) == kABShowAsPerson;
-    BOOL isCompany = (personFlags & kABShowAsMask) == kABShowAsCompany;
-    NSUInteger i;
-    
-    // Check for the phone number match.
-    // Display completion as 1234567 (Display Name).
-    for (i = 0; i < [phones count]; ++i) {
-      NSString *phoneNumber = [phones valueAtIndex:i];
-      
-      NSRange range = [phoneNumber rangeOfString:substring];
-      if (range.location == 0) {
-        NSString *completionString = nil;
-        if ([[theRecord ak_fullName] length] > 0) {
-          completionString = [NSString stringWithFormat:@"%@ (%@)",
-                              phoneNumber, [theRecord ak_fullName]];
-        } else {
-          completionString = phoneNumber;
-        }
-        
-        if (completionString != nil)
-          [completions addObject:completionString];
-      }
-    }
-    
-    // Check if the substing matches email labelled as AKEmailSIPLabel.
-    // Display completion as email_address (Display Name).
-    for (i = 0; i < [emails count]; ++i) {
-      if ([[emails labelAtIndex:i] caseInsensitiveCompare:kEmailSIPLabel]
-          != NSOrderedSame)
-        continue;
-      
-      NSString *anEmail = [emails valueAtIndex:i];
-      
-      NSRange range = [anEmail rangeOfString:substring
-                                     options:NSCaseInsensitiveSearch];
-      if (range.location == 0) {
-        NSString *completionString = nil;
-        
-        if ([[theRecord ak_fullName] length] > 0)
-          completionString = [NSString stringWithFormat:@"%@ (%@)",
-                              anEmail, [theRecord ak_fullName]];
-        else
-          completionString = anEmail;
-        
-        if (completionString != nil)
-          [completions addObject:completionString];
-      }
-    }
-    
-    
-    // Check for first name, last name or company name match.
-    
-    // Determine the contact name including first and last names ordering.
-    // Skip if it's not the name match.
-    NSString *contactName = nil;
-    if (isPerson) {
-      NSString *firstNameFirst
-        = [NSString stringWithFormat:@"%@ %@", firstName, lastName];
-      NSString *lastNameFirst
-        = [NSString stringWithFormat:@"%@ %@", lastName, firstName];
-      NSRange firstNameFirstRange
-        = [firstNameFirst rangeOfString:substring
-                                options:NSCaseInsensitiveSearch];
-      NSRange lastNameFirstRange
-        = [lastNameFirst rangeOfString:substring
-                               options:NSCaseInsensitiveSearch];
-      NSRange firstNameRange
-        = [firstName rangeOfString:substring options:NSCaseInsensitiveSearch];
-      NSRange
-        lastNameRange = [lastName rangeOfString:substring
-                                        options:NSCaseInsensitiveSearch];
-      
-      // Continue if the substing does not match person name prefix.
-      if (firstNameRange.location != 0 && lastNameRange.location != 0 &&
-          firstNameFirstRange.location != 0 && lastNameFirstRange.location != 0)
-        continue;
-      
-      if ([firstName length] > 0 && [lastName length] > 0) {
-        // Determine the order of names in the full name the user is looking for.
-        if (firstNameFirstRange.location == 0) {
-          contactName = [NSString stringWithFormat:@"%@ %@", firstName, lastName];
-        } else {
-          contactName = [NSString stringWithFormat:@"%@ %@", lastName, firstName];
-        }
-        
-      } else if ([firstName length] > 0) {
-        contactName = firstName;
-      } else if ([lastName length] > 0) {
-        contactName = lastName;
-      }
-      
-    } else if (isCompany) {
-      // Continue if the substring does not match company name prefix.
-      NSRange companyNamePrefixRange
-        = [company rangeOfString:substring options:NSCaseInsensitiveSearch];
-      if (companyNamePrefixRange.location != 0)
-        continue;
-      
-      if ([company length] > 0)
-        contactName = company;
-    }
-    
-    if (contactName == nil)
-      continue;
-    
-    // Add phone numbers. Display completion as Display Name <1234567>.
-    for (i = 0; i < [phones count]; ++i) {
-      NSString *phoneNumber = [phones valueAtIndex:i];
-      NSString *completionString = nil;
-      
-      if (contactName != nil) {
-        completionString = [NSString stringWithFormat:@"%@ <%@>",
-                            contactName, phoneNumber];
-      } else {
-        completionString = phoneNumber;
-      }
-      
-      if (completionString != nil)
-        [completions addObject:completionString];
-    }
-    
-    // Add SIP address from the email fields labelled as AKEmailSIPLabel.
-    // Display completion as Display Name <email_address>
-    for (i = 0; i < [emails count]; ++i) {
-      if ([[emails labelAtIndex:i] caseInsensitiveCompare:kEmailSIPLabel]
-          != NSOrderedSame)
-        continue;
-      
-      NSString *anEmail = [emails valueAtIndex:i];
-      NSString *completionString = nil;
-      
-      if (contactName != nil) {
-        completionString = [NSString stringWithFormat:@"%@ <%@>",
-                            contactName, anEmail];
-      } else {
-        completionString = anEmail;
-      }
-      
-      if (completionString != nil)
-        [completions addObject:completionString];
-    }
-  }
-  
-  
-  // Preserve string capitalization according to the user input.
-  if ([completions count] > 0) {
-    NSRange searchedStringRange
-      = [[completions objectAtIndex:0] rangeOfString:substring
-                                             options:NSCaseInsensitiveSearch];
-    if (searchedStringRange.location == 0) {
-      NSRange replaceRange = NSMakeRange(0, [substring length]);
-      NSString *newFirstElement
-        = [[completions objectAtIndex:0]
-           stringByReplacingCharactersInRange:replaceRange withString:substring];
-      [completions replaceObjectAtIndex:0 withObject:newFirstElement];
-    }
-  }
-  
-  // Set appropriate token style depending on the search success.
-  if ([completions count] > 0)
-    [tokenField setTokenStyle:NSRoundedTokenStyle];
-  else
-    [tokenField setTokenStyle:NSPlainTextTokenStyle];
-  
-  return [[completions copy] autorelease];
-}
-
-// Converts input text to the array of dictionaries containing AKSIPURIs and
-// phone labels (mobile, home, etc). Dictionary keys are AKURI and AKPhoneLabel.
-// If there is no @ sign, the input is treated as a user part of the URI and
-// host part will be nil.
-- (id)tokenField:(NSTokenField *)tokenField
-representedObjectForEditingString:(NSString *)editingString {
-  
-  AKSIPURIFormatter *SIPURIFormatter
-    = [[[AKSIPURIFormatter alloc] init] autorelease];
-  AKSIPURI *theURI = [SIPURIFormatter SIPURIFromString:editingString];
-  if (theURI == nil)
-    return nil;
-  
-  ABAddressBook *AB = [ABAddressBook sharedAddressBook];
-  NSArray *recordsFound;
-  
-  NSAssert(([[theURI user] length] > 0),
-           @"User part of the URI must not have zero length in this context");
-  
-  ABSearchElement *phoneNumberMatch
-    = [ABPerson searchElementForProperty:kABPhoneProperty
-                                   label:nil
-                                     key:nil
-                                   value:[theURI user]
-                              comparison:kABEqual];
-  
-  ABSearchElement *SIPAddressMatch
-    = [ABPerson searchElementForProperty:kABEmailProperty
-                                   label:nil
-                                     key:nil
-                                   value:[theURI SIPAddress]
-                              comparison:kABEqualCaseInsensitive];
-  
-  NSString *displayedName = [theURI displayName];
-  if ([displayedName length] > 0) {
-    NSMutableArray *searchElements = [[[NSMutableArray alloc] init] autorelease];
-    
-    // displayedName matches the first name.
-    ABSearchElement *firstNameMatch
-      = [ABPerson searchElementForProperty:kABFirstNameProperty
-                                     label:nil
-                                       key:nil
-                                     value:displayedName
-                                comparison:kABEqualCaseInsensitive];
-    
-    ABSearchElement *firstNameAndPhoneNumberMatch
-      = [ABSearchElement searchElementForConjunction:kABSearchAnd
-                                            children:[NSArray arrayWithObjects:
-                                                      firstNameMatch,
-                                                      phoneNumberMatch,
-                                                      nil]];
-    
-    [searchElements addObject:firstNameAndPhoneNumberMatch];
-    
-    ABSearchElement *firstNameAndSIPAddressMatch
-      = [ABSearchElement searchElementForConjunction:kABSearchAnd
-                                            children:[NSArray arrayWithObjects:
-                                                      firstNameMatch,
-                                                      SIPAddressMatch,
-                                                      nil]];
-    
-    [searchElements addObject:firstNameAndSIPAddressMatch];
-    
-    // displayedName matches the last name.
-    ABSearchElement *lastNameMatch
-      = [ABPerson searchElementForProperty:kABLastNameProperty
-                                     label:nil
-                                       key:nil
-                                     value:displayedName
-                                comparison:kABEqualCaseInsensitive];
-    
-    ABSearchElement *lastNameAndPhoneNumberMatch
-      = [ABSearchElement searchElementForConjunction:kABSearchAnd
-                                            children:[NSArray arrayWithObjects:
-                                                      lastNameMatch,
-                                                      phoneNumberMatch,
-                                                      nil]];
-    
-    [searchElements addObject:lastNameAndPhoneNumberMatch];
-    
-    ABSearchElement *lastNameAndSIPAddressMatch
-      = [ABSearchElement searchElementForConjunction:kABSearchAnd
-                                            children:[NSArray arrayWithObjects:
-                                                      lastNameMatch,
-                                                      SIPAddressMatch,
-                                                      nil]];
-    
-    [searchElements addObject:lastNameAndSIPAddressMatch];
-    
-    // Add person searches for all combination of displayedName components
-    // separated by space.
-    NSArray *displayedNameComponents
-      = [displayedName componentsSeparatedByString:@" "];
-    for (NSUInteger i = 0; i < [displayedNameComponents count] - 1; ++i) {
-      NSMutableString *firstPart = [[[NSMutableString alloc] init] autorelease];
-      NSMutableString *secondPart = [[[NSMutableString alloc] init] autorelease];
-      NSUInteger j;
-      
-      for (j = 0; j <= i; ++j) {
-        if ([firstPart length] > 0)
-          [firstPart appendFormat:@" %@",
-           [displayedNameComponents objectAtIndex:j]];
-        else
-          [firstPart appendString:[displayedNameComponents objectAtIndex:j]];
-      }
-      
-      for (j = i + 1; j < [displayedNameComponents count]; ++j) {
-        if ([secondPart length] > 0)
-          [secondPart appendFormat:@" %@",
-           [displayedNameComponents objectAtIndex:j]];
-        else
-          [secondPart appendString:[displayedNameComponents objectAtIndex:j]];
-      }
-      
-      firstNameMatch
-        = [ABPerson searchElementForProperty:kABFirstNameProperty
-                                       label:nil
-                                         key:nil
-                                       value:firstPart
-                                  comparison:kABEqualCaseInsensitive];
-      lastNameMatch
-        = [ABPerson searchElementForProperty:kABLastNameProperty
-                                       label:nil
-                                         key:nil
-                                       value:secondPart
-                                  comparison:kABEqualCaseInsensitive];
-      
-      ABSearchElement *fullNameAndPhoneNumberMatch
-        = [ABSearchElement searchElementForConjunction:kABSearchAnd
-                                              children:[NSArray arrayWithObjects:
-                                                        firstNameMatch,
-                                                        lastNameMatch,
-                                                        phoneNumberMatch,
-                                                        nil]];
-      
-      [searchElements addObject:fullNameAndPhoneNumberMatch];
-      
-      ABSearchElement *fullNameAndSIPAddressMatch
-        = [ABSearchElement searchElementForConjunction:kABSearchAnd
-                                              children:[NSArray arrayWithObjects:
-                                                        firstNameMatch,
-                                                        lastNameMatch,
-                                                        SIPAddressMatch,
-                                                        nil]];
-      
-      [searchElements addObject:fullNameAndSIPAddressMatch];
-      
-      // Swap the first and the last names.
-      firstNameMatch
-        = [ABPerson searchElementForProperty:kABFirstNameProperty
-                                       label:nil
-                                         key:nil
-                                       value:secondPart
-                                  comparison:kABEqualCaseInsensitive];
-      lastNameMatch
-        = [ABPerson searchElementForProperty:kABLastNameProperty
-                                       label:nil
-                                         key:nil
-                                       value:firstPart
-                                  comparison:kABEqualCaseInsensitive];
-      
-      fullNameAndPhoneNumberMatch
-        = [ABSearchElement searchElementForConjunction:kABSearchAnd
-                                              children:[NSArray arrayWithObjects:
-                                                        firstNameMatch,
-                                                        lastNameMatch,
-                                                        phoneNumberMatch,
-                                                        nil]];
-      
-      [searchElements addObject:fullNameAndPhoneNumberMatch];
-      
-      fullNameAndSIPAddressMatch
-        = [ABSearchElement searchElementForConjunction:kABSearchAnd
-                                              children:[NSArray arrayWithObjects:
-                                                        firstNameMatch,
-                                                        lastNameMatch,
-                                                        SIPAddressMatch,
-                                                        nil]];
-      
-      [searchElements addObject:fullNameAndSIPAddressMatch];
-    }
-    
-    // Add organization search.
-    ABSearchElement *organizationMatch
-      = [ABPerson searchElementForProperty:kABOrganizationProperty
-                                     label:nil
-                                       key:nil
-                                     value:displayedName
-                                comparison:kABEqualCaseInsensitive];
-    
-    ABSearchElement *organizationAndPhoneNumberMatch
-      = [ABSearchElement searchElementForConjunction:kABSearchAnd
-                                            children:[NSArray arrayWithObjects:
-                                                      organizationMatch,
-                                                      phoneNumberMatch,
-                                                      nil]];
-    
-    [searchElements addObject:organizationAndPhoneNumberMatch];
-    
-    ABSearchElement *organizationAndSIPAddressMatch
-      = [ABSearchElement searchElementForConjunction:kABSearchAnd
-                                            children:[NSArray arrayWithObjects:
-                                                      organizationMatch,
-                                                      SIPAddressMatch,
-                                                      nil]];
-    
-    [searchElements addObject:organizationAndSIPAddressMatch];
-    
-    ABSearchElement *compoundMatch
-      = [ABSearchElement searchElementForConjunction:kABSearchOr
-                                            children:searchElements];
-    
-    recordsFound = [AB recordsMatchingSearchElement:compoundMatch];
-    
-  } else {
-    recordsFound = [AB recordsMatchingSearchElement:phoneNumberMatch];
-  }
-  
-  NSMutableArray *callDestinations = [[[NSMutableArray alloc] init] autorelease];
-  NSUInteger destinationIndex = 0;
-  
-  if ([recordsFound count] > 0) {
-    ABRecord *theRecord = [recordsFound objectAtIndex:0];
-    
-    if ([[theRecord ak_fullName] length] > 0)
-      [theURI setDisplayName:[theRecord ak_fullName]];
-    
-    // Get phones.
-    AKTelephoneNumberFormatter *telephoneNumberFormatter
-      = [[[AKTelephoneNumberFormatter alloc] init] autorelease];
-    ABMultiValue *phones = [theRecord valueForProperty:kABPhoneProperty];
-    for (NSUInteger i = 0; i < [phones count]; ++i) {
-      NSString *phoneNumber = [phones valueAtIndex:i];
-      NSString *localizedPhoneLabel = [AB ak_localizedLabel:[phones labelAtIndex:i]];
-      
-      AKSIPURI *uri = [SIPURIFormatter SIPURIFromString:phoneNumber];
-      [uri setDisplayName:[theURI displayName]];
-      [callDestinations addObject:[NSDictionary dictionaryWithObjectsAndKeys:
-                                   uri, kURI,
-                                   localizedPhoneLabel, kPhoneLabel,
-                                   nil]];
-      
-      // If we've met entered URI, store its index.
-      NSRange atSignRange = [phoneNumber rangeOfString:@"@"];
-      if (atSignRange.location == NSNotFound && [[theURI host] length] == 0) {
-        // No @ sign, treat as telephone number.
-        if ([[telephoneNumberFormatter telephoneNumberFromString:phoneNumber]
-             isEqualToString:
-             [telephoneNumberFormatter telephoneNumberFromString:[theURI user]]])
-        {
-          destinationIndex = [callDestinations count] - 1;
-        }
-      } else {
-        if ([phoneNumber isEqualToString:[theURI SIPAddress]]) {
-          destinationIndex = [callDestinations count] - 1;
-        }
-      }
-    }
-    
-    // Get SIP addresses.
-    ABMultiValue *emails = [theRecord valueForProperty:kABEmailProperty];
-    for (NSUInteger i = 0; i < [emails count]; ++i) {
-      if ([[emails labelAtIndex:i] caseInsensitiveCompare:kEmailSIPLabel]
-          != NSOrderedSame)
-        continue;
-      
-      NSString *anEmail = [emails valueAtIndex:i];
-      NSString *localizedPhoneLabel = [AB ak_localizedLabel:kEmailSIPLabel];
-      
-      AKSIPURI *uri = [SIPURIFormatter SIPURIFromString:anEmail];
-      [uri setDisplayName:[theURI displayName]];
-      [callDestinations addObject:[NSDictionary dictionaryWithObjectsAndKeys:
-                                   uri, kURI,
-                                   localizedPhoneLabel, kPhoneLabel,
-                                   nil]];
-      
-      // If we've met entered URI, store its index.
-      if ([anEmail caseInsensitiveCompare:[theURI SIPAddress]] == NSOrderedSame) {
-        destinationIndex = [callDestinations count] - 1;
-      }
-    }
-    
-  } else {
-    [callDestinations addObject:[NSDictionary dictionaryWithObjectsAndKeys:
-                                 theURI, kURI,
-                                 @"", kPhoneLabel, nil]];
-  }
-  
-  // First URI in the array is the default call destination.
-  [self setCallDestinationURIIndex:destinationIndex];
-  
-  return [[callDestinations copy] autorelease];
-}
-
-- (NSString *)tokenField:(NSTokenField *)tokenField
-displayStringForRepresentedObject:(id)representedObject {
-  
-  if (![representedObject isKindOfClass:[NSArray class]])
-    return nil;
-  
-  AKSIPURI *uri
-    = [[representedObject objectAtIndex:[self callDestinationURIIndex]]
-       objectForKey:kURI];
-  
-  NSString *returnString = nil;
-  
-  if ([[uri displayName] length] > 0) {
-    returnString = [uri displayName];
-    
-  } else if ([[uri host] length] > 0) {
-    NSAssert(([[uri user] length] > 0),
-             @"User part of the URI must not have zero length in this context");
-    
-    returnString = [uri SIPAddress];
-    
-  } else {
-    NSAssert(([[uri user] length] > 0),
-             @"User part of the URI must not have zero length in this context");
-    
-    if ([[uri user] ak_isTelephoneNumber]) {
-      AKTelephoneNumberFormatter *formatter
-        = [[[AKTelephoneNumberFormatter alloc] init] autorelease];
-      [formatter setSplitsLastFourDigits:
-       [[NSUserDefaults standardUserDefaults]
-        boolForKey:kTelephoneNumberFormatterSplitsLastFourDigits]];
-      returnString = [formatter stringForObjectValue:[uri user]];
-      
-    } else {
-      returnString = [uri user];
-    }
-  }
-  
-  return returnString;
-}
-
-- (NSString *)tokenField:(NSTokenField *)tokenField
-editingStringForRepresentedObject:(id)representedObject {
-  
-  if (![representedObject isKindOfClass:[NSArray class]])
-    return nil;
-  
-  AKSIPURI *uri
-    = [[representedObject objectAtIndex:[self callDestinationURIIndex]]
-       objectForKey:kURI];
-  
-  NSAssert(([[uri user] length] > 0),
-           @"User part of the URI must not have zero length in this context");
-  
-  NSString *returnString = nil;
-  
-  if ([[uri displayName] length] > 0) {
-    if ([[uri host] length] > 0) {
-      returnString = [NSString stringWithFormat:@"%@ <%@>",
-                      [uri displayName], [uri SIPAddress]];
-    } else {
-      returnString =  [NSString stringWithFormat:@"%@ <%@>",
-                       [uri displayName], [uri user]];
-    }
-  } else if ([[uri host] length] > 0) {
-    returnString =  [uri SIPAddress];
-    
-  } else {
-    returnString =  [uri user];
-  }
-  
-  return returnString;
-}
-
-- (BOOL)tokenField:(NSTokenField *)tokenField
-hasMenuForRepresentedObject:(id)representedObject {
-  
-  AKSIPURI *uri
-    = [[representedObject objectAtIndex:[self callDestinationURIIndex]]
-       objectForKey:kURI];
-  
-  if ([representedObject isKindOfClass:[NSArray class]] &&
-      [[uri displayName] length] > 0)
-    return YES;
-  else
-    return NO;
-}
-
-- (NSMenu *)tokenField:(NSTokenField *)tokenField
-menuForRepresentedObject:(id)representedObject {
-  
-  NSMenu *tokenMenu = [[[NSMenu alloc] init] autorelease];
-  
-  for (NSUInteger i = 0; i < [representedObject count]; ++i) {
-    AKSIPURI *uri = [[representedObject objectAtIndex:i] objectForKey:kURI];
-    
-    NSString *phoneLabel
-      = [[representedObject objectAtIndex:i] objectForKey:kPhoneLabel];
-    
-    NSMenuItem *menuItem = [[[NSMenuItem alloc] init] autorelease];
-    
-    AKTelephoneNumberFormatter *formatter
-      = [[[AKTelephoneNumberFormatter alloc] init] autorelease];
-    [formatter setSplitsLastFourDigits:
-     [[NSUserDefaults standardUserDefaults]
-      boolForKey:kTelephoneNumberFormatterSplitsLastFourDigits]];
-    
-    if ([[uri host] length] > 0) {
-      [menuItem setTitle:[NSString stringWithFormat:@"%@: %@",
-                          phoneLabel, [uri SIPAddress]]];
-      
-    } else if ([[uri user] ak_isTelephoneNumber]) {
-      [menuItem setTitle:[NSString stringWithFormat:@"%@: %@",
-                          phoneLabel,
-                          [formatter stringForObjectValue:[uri user]]]];
-    } else {
-      [menuItem setTitle:[NSString stringWithFormat:@"%@: %@",
-                          phoneLabel, [uri user]]];
-    }
-    
-    [menuItem setTag:i];
-    [menuItem setAction:@selector(changeCallDestinationURIIndex:)];
-    
-    [tokenMenu addItem:menuItem];
-  }
-  
-  [[tokenMenu itemWithTag:[self callDestinationURIIndex]] setState:NSOnState];
-  
-  return tokenMenu;
-}
-
-- (NSArray *)tokenField:(NSTokenField *)tokenField
-       shouldAddObjects:(NSArray *)tokens
-                atIndex:(NSUInteger)index {
-  if (index > 0)
-    return nil;
-  else
-    return tokens;
 }
 
 @end

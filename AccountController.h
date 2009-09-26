@@ -49,7 +49,8 @@ extern NSString * const kEmailSIPLabel;
 // username and password.
 extern NSString * const AKAccountControllerDidChangeUsernameAndPasswordNotification;
 
-@class AKSIPAccount, AKNetworkReachability;
+@class AKSIPAccount, AKSIPURI, AKNetworkReachability;
+@class ActiveAccountViewController;
 
 // A SIP account controller.
 @interface AccountController : NSWindowController <AKSIPAccountDelegate> {
@@ -69,11 +70,9 @@ extern NSString * const AKAccountControllerDidChangeUsernameAndPasswordNotificat
   BOOL substitutesPlusCharacter_;
   NSString *plusCharacterSubstitution_;
   
-  NSView *activeAccountView_;
-  NSView *offlineAccountView_;
+  ActiveAccountViewController *activeAccountViewController_;
+  
   NSPopUpButton *accountStatePopUp_;
-  NSTokenField *callDestinationField_;
-  NSUInteger callDestinationURIIndex_;
   
   // Authentication failure sheet elements.
   NSWindow *authenticationFailureSheet_;
@@ -131,19 +130,14 @@ extern NSString * const AKAccountControllerDidChangeUsernameAndPasswordNotificat
 // A replacement for the plus character in the phone number.
 @property(nonatomic, copy) NSString *plusCharacterSubstitution;
 
+// An active account view controller.
+@property(nonatomic, readonly) ActiveAccountViewController *activeAccountViewController;
+
+
 // Outlets.
-
-// Active account view outlet.
-@property(nonatomic, retain) IBOutlet NSView *activeAccountView;
-
-// Offline account view outlet.
-@property(nonatomic, retain) IBOutlet NSView *offlineAccountView;
 
 // Account state pop-up button outlet.
 @property(nonatomic, retain) IBOutlet NSPopUpButton *accountStatePopUp;
-
-// Call destination token field outlet.
-@property(nonatomic, retain) IBOutlet NSTokenField *callDestinationField;
 
 // Authentication failure sheet outlet.
 @property(nonatomic, retain) IBOutlet NSWindow *authenticationFailureSheet;
@@ -178,8 +172,11 @@ extern NSString * const AKAccountControllerDidChangeUsernameAndPasswordNotificat
 // Removes account from the user agent.
 - (void)removeAccountFromUserAgent;
 
-// Makes a call.
-- (IBAction)makeCall:(id)sender;
+// Makes a call to a given destination URI with a given phone label.
+// Host part of the |destinationURI| can be empty, in which case host part from
+// the account's |registrationURI| will be taken.
+- (void)makeCallToURI:(AKSIPURI *)destinationURI
+           phoneLabel:(NSString *)phoneLabel;
 
 // Changes account state.
 - (IBAction)changeAccountState:(id)sender;
@@ -189,9 +186,6 @@ extern NSString * const AKAccountControllerDidChangeUsernameAndPasswordNotificat
 
 // Closes a sheet.
 - (IBAction)closeSheet:(id)sender;
-
-// Changes the active SIP URI index in the call destination token.
-- (IBAction)changeCallDestinationURIIndex:(id)sender;
 
 // Shows alert saying that connection to the registrar failed.
 - (void)showRegistrarConnectionErrorSheetWithError:(NSString *)error;

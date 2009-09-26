@@ -295,8 +295,8 @@ static const NSTimeInterval kRedialButtonReenableTime = 1.0;
 - (IBAction)redial:(id)sender {
   if (![[[NSApp delegate] userAgent] isStarted] ||
       ![[self accountController] isEnabled] ||
-      [[[[self accountController] window] contentView] isEqual:
-       [[self accountController] offlineAccountView]] ||
+      ![[[[self accountController] window] contentView] isEqual:
+        [[[self accountController] activeAccountViewController] view]] ||
       [self redialURI] == nil) {
     return;
   }

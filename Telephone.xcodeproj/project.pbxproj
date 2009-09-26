@@ -27,6 +27,7 @@
 		AA2ED9A50F05B5C6004A13C6 /* Preferences.xib in Resources */ = {isa = PBXBuildFile; fileRef = AA2ED9A40F05B5C6004A13C6 /* Preferences.xib */; };
 		AA2ED9AC0F05BA11004A13C6 /* AddAccount.xib in Resources */ = {isa = PBXBuildFile; fileRef = AA2ED9AB0F05BA11004A13C6 /* AddAccount.xib */; };
 		AA2ED9B20F05BB5D004A13C6 /* AuthFailed.xib in Resources */ = {isa = PBXBuildFile; fileRef = AA2ED9B10F05BB5D004A13C6 /* AuthFailed.xib */; };
+		AA34ACC3106E229A00FA38F7 /* ActiveAccountView.xib in Resources */ = {isa = PBXBuildFile; fileRef = AA34ACC2106E229A00FA38F7 /* ActiveAccountView.xib */; };
 		AA3578B30E40709900021989 /* AccountController.m in Sources */ = {isa = PBXBuildFile; fileRef = AA3578B20E40709900021989 /* AccountController.m */; };
 		AA3578B60E4070AD00021989 /* CallController.m in Sources */ = {isa = PBXBuildFile; fileRef = AA3578B50E4070AD00021989 /* CallController.m */; };
 		AA3A14FB0F309C7C00C45739 /* AKABAddressBook+Localizing.m in Sources */ = {isa = PBXBuildFile; fileRef = AA3A14FA0F309C7C00C45739 /* AKABAddressBook+Localizing.m */; };
@@ -67,6 +68,7 @@
 		AAF29B180F58107F007B5036 /* AKABRecord+Querying.m in Sources */ = {isa = PBXBuildFile; fileRef = AAB5AAC10F2E7A7D00A57531 /* AKABRecord+Querying.m */; };
 		AAF51C480EF6CF100098A372 /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AAF51C470EF6CF100098A372 /* Sparkle.framework */; };
 		AAF51C4C0EF6CF290098A372 /* Sparkle.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = AAF51C470EF6CF100098A372 /* Sparkle.framework */; };
+		AAF6336A1056FEA600CF6C3B /* ActiveAccountViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AAF633691056FEA600CF6C3B /* ActiveAccountViewController.m */; };
 		AAF639F60FEFF13A0089DA3A /* AKResponsiveProgressIndicator.m in Sources */ = {isa = PBXBuildFile; fileRef = AAF639F50FEFF13A0089DA3A /* AKResponsiveProgressIndicator.m */; };
 		AAFA9B1D0EE1D8FC009A45CB /* AKSIPURIFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = AAFA9B1C0EE1D8FC009A45CB /* AKSIPURIFormatter.m */; };
 		AAFA9B980EE2BFC4009A45CB /* Sound.tiff in Resources */ = {isa = PBXBuildFile; fileRef = AAFA9B970EE2BFC4009A45CB /* Sound.tiff */; };
@@ -215,6 +217,9 @@
 		AAF29A460F575A00007B5036 /* Russian */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Russian; path = PlugIns/AddressBook/Russian.lproj/Localizable.strings; sourceTree = "<group>"; };
 		AAF29A470F575A0D007B5036 /* German */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = German; path = PlugIns/AddressBook/German.lproj/Localizable.strings; sourceTree = "<group>"; };
 		AAF51C470EF6CF100098A372 /* Sparkle.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Sparkle.framework; sourceTree = "<group>"; };
+		AAF633591056FD3000CF6C3B /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/ActiveAccountView.xib; sourceTree = "<group>"; };
+		AAF633681056FEA600CF6C3B /* ActiveAccountViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 2; lastKnownFileType = sourcecode.c.h; path = ActiveAccountViewController.h; sourceTree = "<group>"; tabWidth = 2; };
+		AAF633691056FEA600CF6C3B /* ActiveAccountViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 2; lastKnownFileType = sourcecode.c.objc; path = ActiveAccountViewController.m; sourceTree = "<group>"; tabWidth = 2; };
 		AAF639F40FEFF13A0089DA3A /* AKResponsiveProgressIndicator.h */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 2; lastKnownFileType = sourcecode.c.h; path = AKResponsiveProgressIndicator.h; sourceTree = "<group>"; tabWidth = 2; };
 		AAF639F50FEFF13A0089DA3A /* AKResponsiveProgressIndicator.m */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 2; lastKnownFileType = sourcecode.c.objc; path = AKResponsiveProgressIndicator.m; sourceTree = "<group>"; tabWidth = 2; };
 		AAFA9B1B0EE1D8FC009A45CB /* AKSIPURIFormatter.h */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 2; lastKnownFileType = sourcecode.c.h; path = AKSIPURIFormatter.h; sourceTree = "<group>"; tabWidth = 2; };
@@ -348,6 +353,7 @@
 				AA3A153E0F30A49C00C45739 /* AddressBookLabels.strings */,
 				1DDD58140DA1D0A300B32029 /* MainMenu.xib */,
 				AA2ED99B0F05B362004A13C6 /* Account.xib */,
+				AA34ACC2106E229A00FA38F7 /* ActiveAccountView.xib */,
 				AA2ED99F0F05B3B5004A13C6 /* Call.xib */,
 				AA2ED9A40F05B5C6004A13C6 /* Preferences.xib */,
 				AA2ED9AB0F05BA11004A13C6 /* AddAccount.xib */,
@@ -444,6 +450,8 @@
 				AA4BD4D70E07C305005A71B2 /* AppController.m */,
 				AA3578B10E40709900021989 /* AccountController.h */,
 				AA3578B20E40709900021989 /* AccountController.m */,
+				AAF633681056FEA600CF6C3B /* ActiveAccountViewController.h */,
+				AAF633691056FEA600CF6C3B /* ActiveAccountViewController.m */,
 				AA3578B40E4070AD00021989 /* CallController.h */,
 				AA3578B50E4070AD00021989 /* CallController.m */,
 				AABAD7EB0E0C171A00CB5930 /* PreferenceController.h */,
@@ -557,6 +565,7 @@
 				AA167A1E0F07BF9E00AF8B71 /* SIPResponses.strings in Resources */,
 				AA51FC6F0F1D6700003CE94C /* Growl Registration Ticket.growlRegDict in Resources */,
 				AA3A15400F30A49C00C45739 /* AddressBookLabels.strings in Resources */,
+				AA34ACC3106E229A00FA38F7 /* ActiveAccountView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -607,6 +616,7 @@
 				AABA3A740F8A2B93009E1005 /* AKSIPAccount.m in Sources */,
 				AAAC618C0FE6A42900FBE053 /* AKNetworkReachability.m in Sources */,
 				AAF639F60FEFF13A0089DA3A /* AKResponsiveProgressIndicator.m in Sources */,
+				AAF6336A1056FEA600CF6C3B /* ActiveAccountViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -721,6 +731,14 @@
 				AA51005C0F20117F003CE94C /* German */,
 			);
 			name = AuthFailed.xib;
+			sourceTree = "<group>";
+		};
+		AA34ACC2106E229A00FA38F7 /* ActiveAccountView.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				AAF633591056FD3000CF6C3B /* English */,
+			);
+			name = ActiveAccountView.xib;
 			sourceTree = "<group>";
 		};
 		AA3A153E0F30A49C00C45739 /* AddressBookLabels.strings */ = {
