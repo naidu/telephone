@@ -371,13 +371,13 @@ NSString * const AKAccountControllerDidChangeUsernameAndPasswordNotification
   if ([[destinationURI host] length] > 0) {
     [[aCallController window] setTitle:[destinationURI SIPAddress]];
     
-  } else if (![[destinationURI user] ak_hasLetters]) {
-    if ([[destinationURI user] ak_isTelephoneNumber] &&
+  } else if (![enteredCallDestinationString ak_hasLetters]) {
+    if ([enteredCallDestinationString ak_isTelephoneNumber] &&
         [defaults boolForKey:kFormatTelephoneNumbers]) {
       [[aCallController window] setTitle:
-       [telephoneNumberFormatter stringForObjectValue:[destinationURI user]]];
+       [telephoneNumberFormatter stringForObjectValue:enteredCallDestinationString]];
     } else {
-      [[aCallController window] setTitle:[destinationURI user]];
+      [[aCallController window] setTitle:enteredCallDestinationString];
     }
   } else {
     NSString *SIPAddress = [NSString stringWithFormat:@"%@@%@",
