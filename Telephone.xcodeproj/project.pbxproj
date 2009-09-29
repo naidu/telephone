@@ -164,6 +164,8 @@
 		AA3A153F0F30A49C00C45739 /* English */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/AddressBookLabels.strings; sourceTree = "<group>"; };
 		AA3A15470F30A4C200C45739 /* Russian */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Russian; path = Russian.lproj/AddressBookLabels.strings; sourceTree = "<group>"; };
 		AA3A15480F30A4C700C45739 /* German */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = German; path = German.lproj/AddressBookLabels.strings; sourceTree = "<group>"; };
+		AA3F655C1072C66C000511E8 /* Russian */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Russian; path = Russian.lproj/ActiveAccountView.xib; sourceTree = "<group>"; };
+		AA3F655D1072C674000511E8 /* German */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = German; path = German.lproj/ActiveAccountView.xib; sourceTree = "<group>"; };
 		AA4BD4C60E07C28E005A71B2 /* AKSIPUserAgent.h */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 2; lastKnownFileType = sourcecode.c.h; path = AKSIPUserAgent.h; sourceTree = "<group>"; tabWidth = 2; };
 		AA4BD4C70E07C28E005A71B2 /* AKSIPUserAgent.m */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 2; lastKnownFileType = sourcecode.c.objc; path = AKSIPUserAgent.m; sourceTree = "<group>"; tabWidth = 2; };
 		AA4BD4D60E07C305005A71B2 /* AppController.h */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 2; lastKnownFileType = sourcecode.c.h; path = AppController.h; sourceTree = "<group>"; tabWidth = 2; };
@@ -737,6 +739,8 @@
 			isa = PBXVariantGroup;
 			children = (
 				AAF633591056FD3000CF6C3B /* English */,
+				AA3F655C1072C66C000511E8 /* Russian */,
+				AA3F655D1072C674000511E8 /* German */,
 			);
 			name = ActiveAccountView.xib;
 			sourceTree = "<group>";
