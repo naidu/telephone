@@ -375,7 +375,8 @@ NSString * const AKAccountControllerDidChangeUsernameAndPasswordNotification
     if ([enteredCallDestinationString ak_isTelephoneNumber] &&
         [defaults boolForKey:kFormatTelephoneNumbers]) {
       [[aCallController window] setTitle:
-       [telephoneNumberFormatter stringForObjectValue:enteredCallDestinationString]];
+       [telephoneNumberFormatter stringForObjectValue:
+        enteredCallDestinationString]];
     } else {
       [[aCallController window] setTitle:enteredCallDestinationString];
     }
@@ -394,13 +395,14 @@ NSString * const AKAccountControllerDidChangeUsernameAndPasswordNotification
     if ([[destinationURI host] length] > 0) {
       [aCallController setDisplayedName:[destinationURI SIPAddress]];
       
-    } else if ([[destinationURI user] ak_isTelephoneNumber] &&
+    } else if ([enteredCallDestinationString ak_isTelephoneNumber] &&
                [defaults boolForKey:kFormatTelephoneNumbers]) {
       [aCallController setDisplayedName:
-       [telephoneNumberFormatter stringForObjectValue:[destinationURI user]]];
+       [telephoneNumberFormatter stringForObjectValue:
+        enteredCallDestinationString]];
       
     } else {
-      [aCallController setDisplayedName:[destinationURI user]];
+      [aCallController setDisplayedName:enteredCallDestinationString];
     }
   }
   
@@ -590,6 +592,15 @@ NSString * const AKAccountControllerDidChangeUsernameAndPasswordNotification
   
   [[self window] setContentView:[[self activeAccountViewController] view]];
   
+  // Insert ActiveViewController in the responder chain.
+  if (![[[[self activeAccountViewController] view] nextResponder] isEqual:
+        [self activeAccountViewController]]) {
+    [[self activeAccountViewController] setNextResponder:
+     [[[self activeAccountViewController] view] nextResponder]];
+    [[[self activeAccountViewController] view] setNextResponder:
+     [self activeAccountViewController]];
+  }
+  
   if ([[[self activeAccountViewController] callDestinationField]
        acceptsFirstResponder]) {
     [[self window] makeFirstResponder:
@@ -621,6 +632,15 @@ NSString * const AKAccountControllerDidChangeUsernameAndPasswordNotification
     itemWithTag:kSIPAccountUnavailable] setState:NSOnState];
   
   [[self window] setContentView:[[self activeAccountViewController] view]];
+  
+  // Insert ActiveViewController in the responder chain.
+  if (![[[[self activeAccountViewController] view] nextResponder] isEqual:
+        [self activeAccountViewController]]) {
+    [[self activeAccountViewController] setNextResponder:
+     [[[self activeAccountViewController] view] nextResponder]];
+    [[[self activeAccountViewController] view] setNextResponder:
+     [self activeAccountViewController]];
+  }
   
   if ([[[self activeAccountViewController] callDestinationField]
        acceptsFirstResponder]) {
