@@ -48,6 +48,7 @@
 
 #import "ActiveAccountViewController.h"
 #import "AppController.h"
+#import "AuthenticationFailureController.h"
 #import "CallController.h"
 #import "PreferenceController.h"
 
@@ -73,9 +74,6 @@ static const CGFloat kAccountStatePopUpUnavailableGermanWidth = 101.0;
 static const CGFloat kAccountStatePopUpConnectingGermanWidth = 88.0;
 
 NSString * const kEmailSIPLabel = @"sip";
-
-NSString * const AKAccountControllerDidChangeUsernameAndPasswordNotification
-  = @"AKAccountControllerDidChangeUsernameAndPassword";
 
 
 @interface AccountController ()
@@ -107,15 +105,9 @@ NSString * const AKAccountControllerDidChangeUsernameAndPasswordNotification
 @synthesize plusCharacterSubstitution = plusCharacterSubstitution_;
 
 @dynamic activeAccountViewController;
+@dynamic authenticationFailureController;
 
 @synthesize accountStatePopUp = accountStatePopUp_;
-
-@synthesize authenticationFailureSheet = authenticationFailureSheet_;
-@synthesize authenticationFailureInformativeText = authenticationFailureInformativeText_;
-@synthesize updatedUsernameField = updatedUsernameField_;
-@synthesize updatedPasswordField = updatedPasswordField_;
-@synthesize mustSaveCheckBox = mustSaveCheckBox_;
-@synthesize authenticationFailureCancelButton = authenticationFailureCancelButton_;
 
 - (void)setEnabled:(BOOL)flag {
   enabled_ = flag;
@@ -234,6 +226,15 @@ NSString * const AKAccountControllerDidChangeUsernameAndPasswordNotification
   return activeAccountViewController_;
 }
 
+- (AuthenticationFailureController *)authenticationFailureController {
+  if (authenticationFailureController_ == nil) {
+    authenticationFailureController_ = [[AuthenticationFailureController alloc]
+                                        initWithAccountController:self];
+  }
+  
+  return authenticationFailureController_;
+}
+
 - (id)initWithSIPAccount:(AKSIPAccount *)anAccount {
   self = [super initWithWindowNibName:@"Account"];
   if (self == nil)
@@ -285,8 +286,8 @@ NSString * const AKAccountControllerDidChangeUsernameAndPasswordNotification
   
   [[NSNotificationCenter defaultCenter] removeObserver:self];
   
-  // Close authentication failure sheet if it's raised
-  [[self authenticationFailureCancelButton] performClick:nil];
+  // Close authentication failure sheet if it's raised.
+  [[[self authenticationFailureController] cancelButton] performClick:nil];
   
   [account_ release];
   [callControllers_ release];
@@ -297,12 +298,6 @@ NSString * const AKAccountControllerDidChangeUsernameAndPasswordNotification
   [activeAccountViewController_ release];
   
   [accountStatePopUp_ release];
-  [authenticationFailureSheet_ release];
-  [authenticationFailureInformativeText_ release];
-  [updatedUsernameField_ release];
-  [updatedPasswordField_ release];
-  [mustSaveCheckBox_ release];
-  [authenticationFailureCancelButton_ release];
   
   [super dealloc];
 }
@@ -474,72 +469,6 @@ NSString * const AKAccountControllerDidChangeUsernameAndPasswordNotification
     [self setShouldPresentRegistrationError:YES];
     [self setAccountRegistered:YES];
   }
-}
-
-- (IBAction)changeUsernameAndPassword:(id)sender {
-  [self closeSheet:sender];
-  
-  if ([[[self updatedUsernameField] stringValue] length] > 0) {
-    [self removeAccountFromUserAgent];
-    [[self account] setUsername:[[self updatedUsernameField] stringValue]];
-    
-    [self showConnectingState];
-    
-    // Add account to the user agent.
-    [[[NSApp delegate] userAgent] addAccount:[self account]
-                                withPassword:[[self updatedPasswordField]
-                                              stringValue]];
-    
-    // Error connecting to registrar.
-    if (![self isAccountRegistered] &&
-        [[self account] registrationExpireTime] < 0) {
-      [self showUnavailableState];
-      
-      NSString *statusText;
-      NSString *preferredLocalization
-        = [[[NSBundle mainBundle] preferredLocalizations] objectAtIndex:0];
-      if ([preferredLocalization isEqualToString:@"Russian"]) {
-        statusText = [[NSApp delegate] localizedStringForSIPResponseCode:
-                      [[self account] registrationStatus]];
-      } else {
-        statusText = [[self account] registrationStatusText];
-      }
-      
-      NSString *error;
-      if (statusText == nil) {
-        error = [NSString stringWithFormat:
-                 NSLocalizedString(@"Error %d", @"Error #."),
-                 [[self account] registrationStatus]];
-        error = [error stringByAppendingString:@"."];
-      } else {
-        error = [NSString stringWithFormat:
-                 NSLocalizedString(@"The error was: \\U201C%d %@\\U201D.",
-                                   @"Error description."),
-                 [[self account] registrationStatus], statusText];
-      }
-      
-      [self showRegistrarConnectionErrorSheetWithError:error];
-    }
-    
-    if ([[self mustSaveCheckBox] state] == NSOnState) {
-      [AKKeychain
-       addItemWithServiceName:[NSString stringWithFormat:@"SIP: %@",
-                               [[self account] registrar]]
-                  accountName:[[self updatedUsernameField] stringValue]
-                     password:[[self updatedPasswordField] stringValue]];
-    }
-    
-    [[NSNotificationCenter defaultCenter]
-     postNotificationName:AKAccountControllerDidChangeUsernameAndPasswordNotification
-                   object:self];
-  }
-  
-  [[self updatedPasswordField] setStringValue:@""];
-}
-
-- (IBAction)closeSheet:(id)sender {
-  [NSApp endSheet:[sender window]];
-  [[sender window] orderOut:self];
 }
 
 - (void)showRegistrarConnectionErrorSheetWithError:(NSString *)error {
@@ -798,10 +727,7 @@ NSString * const AKAccountControllerDidChangeUsernameAndPasswordNotification
     
     // Handle authentication failure
     if ([[self account] registrationStatus] == PJSIP_EFAILEDCREDENTIAL) {
-      if ([self authenticationFailureSheet] == nil)
-        [NSBundle loadNibNamed:@"AuthFailed" owner:self];
-      
-      [[self authenticationFailureInformativeText] setStringValue:
+      [[[self authenticationFailureController] informativeText] setStringValue:
        [NSString stringWithFormat:
         NSLocalizedString(@"Telephone was unable to login to %@. "
                           "Change user name or password and try again.",
@@ -813,10 +739,12 @@ NSString * const AKAccountControllerDidChangeUsernameAndPasswordNotification
                                             [[self account] registrar]]
                                accountName:[[self account] username]];
       
-      [[self updatedUsernameField] setStringValue:[[self account] username]];
-      [[self updatedPasswordField] setStringValue:password];
+      [[[self authenticationFailureController] usernameField]
+       setStringValue:[[self account] username]];
+      [[[self authenticationFailureController] passwordField]
+       setStringValue:password];
       
-      [NSApp beginSheet:[self authenticationFailureSheet]
+      [NSApp beginSheet:[[self authenticationFailureController] window]
          modalForWindow:[self window]
           modalDelegate:nil
          didEndSelector:NULL

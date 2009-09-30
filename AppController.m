@@ -47,6 +47,7 @@
 
 #import "AccountController.h"
 #import "ActiveAccountViewController.h"
+#import "AuthenticationFailureController.h"
 #import "CallController.h"
 #import "PreferenceController.h"
 
@@ -341,11 +342,11 @@ static void NameserversChanged(SCDynamicStoreRef store,
                              name:AKSIPCallDidDisconnectNotification
                            object:nil];
   
-  // Subscribe to username and password changes by the account controllers. For
-  // example, when authentication fails and user enters new credentials.
+  // Subscribe to username and password changes by the authentication failure
+  // controllers.
   [notificationCenter addObserver:self
-                         selector:@selector(accountControllerDidChangeUsernameAndPassword:)
-                             name:AKAccountControllerDidChangeUsernameAndPasswordNotification
+                         selector:@selector(authenticationFailureControllerDidChangeUsernameAndPassword:)
+                             name:AKAuthenticationFailureControllerDidChangeUsernameAndPasswordNotification
                            object:nil];
   
   // Subscribe to NSWorkspace notifications about going computer to sleep,
@@ -2081,10 +2082,11 @@ static void NameserversChanged(SCDynamicStoreRef store,
 
 
 #pragma mark -
-#pragma mark AccountController notifications
+#pragma mark AuthenticationFailureController notifications
 
-- (void)accountControllerDidChangeUsernameAndPassword:(NSNotification *)notification {
-  AccountController *accountController = [notification object];
+- (void)authenticationFailureControllerDidChangeUsernameAndPassword:(NSNotification *)notification {
+  AccountController *accountController
+    = [[notification object] accountController];
   NSUInteger index
     = [[self accountControllers] indexOfObject:accountController];
   

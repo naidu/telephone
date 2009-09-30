@@ -43,14 +43,8 @@ enum {
 // Address Book label for SIP address in the email field.
 extern NSString * const kEmailSIPLabel;
 
-// Posted whenever an AccountController object changes account's username and
-// password.
-// The notification object is the AccountController object that changed
-// username and password.
-extern NSString * const AKAccountControllerDidChangeUsernameAndPasswordNotification;
-
-@class AKSIPAccount, AKSIPURI, AKNetworkReachability;
-@class ActiveAccountViewController;
+@class AKSIPURI, AKNetworkReachability;
+@class ActiveAccountViewController, AuthenticationFailureController;
 
 // A SIP account controller.
 @interface AccountController : NSWindowController <AKSIPAccountDelegate> {
@@ -71,16 +65,9 @@ extern NSString * const AKAccountControllerDidChangeUsernameAndPasswordNotificat
   NSString *plusCharacterSubstitution_;
   
   ActiveAccountViewController *activeAccountViewController_;
+  AuthenticationFailureController *authenticationFailureController_;
   
   NSPopUpButton *accountStatePopUp_;
-  
-  // Authentication failure sheet elements.
-  NSWindow *authenticationFailureSheet_;
-  NSTextField *authenticationFailureInformativeText_;
-  NSTextField *updatedUsernameField_;
-  NSTextField *updatedPasswordField_;
-  NSButton *mustSaveCheckBox_;
-  NSButton *authenticationFailureCancelButton_;
 }
 
 // A Boolean value indicating whether receiver is enabled.
@@ -133,29 +120,12 @@ extern NSString * const AKAccountControllerDidChangeUsernameAndPasswordNotificat
 // An active account view controller.
 @property(nonatomic, readonly) ActiveAccountViewController *activeAccountViewController;
 
-
-// Outlets.
+// An authentication failure controller.
+@property(nonatomic, readonly) AuthenticationFailureController *authenticationFailureController;
 
 // Account state pop-up button outlet.
 @property(nonatomic, retain) IBOutlet NSPopUpButton *accountStatePopUp;
 
-// Authentication failure sheet outlet.
-@property(nonatomic, retain) IBOutlet NSWindow *authenticationFailureSheet;
-
-// Informative text outlet of the authentication failure sheet.
-@property(nonatomic, retain) IBOutlet NSTextField *authenticationFailureInformativeText;
-
-// |User Name| field outlet of the authentication failure sheet.
-@property(nonatomic, retain) IBOutlet NSTextField *updatedUsernameField;
-
-// |Password| field outlet of the authentication failure sheet.
-@property(nonatomic, retain) IBOutlet NSTextField *updatedPasswordField;
-
-// |Save in the Keychain| checkbox outlet.
-@property(nonatomic, retain) IBOutlet NSButton *mustSaveCheckBox;
-
-// Cancel button outlet of the authentication failure sheet.
-@property(nonatomic, retain) IBOutlet NSButton *authenticationFailureCancelButton;
 
 // Designated initializer.
 // Initializes an AccountController object with a given account.
@@ -180,12 +150,6 @@ extern NSString * const AKAccountControllerDidChangeUsernameAndPasswordNotificat
 
 // Changes account state.
 - (IBAction)changeAccountState:(id)sender;
-
-// Sets new user name and password when authentication fails.
-- (IBAction)changeUsernameAndPassword:(id)sender;
-
-// Closes a sheet.
-- (IBAction)closeSheet:(id)sender;
 
 // Shows alert saying that connection to the registrar failed.
 - (void)showRegistrarConnectionErrorSheetWithError:(NSString *)error;
