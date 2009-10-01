@@ -680,21 +680,21 @@ static void NameserversChanged(SCDynamicStoreRef store,
 - (IBAction)addAccountOnFirstLaunch:(id)sender {
   [[self preferenceController] addAccount:sender];
   
-  if ([[[[self preferenceController] setupFullNameField] stringValue] length] > 0 &&
-      [[[[self preferenceController] setupDomainField] stringValue] length] > 0 &&
-      [[[[self preferenceController] setupUsernameField] stringValue] length] > 0 &&
-      [[[[self preferenceController] setupPasswordField] stringValue] length] > 0) {
+  if ([[[[self preferenceController] fullNameField] stringValue] length] > 0 &&
+      [[[[self preferenceController] domainField] stringValue] length] > 0 &&
+      [[[[self preferenceController] usernameField] stringValue] length] > 0 &&
+      [[[[self preferenceController] passwordField] stringValue] length] > 0) {
     // Re-enable Preferences.
     [[self preferencesMenuItem] setAction:@selector(showPreferencePanel:)];
     
     // Change back targets and actions of addAccountWindow buttons.
-    [[[self preferenceController] addAccountWindowDefaultButton]
+    [[[self preferenceController] defaultButton]
      setTarget:[self preferenceController]];
-    [[[self preferenceController] addAccountWindowDefaultButton]
+    [[[self preferenceController] defaultButton]
      setAction:@selector(addAccount:)];
-    [[[self preferenceController] addAccountWindowOtherButton]
+    [[[self preferenceController] otherButton]
      setTarget:[self preferenceController]];
-    [[[self preferenceController] addAccountWindowOtherButton]
+    [[[self preferenceController] otherButton]
      setAction:@selector(closeSheet:)];
     
     // Install audio devices changes callback.
@@ -1858,13 +1858,13 @@ static void NameserversChanged(SCDynamicStoreRef store,
     
     // Set different targets and actions of addAccountWindow buttons
     // to add the first account.
-    [[[self preferenceController] addAccountWindowDefaultButton]
+    [[[self preferenceController] defaultButton]
      setTarget:self];
-    [[[self preferenceController] addAccountWindowDefaultButton]
+    [[[self preferenceController] defaultButton]
      setAction:@selector(addAccountOnFirstLaunch:)];
-    [[[self preferenceController] addAccountWindowOtherButton]
+    [[[self preferenceController] otherButton]
      setTarget:[[self preferenceController] addAccountWindow]];
-    [[[self preferenceController] addAccountWindowOtherButton]
+    [[[self preferenceController] otherButton]
      setAction:@selector(performClose:)];
     
     [[[self preferenceController] addAccountWindow] center];

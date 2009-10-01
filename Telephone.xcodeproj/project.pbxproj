@@ -25,9 +25,13 @@
 		AA2ED99C0F05B362004A13C6 /* Account.xib in Resources */ = {isa = PBXBuildFile; fileRef = AA2ED99B0F05B362004A13C6 /* Account.xib */; };
 		AA2ED9A00F05B3B5004A13C6 /* Call.xib in Resources */ = {isa = PBXBuildFile; fileRef = AA2ED99F0F05B3B5004A13C6 /* Call.xib */; };
 		AA2ED9A50F05B5C6004A13C6 /* Preferences.xib in Resources */ = {isa = PBXBuildFile; fileRef = AA2ED9A40F05B5C6004A13C6 /* Preferences.xib */; };
-		AA2ED9AC0F05BA11004A13C6 /* AddAccount.xib in Resources */ = {isa = PBXBuildFile; fileRef = AA2ED9AB0F05BA11004A13C6 /* AddAccount.xib */; };
+		AA2ED9AC0F05BA11004A13C6 /* AccountSetup.xib in Resources */ = {isa = PBXBuildFile; fileRef = AA2ED9AB0F05BA11004A13C6 /* AccountSetup.xib */; };
 		AA2ED9B20F05BB5D004A13C6 /* AuthenticationFailure.xib in Resources */ = {isa = PBXBuildFile; fileRef = AA2ED9B10F05BB5D004A13C6 /* AuthenticationFailure.xib */; };
 		AA34ACC3106E229A00FA38F7 /* ActiveAccountView.xib in Resources */ = {isa = PBXBuildFile; fileRef = AA34ACC2106E229A00FA38F7 /* ActiveAccountView.xib */; };
+		AA34AF3E1073B7C700FA38F7 /* AccountPreferencesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AA34AF3D1073B7C700FA38F7 /* AccountPreferencesViewController.m */; };
+		AA34AF481073B81500FA38F7 /* SoundPreferencesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AA34AF471073B81500FA38F7 /* SoundPreferencesViewController.m */; };
+		AA34AF4B1073B84700FA38F7 /* NetworkPreferencesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AA34AF4A1073B84700FA38F7 /* NetworkPreferencesViewController.m */; };
+		AA34AF831073BF5D00FA38F7 /* GeneralPreferencesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AA34AF821073BF5D00FA38F7 /* GeneralPreferencesViewController.m */; };
 		AA3578B30E40709900021989 /* AccountController.m in Sources */ = {isa = PBXBuildFile; fileRef = AA3578B20E40709900021989 /* AccountController.m */; };
 		AA3578B60E4070AD00021989 /* CallController.m in Sources */ = {isa = PBXBuildFile; fileRef = AA3578B50E4070AD00021989 /* CallController.m */; };
 		AA3A14FB0F309C7C00C45739 /* AKABAddressBook+Localizing.m in Sources */ = {isa = PBXBuildFile; fileRef = AA3A14FA0F309C7C00C45739 /* AKABAddressBook+Localizing.m */; };
@@ -74,6 +78,11 @@
 		AAFA9B1D0EE1D8FC009A45CB /* AKSIPURIFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = AAFA9B1C0EE1D8FC009A45CB /* AKSIPURIFormatter.m */; };
 		AAFA9B980EE2BFC4009A45CB /* Sound.tiff in Resources */ = {isa = PBXBuildFile; fileRef = AAFA9B970EE2BFC4009A45CB /* Sound.tiff */; };
 		AAFA9C3D0EE411BA009A45CB /* AKTelephoneNumberFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = AAFA9C3C0EE411BA009A45CB /* AKTelephoneNumberFormatter.m */; };
+		AAFC00261074D0B50018C7DA /* NetworkPreferencesView.xib in Resources */ = {isa = PBXBuildFile; fileRef = AAFC00251074D0B50018C7DA /* NetworkPreferencesView.xib */; };
+		AAFC00281074D0B50018C7DA /* AccountPreferencesView.xib in Resources */ = {isa = PBXBuildFile; fileRef = AAFC00271074D0B50018C7DA /* AccountPreferencesView.xib */; };
+		AAFC002A1074D0B50018C7DA /* SoundPreferencesView.xib in Resources */ = {isa = PBXBuildFile; fileRef = AAFC00291074D0B50018C7DA /* SoundPreferencesView.xib */; };
+		AAFC002C1074D0B50018C7DA /* GeneralPreferencesView.xib in Resources */ = {isa = PBXBuildFile; fileRef = AAFC002B1074D0B50018C7DA /* GeneralPreferencesView.xib */; };
+		AAFCFFBD1074BFCA0018C7DA /* AccountSetupController.m in Sources */ = {isa = PBXBuildFile; fileRef = AAFCFFBC1074BFCA0018C7DA /* AccountSetupController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -152,9 +161,21 @@
 		AA2ED99D0F05B36B004A13C6 /* Russian */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Russian; path = Russian.lproj/Account.xib; sourceTree = "<group>"; };
 		AA2ED9A10F05B3BD004A13C6 /* Russian */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Russian; path = Russian.lproj/Call.xib; sourceTree = "<group>"; };
 		AA2ED9A60F05B5CE004A13C6 /* Russian */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Russian; path = Russian.lproj/Preferences.xib; sourceTree = "<group>"; };
-		AA2ED9AD0F05BA16004A13C6 /* Russian */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Russian; path = Russian.lproj/AddAccount.xib; sourceTree = "<group>"; };
+		AA2ED9AD0F05BA16004A13C6 /* Russian */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Russian; path = Russian.lproj/AccountSetup.xib; sourceTree = "<group>"; };
 		AA2ED9B30F05BB64004A13C6 /* Russian */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Russian; path = Russian.lproj/AuthenticationFailure.xib; sourceTree = "<group>"; };
 		AA2ED9DF0F05C1E3004A13C6 /* Russian */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Russian; path = Russian.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		AA34AF281073B70900FA38F7 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/GeneralPreferencesView.xib; sourceTree = "<group>"; };
+		AA34AF361073B75600FA38F7 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/AccountPreferencesView.xib; sourceTree = "<group>"; };
+		AA34AF381073B76A00FA38F7 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/SoundPreferencesView.xib; sourceTree = "<group>"; };
+		AA34AF3A1073B77A00FA38F7 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/NetworkPreferencesView.xib; sourceTree = "<group>"; };
+		AA34AF3C1073B7C700FA38F7 /* AccountPreferencesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 2; lastKnownFileType = sourcecode.c.h; path = AccountPreferencesViewController.h; sourceTree = "<group>"; tabWidth = 2; };
+		AA34AF3D1073B7C700FA38F7 /* AccountPreferencesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 2; lastKnownFileType = sourcecode.c.objc; path = AccountPreferencesViewController.m; sourceTree = "<group>"; tabWidth = 2; };
+		AA34AF461073B81500FA38F7 /* SoundPreferencesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 2; lastKnownFileType = sourcecode.c.h; path = SoundPreferencesViewController.h; sourceTree = "<group>"; tabWidth = 2; };
+		AA34AF471073B81500FA38F7 /* SoundPreferencesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 2; lastKnownFileType = sourcecode.c.objc; path = SoundPreferencesViewController.m; sourceTree = "<group>"; tabWidth = 2; };
+		AA34AF491073B84700FA38F7 /* NetworkPreferencesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 2; lastKnownFileType = sourcecode.c.h; path = NetworkPreferencesViewController.h; sourceTree = "<group>"; tabWidth = 2; };
+		AA34AF4A1073B84700FA38F7 /* NetworkPreferencesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 2; lastKnownFileType = sourcecode.c.objc; path = NetworkPreferencesViewController.m; sourceTree = "<group>"; tabWidth = 2; };
+		AA34AF811073BF5D00FA38F7 /* GeneralPreferencesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 2; lastKnownFileType = sourcecode.c.h; path = GeneralPreferencesViewController.h; sourceTree = "<group>"; tabWidth = 2; };
+		AA34AF821073BF5D00FA38F7 /* GeneralPreferencesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 2; lastKnownFileType = sourcecode.c.objc; path = GeneralPreferencesViewController.m; sourceTree = "<group>"; tabWidth = 2; };
 		AA3578680E3FD91400021989 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/Call.xib; sourceTree = "<group>"; };
 		AA3578B10E40709900021989 /* AccountController.h */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 2; lastKnownFileType = sourcecode.c.h; path = AccountController.h; sourceTree = "<group>"; tabWidth = 2; };
 		AA3578B20E40709900021989 /* AccountController.m */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 2; lastKnownFileType = sourcecode.c.objc; path = AccountController.m; sourceTree = "<group>"; tabWidth = 2; };
@@ -183,12 +204,12 @@
 		AA5100400F200066003CE94C /* German */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = German; path = German.lproj/Call.xib; sourceTree = "<group>"; };
 		AA5100590F200E2F003CE94C /* German */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = German; path = German.lproj/Preferences.xib; sourceTree = "<group>"; };
 		AA51005C0F20117F003CE94C /* German */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = German; path = German.lproj/AuthenticationFailure.xib; sourceTree = "<group>"; };
-		AA5100970F20CD11003CE94C /* German */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = German; path = German.lproj/AddAccount.xib; sourceTree = "<group>"; };
+		AA5100970F20CD11003CE94C /* German */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = German; path = German.lproj/AccountSetup.xib; sourceTree = "<group>"; };
 		AA51FAC80F1D5673003CE94C /* Growl.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Growl.framework; sourceTree = "<group>"; };
 		AA51FC6E0F1D6700003CE94C /* Growl Registration Ticket.growlRegDict */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = "Growl Registration Ticket.growlRegDict"; sourceTree = "<group>"; };
 		AA584A690F06CFD2003C4992 /* English */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/Localizable.strings; sourceTree = "<group>"; };
 		AA584A6B0F06D007003C4992 /* Russian */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Russian; path = Russian.lproj/Localizable.strings; sourceTree = "<group>"; };
-		AA69ADD90E89578900CF54B3 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/AddAccount.xib; sourceTree = "<group>"; };
+		AA69ADD90E89578900CF54B3 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/AccountSetup.xib; sourceTree = "<group>"; };
 		AA8A5D2A0E91262500DB43C8 /* AKKeychain.h */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 2; lastKnownFileType = sourcecode.c.h; path = AKKeychain.h; sourceTree = "<group>"; tabWidth = 2; };
 		AA8A5D2B0E91262500DB43C8 /* AKKeychain.m */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 2; lastKnownFileType = sourcecode.c.objc; path = AKKeychain.m; sourceTree = "<group>"; tabWidth = 2; };
 		AAA1AD510E8AF0AB00B0CE36 /* telephone.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = telephone.icns; sourceTree = "<group>"; };
@@ -232,6 +253,16 @@
 		AAFA9B970EE2BFC4009A45CB /* Sound.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = Sound.tiff; sourceTree = "<group>"; };
 		AAFA9C3B0EE411BA009A45CB /* AKTelephoneNumberFormatter.h */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 2; lastKnownFileType = sourcecode.c.h; path = AKTelephoneNumberFormatter.h; sourceTree = "<group>"; tabWidth = 2; };
 		AAFA9C3C0EE411BA009A45CB /* AKTelephoneNumberFormatter.m */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 2; lastKnownFileType = sourcecode.c.objc; path = AKTelephoneNumberFormatter.m; sourceTree = "<group>"; tabWidth = 2; };
+		AAFC002D1074D0EB0018C7DA /* Russian */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Russian; path = Russian.lproj/GeneralPreferencesView.xib; sourceTree = "<group>"; };
+		AAFC00351074D1700018C7DA /* German */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = German; path = German.lproj/GeneralPreferencesView.xib; sourceTree = "<group>"; };
+		AAFC00361074D17F0018C7DA /* Russian */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Russian; path = Russian.lproj/AccountPreferencesView.xib; sourceTree = "<group>"; };
+		AAFC00371074D1820018C7DA /* German */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = German; path = German.lproj/AccountPreferencesView.xib; sourceTree = "<group>"; };
+		AAFC00381074D18C0018C7DA /* Russian */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Russian; path = Russian.lproj/SoundPreferencesView.xib; sourceTree = "<group>"; };
+		AAFC00391074D18F0018C7DA /* German */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = German; path = German.lproj/SoundPreferencesView.xib; sourceTree = "<group>"; };
+		AAFC003A1074D1980018C7DA /* Russian */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Russian; path = Russian.lproj/NetworkPreferencesView.xib; sourceTree = "<group>"; };
+		AAFC003B1074D19A0018C7DA /* German */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = German; path = German.lproj/NetworkPreferencesView.xib; sourceTree = "<group>"; };
+		AAFCFFBB1074BFCA0018C7DA /* AccountSetupController.h */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 2; lastKnownFileType = sourcecode.c.h; path = AccountSetupController.h; sourceTree = "<group>"; tabWidth = 2; };
+		AAFCFFBC1074BFCA0018C7DA /* AccountSetupController.m */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 2; lastKnownFileType = sourcecode.c.objc; path = AccountSetupController.m; sourceTree = "<group>"; tabWidth = 2; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -361,7 +392,11 @@
 				AA34ACC2106E229A00FA38F7 /* ActiveAccountView.xib */,
 				AA2ED99F0F05B3B5004A13C6 /* Call.xib */,
 				AA2ED9A40F05B5C6004A13C6 /* Preferences.xib */,
-				AA2ED9AB0F05BA11004A13C6 /* AddAccount.xib */,
+				AAFC002B1074D0B50018C7DA /* GeneralPreferencesView.xib */,
+				AAFC00271074D0B50018C7DA /* AccountPreferencesView.xib */,
+				AAFC00291074D0B50018C7DA /* SoundPreferencesView.xib */,
+				AAFC00251074D0B50018C7DA /* NetworkPreferencesView.xib */,
+				AA2ED9AB0F05BA11004A13C6 /* AccountSetup.xib */,
 				AA2ED9B10F05BB5D004A13C6 /* AuthenticationFailure.xib */,
 				AAFA9B970EE2BFC4009A45CB /* Sound.tiff */,
 				AA2D599C0EF924F800F65074 /* dsa_pub.pem */,
@@ -463,6 +498,16 @@
 				AA3578B50E4070AD00021989 /* CallController.m */,
 				AABAD7EB0E0C171A00CB5930 /* PreferenceController.h */,
 				AABAD7EC0E0C171A00CB5930 /* PreferenceController.m */,
+				AA34AF811073BF5D00FA38F7 /* GeneralPreferencesViewController.h */,
+				AA34AF821073BF5D00FA38F7 /* GeneralPreferencesViewController.m */,
+				AA34AF3C1073B7C700FA38F7 /* AccountPreferencesViewController.h */,
+				AA34AF3D1073B7C700FA38F7 /* AccountPreferencesViewController.m */,
+				AA34AF461073B81500FA38F7 /* SoundPreferencesViewController.h */,
+				AA34AF471073B81500FA38F7 /* SoundPreferencesViewController.m */,
+				AA34AF491073B84700FA38F7 /* NetworkPreferencesViewController.h */,
+				AA34AF4A1073B84700FA38F7 /* NetworkPreferencesViewController.m */,
+				AAFCFFBB1074BFCA0018C7DA /* AccountSetupController.h */,
+				AAFCFFBC1074BFCA0018C7DA /* AccountSetupController.m */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -540,6 +585,7 @@
 				French,
 				German,
 				Russian,
+				"",
 			);
 			mainGroup = 29B97314FDCFA39411CA2CEA /* Telephone */;
 			projectDirPath = "";
@@ -562,7 +608,7 @@
 				AA2ED9A50F05B5C6004A13C6 /* Preferences.xib in Resources */,
 				AA2ED99C0F05B362004A13C6 /* Account.xib in Resources */,
 				AA2ED9A00F05B3B5004A13C6 /* Call.xib in Resources */,
-				AA2ED9AC0F05BA11004A13C6 /* AddAccount.xib in Resources */,
+				AA2ED9AC0F05BA11004A13C6 /* AccountSetup.xib in Resources */,
 				AAA1AD520E8AF0AB00B0CE36 /* telephone.icns in Resources */,
 				AA2ED9B20F05BB5D004A13C6 /* AuthenticationFailure.xib in Resources */,
 				AA0910CC0EC21F44004912A5 /* COPYRIGHT in Resources */,
@@ -573,6 +619,10 @@
 				AA51FC6F0F1D6700003CE94C /* Growl Registration Ticket.growlRegDict in Resources */,
 				AA3A15400F30A49C00C45739 /* AddressBookLabels.strings in Resources */,
 				AA34ACC3106E229A00FA38F7 /* ActiveAccountView.xib in Resources */,
+				AAFC002C1074D0B50018C7DA /* GeneralPreferencesView.xib in Resources */,
+				AAFC00281074D0B50018C7DA /* AccountPreferencesView.xib in Resources */,
+				AAFC002A1074D0B50018C7DA /* SoundPreferencesView.xib in Resources */,
+				AAFC00261074D0B50018C7DA /* NetworkPreferencesView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -625,6 +675,11 @@
 				AAF639F60FEFF13A0089DA3A /* AKResponsiveProgressIndicator.m in Sources */,
 				AAF6336A1056FEA600CF6C3B /* ActiveAccountViewController.m in Sources */,
 				AA3F656A1072C926000511E8 /* AuthenticationFailureController.m in Sources */,
+				AA34AF3E1073B7C700FA38F7 /* AccountPreferencesViewController.m in Sources */,
+				AA34AF481073B81500FA38F7 /* SoundPreferencesViewController.m in Sources */,
+				AA34AF4B1073B84700FA38F7 /* NetworkPreferencesViewController.m in Sources */,
+				AA34AF831073BF5D00FA38F7 /* GeneralPreferencesViewController.m in Sources */,
+				AAFCFFBD1074BFCA0018C7DA /* AccountSetupController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -721,14 +776,14 @@
 			name = Preferences.xib;
 			sourceTree = "<group>";
 		};
-		AA2ED9AB0F05BA11004A13C6 /* AddAccount.xib */ = {
+		AA2ED9AB0F05BA11004A13C6 /* AccountSetup.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
 				AA69ADD90E89578900CF54B3 /* English */,
 				AA2ED9AD0F05BA16004A13C6 /* Russian */,
 				AA5100970F20CD11003CE94C /* German */,
 			);
-			name = AddAccount.xib;
+			name = AccountSetup.xib;
 			sourceTree = "<group>";
 		};
 		AA2ED9B10F05BB5D004A13C6 /* AuthenticationFailure.xib */ = {
@@ -779,6 +834,46 @@
 				AAF29A470F575A0D007B5036 /* German */,
 			);
 			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+		AAFC00251074D0B50018C7DA /* NetworkPreferencesView.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				AA34AF3A1073B77A00FA38F7 /* English */,
+				AAFC003A1074D1980018C7DA /* Russian */,
+				AAFC003B1074D19A0018C7DA /* German */,
+			);
+			name = NetworkPreferencesView.xib;
+			sourceTree = "<group>";
+		};
+		AAFC00271074D0B50018C7DA /* AccountPreferencesView.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				AA34AF361073B75600FA38F7 /* English */,
+				AAFC00361074D17F0018C7DA /* Russian */,
+				AAFC00371074D1820018C7DA /* German */,
+			);
+			name = AccountPreferencesView.xib;
+			sourceTree = "<group>";
+		};
+		AAFC00291074D0B50018C7DA /* SoundPreferencesView.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				AA34AF381073B76A00FA38F7 /* English */,
+				AAFC00381074D18C0018C7DA /* Russian */,
+				AAFC00391074D18F0018C7DA /* German */,
+			);
+			name = SoundPreferencesView.xib;
+			sourceTree = "<group>";
+		};
+		AAFC002B1074D0B50018C7DA /* GeneralPreferencesView.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				AA34AF281073B70900FA38F7 /* English */,
+				AAFC002D1074D0EB0018C7DA /* Russian */,
+				AAFC00351074D1700018C7DA /* German */,
+			);
+			name = GeneralPreferencesView.xib;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
