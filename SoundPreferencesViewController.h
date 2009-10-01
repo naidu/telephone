@@ -58,6 +58,7 @@
 // /Library/Sounds
 // /Network/Library/Sounds
 // /System/Library/Sounds
+//
 - (void)updateAvailableSounds;
 
 // Changes a ringtone sound.

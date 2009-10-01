@@ -44,6 +44,12 @@
 @synthesize defaultButton = defaultButton_;
 @synthesize otherButton = otherButton_;
 
+- (id)init {
+  self = [super initWithWindowNibName:@"AccountSetup"];
+  
+  return self;
+}
+
 - (void)dealloc {
   [fullNameField_ release];
   [domainField_ release];
@@ -121,18 +127,18 @@
   [[self accountsTable] reloadData];
   
   BOOL success
-  = [AKKeychain addItemWithServiceName:[NSString stringWithFormat:@"SIP: %@",
-                                        [[self domainField] stringValue]]
-                           accountName:[[self usernameField] stringValue]
-                              password:[[self passwordField] stringValue]];
+    = [AKKeychain addItemWithServiceName:[NSString stringWithFormat:@"SIP: %@",
+                                          [[self domainField] stringValue]]
+                             accountName:[[self usernameField] stringValue]
+                                password:[[self passwordField] stringValue]];
   
   [self closeSheet:sender];
   
   if (success) {
     [[NSNotificationCenter defaultCenter]
      postNotificationName:AKPreferenceControllerDidAddAccountNotification
-     object:self
-     userInfo:accountDict];
+                   object:self
+                 userInfo:accountDict];
   }
   
   // Set the selection to the new account

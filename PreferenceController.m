@@ -200,8 +200,6 @@ static NSString * const kAKSIPAccountPboardType = @"AKSIPAccountPboardType";
   [soundPreferencesViewController_ release];
   [networkPreferencesViewController_ release];
   
-  [[NSNotificationCenter defaultCenter] removeObserver:self];
-  
   [toolbar_ release];
   [generalToolbarItem_ release];
   [accountsToolbarItem_ release];
@@ -215,19 +213,15 @@ static NSString * const kAKSIPAccountPboardType = @"AKSIPAccountPboardType";
 }
 
 - (void)windowDidLoad {
-  [self updateAvailableSounds];
-  
   [[self toolbar] setSelectedItemIdentifier:
    [[self generalToolbarItem] itemIdentifier]];
   [[self window] ak_resizeAndSwapToContentView:
    [[self generalPreferencesController] view]];
   [[self window] setTitle:[[self generalPreferencesController] title]];
   
-  [self updateAudioDevices];
-  
   // Show transport port in the network preferences as a placeholder string.
   if ([[[NSApp delegate] userAgent] isStarted]) {
-    [[self transportPortCell] setPlaceholderString:
+    [[[self transportPortField] cell] setPlaceholderString:
      [[NSNumber numberWithUnsignedInteger:
        [[[NSApp delegate] userAgent] transportPort]] stringValue]];
   }

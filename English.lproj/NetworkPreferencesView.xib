@@ -361,14 +361,6 @@
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBOutletConnection" key="connection">
-						<string key="label">transportPortCell</string>
-						<reference key="source" ref="853420499"/>
-						<reference key="destination" ref="242191544"/>
-					</object>
-					<int key="connectionID">496</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBOutletConnection" key="connection">
 						<string key="label">transportPortField</string>
 						<reference key="source" ref="853420499"/>
 						<reference key="destination" ref="292801911"/>
@@ -690,7 +682,6 @@
 						<string key="STUNServerPortField">NSTextField</string>
 						<string key="outboundProxyHostField">NSTextField</string>
 						<string key="outboundProxyPortField">NSTextField</string>
-						<string key="transportPortCell">NSTextFieldCell</string>
 						<string key="transportPortField">NSTextField</string>
 						<string key="useDNSSRVCheckBox">NSButton</string>
 						<string key="useICECheckBox">NSButton</string>
@@ -1150,7 +1141,7 @@
 			<integer value="1060" key="NS.object.0"/>
 		</object>
 		<bool key="IBDocument.PluginDeclaredDependenciesTrackSystemTargetVersion">YES</bool>
-		<string key="IBDocument.LastKnownRelativeProjectPath">Telephone.xcodeproj</string>
+		<string key="IBDocument.LastKnownRelativeProjectPath">../Telephone.xcodeproj</string>
 		<int key="IBDocument.defaultPropertyAccessControl">3</int>
 	</data>
 </archive>

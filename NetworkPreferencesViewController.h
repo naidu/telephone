@@ -35,7 +35,6 @@
 @interface NetworkPreferencesViewController : NSViewController {
  @private
   NSTextField *transportPortField_;
-  NSTextFieldCell *transportPortCell_;
   NSTextField *STUNServerHostField_;
   NSTextField *STUNServerPortField_;
   NSButton *useICECheckBox_;
@@ -45,7 +44,6 @@
 }
 
 @property(nonatomic, retain) IBOutlet NSTextField *transportPortField;
-@property(nonatomic, retain) IBOutlet NSTextFieldCell *transportPortCell;
 @property(nonatomic, retain) IBOutlet NSTextField *STUNServerHostField;
 @property(nonatomic, retain) IBOutlet NSTextField *STUNServerPortField;
 @property(nonatomic, retain) IBOutlet NSButton *useICECheckBox;

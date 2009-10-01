@@ -30,6 +30,7 @@
 
 #import "NetworkPreferencesViewController.h"
 
+#import "AppController.h"
 #import "PreferenceController.h"
 
 
@@ -48,7 +49,6 @@
 @implementation NetworkPreferencesViewController
 
 @synthesize transportPortField = transportPortField_;
-@synthesize transportPortCell = transportPortCell_;
 @synthesize STUNServerHostField = STUNServerHostField_;
 @synthesize STUNServerPortField = STUNServerPortField_;
 @synthesize useICECheckBox = useICECheckBox_;
@@ -79,7 +79,6 @@
 
 - (void)dealloc {
   [transportPortField_ release];
-  [transportPortCell_ release];
   [STUNServerHostField_ release];
   [STUNServerPortField_ release];
   [useICECheckBox_ release];
@@ -150,7 +149,7 @@
   id sender = (id)contextInfo;
   
   if (returnCode == NSAlertFirstButtonReturn) {
-    [[self transportPortCell] setPlaceholderString:
+    [[[self transportPortField] cell] setPlaceholderString:
      [[self transportPortField] stringValue]];
     
     [defaults setInteger:[[self transportPortField] integerValue]
@@ -228,7 +227,7 @@
     return;
   
   // Show transport port in the network preferences as a placeholder string.
-  [[self transportPortCell] setPlaceholderString:
+  [[[self transportPortField] cell] setPlaceholderString:
    [[NSNumber numberWithUnsignedInteger:
      [[[NSApp delegate] userAgent] transportPort]] stringValue]];
 }

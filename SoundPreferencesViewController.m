@@ -30,6 +30,7 @@
 
 #import "SoundPreferencesViewController.h"
 
+#import "AppController.h"
 #import "PreferenceController.h"
 
 
@@ -59,6 +60,9 @@
                          selector:@selector(popUpButtonWillPopUp:)
                              name:NSPopUpButtonWillPopUpNotification
                            object:[self ringtonePopUp]];
+  
+  [self updateAvailableSounds];
+  [self updateAudioDevices];
 }
 
 - (void)dealloc {
