@@ -33,7 +33,7 @@
 #import "AKKeychain.h"
 
 #import "AccountSetupController.h"
-#import "PreferenceController.h"
+#import "PreferencesController.h"
 
 
 // Pasteboard type.
@@ -188,7 +188,7 @@ static NSString * const kAKSIPAccountPboardType = @"AKSIPAccountPboardType";
   [defaults synchronize];
   
   [[NSNotificationCenter defaultCenter]
-   postNotificationName:AKPreferenceControllerDidRemoveAccountNotification
+   postNotificationName:AKPreferencesControllerDidRemoveAccountNotification
                  object:[self preferencesController]
                userInfo:[NSDictionary
                          dictionaryWithObject:[NSNumber numberWithInteger:index]
@@ -592,7 +592,7 @@ static NSString * const kAKSIPAccountPboardType = @"AKSIPAccountPboardType";
   [defaults synchronize];
   
   [[NSNotificationCenter defaultCenter]
-   postNotificationName:AKPreferenceControllerDidChangeAccountEnabledNotification
+   postNotificationName:AKPreferencesControllerDidChangeAccountEnabledNotification
                  object:[self preferencesController]
                userInfo:userInfo];
 }
@@ -714,7 +714,7 @@ writeRowsWithIndexes:(NSIndexSet *)rowIndexes
    byExtendingSelection:NO];
   
   [[NSNotificationCenter defaultCenter]
-   postNotificationName:AKPreferenceControllerDidSwapAccountsNotification
+   postNotificationName:AKPreferencesControllerDidSwapAccountsNotification
                  object:[self preferencesController]
                userInfo:[NSDictionary dictionaryWithObjectsAndKeys:
                          [NSNumber numberWithInteger:draggingRow], kSourceIndex,

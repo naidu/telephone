@@ -32,7 +32,7 @@
 
 #import "AKKeychain.h"
 
-#import "PreferenceController.h"
+#import "PreferencesController.h"
 
 
 NSString * const AKAccountSetupControllerDidAddAccountNotification

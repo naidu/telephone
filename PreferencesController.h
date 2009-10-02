@@ -1,5 +1,5 @@
 //
-//  PreferenceController.h
+//  PreferencesController.h
 //  Telephone
 //
 //  Copyright (c) 2008-2009 Alexei Kuznetsov. All rights reserved.
@@ -87,26 +87,26 @@ extern NSString * const kDestinationIndex;
 
 // Notifications.
 //
-// Sent when preference controller removes an accont.
+// Sent when preferences controller removes an accont.
 // |userInfo| dictionary key: AKAccountIndex.
-extern NSString * const AKPreferenceControllerDidRemoveAccountNotification;
+extern NSString * const AKPreferencesControllerDidRemoveAccountNotification;
 //
-// Sent when preference controller enables or disables an account.
+// Sent when preferences controller enables or disables an account.
 // |userInfo| dictionary key: AKAccountIndex.
-extern NSString * const AKPreferenceControllerDidChangeAccountEnabledNotification;
+extern NSString * const AKPreferencesControllerDidChangeAccountEnabledNotification;
 //
-// Sent when preference controller changes account order.
+// Sent when preferences controller changes account order.
 // |userInfo| dictionary keys: AKSourceIndex, AKDestinationIndex.
-extern NSString * const AKPreferenceControllerDidSwapAccountsNotification;
+extern NSString * const AKPreferencesControllerDidSwapAccountsNotification;
 //
-// Sent when preference controller changes network settings.
-extern NSString * const AKPreferenceControllerDidChangeNetworkSettingsNotification;
+// Sent when preferences controller changes network settings.
+extern NSString * const AKPreferencesControllerDidChangeNetworkSettingsNotification;
 
 @class GeneralPreferencesViewController, AccountPreferencesViewController;
 @class SoundPreferencesViewController, NetworkPreferencesViewController;
 
-// A preference controler.
-@interface PreferenceController : NSWindowController {
+// A preferences controller.
+@interface PreferencesController : NSWindowController {
  @private
   id delegate_;
   GeneralPreferencesViewController *generalPreferencesViewController_;

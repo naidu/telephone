@@ -31,7 +31,7 @@
 #import "NetworkPreferencesViewController.h"
 
 #import "AppController.h"
-#import "PreferenceController.h"
+#import "PreferencesController.h"
 
 
 @interface NetworkPreferencesViewController ()
@@ -207,7 +207,7 @@
                   forKey:kOutboundProxyPort];
     
     [[NSNotificationCenter defaultCenter]
-     postNotificationName:AKPreferenceControllerDidChangeNetworkSettingsNotification
+     postNotificationName:AKPreferencesControllerDidChangeNetworkSettingsNotification
                    object:[self preferencesController]];
     
   } else if (returnCode == NSAlertThirdButtonReturn) {

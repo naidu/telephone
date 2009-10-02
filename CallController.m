@@ -45,7 +45,7 @@
 
 #import "AccountController.h"
 #import "AppController.h"
-#import "PreferenceController.h"
+#import "PreferencesController.h"
 
 
 NSString * const AKCallWindowWillCloseNotification = @"AKCallWindowWillClose";

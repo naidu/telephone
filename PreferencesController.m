@@ -1,5 +1,5 @@
 //
-//  PreferenceController.m
+//  PreferencesController.m
 //  Telephone
 //
 //  Copyright (c) 2008-2009 Alexei Kuznetsov. All rights reserved.
@@ -28,7 +28,7 @@
 //  ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
 
-#import "PreferenceController.h"
+#import "PreferencesController.h"
 
 #import "AKNSWindow+Resizing.h"
 
@@ -84,16 +84,16 @@ NSString * const kProxyPort = @"ProxyPort";
 NSString * const kSourceIndex = @"SourceIndex";
 NSString * const kDestinationIndex = @"DestinationIndex";
 
-NSString * const AKPreferenceControllerDidRemoveAccountNotification
-  = @"AKPreferenceControllerDidRemoveAccount";
-NSString * const AKPreferenceControllerDidChangeAccountEnabledNotification
-  = @"AKPreferenceControllerDidChangeAccountEnabled";
-NSString * const AKPreferenceControllerDidSwapAccountsNotification
-  = @"AKPreferenceControllerDidSwapAccounts";
-NSString * const AKPreferenceControllerDidChangeNetworkSettingsNotification
-  = @"AKPreferenceControllerDidChangeNetworkSettings";
+NSString * const AKPreferencesControllerDidRemoveAccountNotification
+  = @"AKPreferencesControllerDidRemoveAccount";
+NSString * const AKPreferencesControllerDidChangeAccountEnabledNotification
+  = @"AKPreferencesControllerDidChangeAccountEnabled";
+NSString * const AKPreferencesControllerDidSwapAccountsNotification
+  = @"AKPreferencesControllerDidSwapAccounts";
+NSString * const AKPreferencesControllerDidChangeNetworkSettingsNotification
+  = @"AKPreferencesControllerDidChangeNetworkSettings";
 
-@implementation PreferenceController
+@implementation PreferencesController
 
 @synthesize delegate = delegate_;
 @dynamic generalPreferencesViewController;
@@ -111,35 +111,39 @@ NSString * const AKPreferenceControllerDidChangeNetworkSettingsNotification
   if (delegate_ == aDelegate)
     return;
   
-  NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
+  NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
   
   if (delegate_ != nil)
-    [notificationCenter removeObserver:delegate_ name:nil object:self];
+    [nc removeObserver:delegate_ name:nil object:self];
   
   if (aDelegate != nil) {
-    if ([aDelegate respondsToSelector:@selector(preferenceControllerDidRemoveAccount:)])
-      [notificationCenter addObserver:aDelegate
-                             selector:@selector(preferenceControllerDidRemoveAccount:)
-                                 name:AKPreferenceControllerDidRemoveAccountNotification
-                               object:self];
+    if ([aDelegate respondsToSelector:@selector(preferencesControllerDidRemoveAccount:)]) {
+      [nc addObserver:aDelegate
+             selector:@selector(preferencesControllerDidRemoveAccount:)
+                 name:AKPreferencesControllerDidRemoveAccountNotification
+               object:self];
+    }
     
-    if ([aDelegate respondsToSelector:@selector(preferenceControllerDidChangeAccountEnabled:)])
-      [notificationCenter addObserver:aDelegate
-                             selector:@selector(preferenceControllerDidChangeAccountEnabled:)
-                                 name:AKPreferenceControllerDidChangeAccountEnabledNotification
-                               object:self];
+    if ([aDelegate respondsToSelector:@selector(preferencesControllerDidChangeAccountEnabled:)]) {
+      [nc addObserver:aDelegate
+             selector:@selector(preferencesControllerDidChangeAccountEnabled:)
+                 name:AKPreferencesControllerDidChangeAccountEnabledNotification
+               object:self];
+    }
     
-    if ([aDelegate respondsToSelector:@selector(preferenceControllerDidSwapAccounts:)])
-      [notificationCenter addObserver:aDelegate
-                             selector:@selector(preferenceControllerDidSwapAccounts:)
-                                 name:AKPreferenceControllerDidSwapAccountsNotification
-                               object:self];
+    if ([aDelegate respondsToSelector:@selector(preferencesControllerDidSwapAccounts:)]) {
+      [nc addObserver:aDelegate
+             selector:@selector(preferencesControllerDidSwapAccounts:)
+                 name:AKPreferencesControllerDidSwapAccountsNotification
+               object:self];
+    }
     
-    if ([aDelegate respondsToSelector:@selector(preferenceControllerDidChangeNetworkSettings:)])
-      [notificationCenter addObserver:aDelegate
-                             selector:@selector(preferenceControllerDidChangeNetworkSettings:)
-                                 name:AKPreferenceControllerDidChangeNetworkSettingsNotification
-                               object:self];
+    if ([aDelegate respondsToSelector:@selector(preferencesControllerDidChangeNetworkSettings:)]) {
+      [nc addObserver:aDelegate
+             selector:@selector(preferencesControllerDidChangeNetworkSettings:)
+                 name:AKPreferencesControllerDidChangeNetworkSettingsNotification
+               object:self];
+    }
   }
   
   delegate_ = aDelegate;

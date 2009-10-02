@@ -50,7 +50,7 @@
 #import "AppController.h"
 #import "AuthenticationFailureController.h"
 #import "CallController.h"
-#import "PreferenceController.h"
+#import "PreferencesController.h"
 
 
 // Account state pop-up button widths.

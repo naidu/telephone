@@ -40,7 +40,7 @@
 #import "AKTelephoneNumberFormatter.h"
 
 #import "AccountController.h"
-#import "PreferenceController.h"
+#import "PreferencesController.h"
 
 
 // Call destination keys.

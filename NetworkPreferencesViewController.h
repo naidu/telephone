@@ -31,12 +31,12 @@
 #import <Cocoa/Cocoa.h>
 
 
-@class PreferenceController;
+@class PreferencesController;
 
 // A view controller to manage network preferences.
 @interface NetworkPreferencesViewController : NSViewController {
  @private
-  PreferenceController *preferencesController_;
+  PreferencesController *preferencesController_;
   
   NSTextField *transportPortField_;
   NSTextField *STUNServerHostField_;
@@ -47,7 +47,7 @@
   NSTextField *outboundProxyPortField_;
 }
 
-@property(nonatomic, assign) PreferenceController *preferencesController;
+@property(nonatomic, assign) PreferencesController *preferencesController;
 
 @property(nonatomic, retain) IBOutlet NSTextField *transportPortField;
 @property(nonatomic, retain) IBOutlet NSTextField *STUNServerHostField;

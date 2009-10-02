@@ -51,7 +51,7 @@
 #import "ActiveAccountViewController.h"
 #import "AuthenticationFailureController.h"
 #import "CallController.h"
-#import "PreferenceController.h"
+#import "PreferencesController.h"
 
 
 NSString * const kAudioDeviceIdentifier = @"AudioDeviceIdentifier";
@@ -124,7 +124,7 @@ static void NameserversChanged(SCDynamicStoreRef store,
 @synthesize userAgent = userAgent_;
 @synthesize accountControllers = accountControllers_;
 @dynamic enabledAccountControllers;
-@synthesize preferenceController = preferenceController_;
+@dynamic preferencesController;
 @dynamic accountSetupController;
 @synthesize audioDevices = audioDevices_;
 @synthesize soundInputDeviceIndex = soundInputDeviceIndex_;
@@ -151,6 +151,14 @@ static void NameserversChanged(SCDynamicStoreRef store,
 - (NSArray *)enabledAccountControllers {
   return [[self accountControllers] filteredArrayUsingPredicate:
           [NSPredicate predicateWithFormat:@"enabled == YES"]];
+}
+
+- (PreferencesController *)preferencesController {
+  if (preferencesController_ == nil) {
+    preferencesController_ = [[PreferencesController alloc] init];
+    [preferencesController_ setDelegate:self];
+  }
+  return preferencesController_;
 }
 
 - (AccountSetupController *)accountSetupController {
@@ -420,9 +428,9 @@ static void NameserversChanged(SCDynamicStoreRef store,
   [userAgent_ dealloc];
   [accountControllers_ release];
   
-  if ([[[self preferenceController] delegate] isEqual:self])
-    [[self preferenceController] setDelegate:nil];
-  [preferenceController_ release];
+  if ([[[self preferencesController] delegate] isEqual:self])
+    [[self preferencesController] setDelegate:nil];
+  [preferencesController_ release];
   
   [audioDevices_ release];
   [ringtone_ release];
@@ -572,7 +580,7 @@ static void NameserversChanged(SCDynamicStoreRef store,
                       waitUntilDone:YES];
   
   // Update audio devices in preferences.
-  [[[self preferenceController] soundPreferencesViewController]
+  [[[self preferencesController] soundPreferencesViewController]
    performSelectorOnMainThread:@selector(updateAudioDevices)
                     withObject:nil
                  waitUntilDone:NO];
@@ -684,15 +692,10 @@ static void NameserversChanged(SCDynamicStoreRef store,
 }
 
 - (IBAction)showPreferencePanel:(id)sender {
-  if (preferenceController_ == nil) {
-    preferenceController_ = [[PreferenceController alloc] init];
-    [[self preferenceController] setDelegate:self];
-  }
+  if (![[[self preferencesController] window] isVisible])
+    [[[self preferencesController] window] center];
   
-  if (![[[self preferenceController] window] isVisible])
-    [[[self preferenceController] window] center];
-  
-  [[self preferenceController] showWindow:nil];
+  [[self preferencesController] showWindow:nil];
 }
 
 - (IBAction)addAccountOnFirstLaunch:(id)sender {
@@ -1500,9 +1503,9 @@ static void NameserversChanged(SCDynamicStoreRef store,
 
 
 #pragma mark -
-#pragma mark PreferenceController delegate
+#pragma mark PreferencesController delegate
 
-- (void)preferenceControllerDidRemoveAccount:(NSNotification *)notification {
+- (void)preferencesControllerDidRemoveAccount:(NSNotification *)notification {
   NSInteger index
     = [[[notification userInfo] objectForKey:kAccountIndex] integerValue];
   AccountController *anAccountController
@@ -1514,7 +1517,7 @@ static void NameserversChanged(SCDynamicStoreRef store,
   [[self accountControllers] removeObjectAtIndex:index];
 }
 
-- (void)preferenceControllerDidChangeAccountEnabled:(NSNotification *)notification {
+- (void)preferencesControllerDidChangeAccountEnabled:(NSNotification *)notification {
   NSUInteger index
     = [[[notification userInfo] objectForKey:kAccountIndex] integerValue];
   
@@ -1603,7 +1606,7 @@ static void NameserversChanged(SCDynamicStoreRef store,
   }
 }
 
-- (void)preferenceControllerDidSwapAccounts:(NSNotification *)notification {
+- (void)preferencesControllerDidSwapAccounts:(NSNotification *)notification {
   NSDictionary *userInfo = [notification userInfo];
   NSInteger sourceIndex = [[userInfo objectForKey:kSourceIndex] integerValue];
   NSInteger destinationIndex = [[userInfo objectForKey:kDestinationIndex]
@@ -1621,7 +1624,7 @@ static void NameserversChanged(SCDynamicStoreRef store,
     [[self accountControllers] removeObjectAtIndex:(sourceIndex + 1)];
 }
 
-- (void)preferenceControllerDidChangeNetworkSettings:(NSNotification *)notification {
+- (void)preferencesControllerDidChangeNetworkSettings:(NSNotification *)notification {
   NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
   
   [[self userAgent] setTransportPort:[defaults integerForKey:kTransportPort]];
@@ -2124,7 +2127,7 @@ static void NameserversChanged(SCDynamicStoreRef store,
     [defaults synchronize];
     
     AccountPreferencesViewController *accountPreferencesViewController
-      = [[self preferenceController] accountPreferencesViewController];
+      = [[self preferencesController] accountPreferencesViewController];
     if ([[accountPreferencesViewController accountsTable] selectedRow] == index) {
       [accountPreferencesViewController populateFieldsForAccountAtIndex:index];
     }

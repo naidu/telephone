@@ -31,7 +31,7 @@
 #import "SoundPreferencesViewController.h"
 
 #import "AppController.h"
-#import "PreferenceController.h"
+#import "PreferencesController.h"
 
 
 @implementation SoundPreferencesViewController
