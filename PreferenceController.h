@@ -87,9 +87,6 @@ extern NSString * const kDestinationIndex;
 
 // Notifications.
 //
-// Sent when preference controller adds an account.
-extern NSString * const AKPreferenceControllerDidAddAccountNotification;
-//
 // Sent when preference controller removes an accont.
 // Key: AKAccountIndex.
 extern NSString * const AKPreferenceControllerDidRemoveAccountNotification;
@@ -112,7 +109,7 @@ extern NSString * const AKPreferenceControllerDidChangeNetworkSettingsNotificati
 @interface PreferenceController : NSWindowController {
  @private
   id delegate_;
-  GeneralPreferencesViewController *generalPreferencesController_;
+  GeneralPreferencesViewController *generalPreferencesViewController_;
   AccountPreferencesViewController *accountPreferencesViewController_;
   SoundPreferencesViewController *soundPreferencesViewController_;
   NetworkPreferencesViewController *networkPreferencesViewController_;
@@ -128,7 +125,7 @@ extern NSString * const AKPreferenceControllerDidChangeNetworkSettingsNotificati
 @property(nonatomic, assign) id delegate;
 
 // General preferences view controller.
-@property(nonatomic, readonly) GeneralPreferencesViewController *generalPreferencesController;
+@property(nonatomic, readonly) GeneralPreferencesViewController *generalPreferencesViewController;
 
 // Account preferences view controller.
 @property(nonatomic, readonly) AccountPreferencesViewController *accountPreferencesViewController;
@@ -140,7 +137,7 @@ extern NSString * const AKPreferenceControllerDidChangeNetworkSettingsNotificati
 @property(nonatomic, readonly) NetworkPreferencesViewController *networkPreferencesViewController;
 
 // Outlets.
-
+//
 @property(nonatomic, retain) IBOutlet NSToolbar *toolbar;
 @property(nonatomic, retain) IBOutlet NSToolbarItem *generalToolbarItem;
 @property(nonatomic, retain) IBOutlet NSToolbarItem *accountsToolbarItem;

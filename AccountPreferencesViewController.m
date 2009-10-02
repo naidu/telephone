@@ -30,6 +30,12 @@
 
 #import "AccountPreferencesViewController.h"
 
+#import "AccountSetupController.h"
+#import "PreferenceController.h"
+
+
+// Pasteboard type.
+static NSString * const kAKSIPAccountPboardType = @"AKSIPAccountPboardType";
 
 @implementation AccountPreferencesViewController
 
@@ -63,6 +69,18 @@
   // Register a pasteboard type to rearrange accounts with drag and drop.
   [[self accountsTable] registerForDraggedTypes:
    [NSArray arrayWithObject:kAKSIPAccountPboardType]];
+  
+  NSInteger row = [[self accountsTable] selectedRow];
+  if (row != -1) {
+    [self populateFieldsForAccountAtIndex:row];
+  }
+  
+  // Subscribe to the account setup notifications.
+  NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
+  [nc addObserver:self
+         selector:@selector(accountSetupControllerDidAddAccount:)
+             name:AKAccountSetupControllerDidAddAccountNotification
+           object:nil];
 }
 
 - (void)dealloc {
@@ -82,27 +100,30 @@
   [SIPAddressField_ release];
   [registrarField_ release];
   
+  [[NSNotificationCenter defaultCenter] removeObserver:self];
+  
   [super dealloc];
 }
 
 - (IBAction)showAddAccountSheet:(id)sender {
-  if ([self addAccountWindow] == nil)
-    [NSBundle loadNibNamed:@"AddAccount" owner:self];
+  AccountSetupController *accountSetupController
+    = [[[AccountSetupController alloc] init] autorelease];
   
-  [[self setupFullNameField] setStringValue:@""];
-  [[self setupDomainField] setStringValue:@""];
-  [[self setupUsernameField] setStringValue:@""];
-  [[self setupPasswordField] setStringValue:@""];
+//  [[accountSetupController fullNameField] setStringValue:@""];
+//  [[accountSetupController domainField] setStringValue:@""];
+//  [[accountSetupController usernameField] setStringValue:@""];
+//  [[accountSetupController passwordField] setStringValue:@""];
+//  
+//  [[accountSetupController fullNameInvalidDataView] setHidden:YES];
+//  [[accountSetupController domainInvalidDataView] setHidden:YES];
+//  [[accountSetupController usernameInvalidDataView] setHidden:YES];
+//  [[accountSetupController passwordInvalidDataView] setHidden:YES];
   
-  [[self setupFullNameInvalidDataView] setHidden:YES];
-  [[self setupDomainInvalidDataView] setHidden:YES];
-  [[self setupUsernameInvalidDataView] setHidden:YES];
-  [[self setupPasswordInvalidDataView] setHidden:YES];
+  [[accountSetupController window] makeFirstResponder:
+   [accountSetupController fullNameField]];
   
-  [[self addAccountWindow] makeFirstResponder:[self setupFullNameField]];
-  
-  [NSApp beginSheet:[self addAccountWindow]
-     modalForWindow:[[self accountsView] window]
+  [NSApp beginSheet:[accountSetupController window]
+     modalForWindow:[[self view] window]
       modalDelegate:nil
      didEndSelector:NULL
         contextInfo:NULL];
@@ -702,6 +723,22 @@ writeRowsWithIndexes:(NSIndexSet *)rowIndexes
   NSInteger row = [[self accountsTable] selectedRow];
   
   [self populateFieldsForAccountAtIndex:row];
+}
+
+
+#pragma mark -
+#pragma mark AccountSetupController notifications
+
+- (void)accountSetupControllerDidAddAccount:(NSNotification *)notification {
+  [[self accountsTable] reloadData];
+  
+  // Select the newly added account.
+  NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+  NSUInteger index = [[defaults arrayForKey:kAccounts] count] - 1;
+  if (index != 0) {
+    [[self accountsTable] selectRowIndexes:[NSIndexSet indexSetWithIndex:index]
+                      byExtendingSelection:NO];
+  }
 }
 
 @end

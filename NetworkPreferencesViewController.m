@@ -48,6 +48,8 @@
 
 @implementation NetworkPreferencesViewController
 
+@synthesize preferencesController = preferencesController_;
+
 @synthesize transportPortField = transportPortField_;
 @synthesize STUNServerHostField = STUNServerHostField_;
 @synthesize STUNServerPortField = STUNServerPortField_;
@@ -75,6 +77,40 @@
                          selector:@selector(SIPUserAgentDidFinishStarting:)
                              name:AKSIPUserAgentDidFinishStartingNotification
                            object:nil];
+  
+  // Show user agent's current transport port as a placeholder string.
+  if ([[[NSApp delegate] userAgent] isStarted]) {
+    [[[self transportPortField] cell] setPlaceholderString:
+     [[NSNumber numberWithUnsignedInteger:
+       [[[NSApp delegate] userAgent] transportPort]] stringValue]];
+  }
+  
+  NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+  
+  if ([defaults integerForKey:kTransportPort] > 0) {
+    [[self transportPortField] setIntegerValue:
+     [defaults integerForKey:kTransportPort]];
+  }
+  
+  [[self STUNServerHostField] setStringValue:
+   [defaults stringForKey:kSTUNServerHost]];
+  
+  if ([defaults integerForKey:kSTUNServerPort] > 0) {
+    [[self STUNServerPortField] setIntegerValue:
+     [defaults integerForKey:kSTUNServerPort]];
+  }
+  
+  [[self useICECheckBox] setState:[defaults integerForKey:kUseICE]];
+  
+  [[self useDNSSRVCheckBox] setState:[defaults integerForKey:kUseDNSSRV]];
+  
+  [[self outboundProxyHostField] setStringValue:
+   [defaults stringForKey:kOutboundProxyHost]];
+  
+  if ([defaults integerForKey:kOutboundProxyPort] > 0) {
+    [[self outboundProxyPortField] setIntegerValue:
+     [defaults integerForKey:kOutboundProxyPort]];
+  }
 }
 
 - (void)dealloc {
@@ -110,8 +146,9 @@
       ![[defaults stringForKey:kOutboundProxyHost] isEqualToString:newOutboundProxyHost] ||
       [defaults integerForKey:kOutboundProxyPort] != newOutboundProxyPort) {
     // Explicitly select Network toolbar item.
-    [[self toolbar] setSelectedItemIdentifier:[[self networkToolbarItem]
-                                               itemIdentifier]];
+    [[[self preferencesController] toolbar]
+     setSelectedItemIdentifier:[[self networkToolbarItem]
+                                itemIdentifier]];
     
     NSAlert *alert = [[[NSAlert alloc] init] autorelease];
     [alert addButtonWithTitle:NSLocalizedString(@"Save", @"Save button.")];
@@ -176,7 +213,7 @@
     
     [[NSNotificationCenter defaultCenter]
      postNotificationName:AKPreferenceControllerDidChangeNetworkSettingsNotification
-                   object:self];
+                   object:[self preferencesController]];
     
   } else if (returnCode == NSAlertThirdButtonReturn) {
     if ([defaults integerForKey:kTransportPort] == 0) {
@@ -212,8 +249,9 @@
   }
   
   if ([sender isMemberOfClass:[NSToolbarItem class]]) {
-    [[self toolbar] setSelectedItemIdentifier:[sender itemIdentifier]];
-    [self changeView:sender];
+    [[[self preferencesController] toolbar]
+     setSelectedItemIdentifier:[sender itemIdentifier]];
+    [[self preferencesController] changeView:sender];
   } else if ([sender isMemberOfClass:[NSWindow class]])
     [sender close];
 }

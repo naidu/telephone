@@ -30,6 +30,11 @@
 
 #import "AccountSetupController.h"
 
+#import "PreferenceController.h"
+
+
+NSString * const AKAccountSetupControllerDidAddAccountNotification
+  = @"AKAccountSetupControllerDidAddAccount";
 
 @implementation AccountSetupController
 
@@ -124,29 +129,17 @@
   [defaults setObject:savedAccounts forKey:kAccounts];
   [defaults synchronize];
   
-  [[self accountsTable] reloadData];
-  
-  BOOL success
-    = [AKKeychain addItemWithServiceName:[NSString stringWithFormat:@"SIP: %@",
-                                          [[self domainField] stringValue]]
-                             accountName:[[self usernameField] stringValue]
-                                password:[[self passwordField] stringValue]];
+  [AKKeychain addItemWithServiceName:[NSString stringWithFormat:@"SIP: %@",
+                                      [[self domainField] stringValue]]
+                         accountName:[[self usernameField] stringValue]
+                            password:[[self passwordField] stringValue]];
   
   [self closeSheet:sender];
   
-  if (success) {
-    [[NSNotificationCenter defaultCenter]
-     postNotificationName:AKPreferenceControllerDidAddAccountNotification
-                   object:self
-                 userInfo:accountDict];
-  }
-  
-  // Set the selection to the new account
-  NSUInteger index = [[defaults arrayForKey:kAccounts] count] - 1;
-  if (index != 0) {
-    [[self accountsTable] selectRowIndexes:[NSIndexSet indexSetWithIndex:index]
-                      byExtendingSelection:NO];
-  }
+  [[NSNotificationCenter defaultCenter]
+   postNotificationName:AKAccountSetupControllerDidAddAccountNotification
+                 object:self
+               userInfo:accountDict];
 }
 
 @end

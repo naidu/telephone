@@ -31,6 +31,11 @@
 #import <Cocoa/Cocoa.h>
 
 
+// Sent when account setup controller adds an account.
+// |userInfo| object contains dictionary with the account data (see the account
+// keys defined in PreferencesController.h).
+extern NSString * const AKAccountSetupControllerDidAddAccountNotification;
+
 // A class to manage account setup.
 @interface AccountSetupController : NSWindowController {
  @private

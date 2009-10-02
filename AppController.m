@@ -46,6 +46,7 @@
 #import "iTunes.h"
 
 #import "AccountController.h"
+#import "AccountSetupController.h"
 #import "ActiveAccountViewController.h"
 #import "AuthenticationFailureController.h"
 #import "CallController.h"
@@ -324,9 +325,17 @@ static void NameserversChanged(SCDynamicStoreRef store,
     [NSNumber numberWithDouble:40.0],
     nil]];
   
+  NSNotificationCenter *notificationCenter
+    = [NSNotificationCenter defaultCenter];
+  
+  // Subscribe to the account setup notifications.
+  [notificationCenter addObserver:self
+                         selector:@selector(accountSetupControllerDidAddAccount:)
+                             name:AKAccountSetupControllerDidAddAccountNotification
+                           object:nil];
+  
   // Subscribe to Early and Confirmed call states to set sound IO to the user
   // agent.
-  NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
   [notificationCenter addObserver:self
                          selector:@selector(SIPCallCalling:)
                              name:AKSIPCallCallingNotification
@@ -1448,9 +1457,9 @@ static void NameserversChanged(SCDynamicStoreRef store,
 
 
 #pragma mark -
-#pragma mark PreferenceController delegate
+#pragma mark AccountSetupController delegate
 
-- (void)preferenceControllerDidAddAccount:(NSNotification *)notification {
+- (void)accountSetupControllerDidAddAccount:(NSNotification *)notification {
   NSDictionary *accountDict = [notification userInfo];
   
   NSString *SIPAddress = [NSString stringWithFormat:@"%@@%@",
@@ -1479,6 +1488,10 @@ static void NameserversChanged(SCDynamicStoreRef store,
     [theAccountController setAccountRegistered:YES];
   }
 }
+
+
+#pragma mark -
+#pragma mark PreferenceController delegate
 
 - (void)preferenceControllerDidRemoveAccount:(NSNotification *)notification {
   NSInteger index

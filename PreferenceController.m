@@ -35,7 +35,11 @@
 #import "AKSIPAccount.h"
 #import "AKSIPUserAgent.h"
 
+#import "AccountPreferencesViewController.h"
 #import "AppController.h"
+#import "GeneralPreferencesViewController.h"
+#import "NetworkPreferencesViewController.h"
+#import "SoundPreferencesViewController.h"
 
 
 NSString * const kAccounts = @"Accounts";
@@ -83,8 +87,6 @@ NSString * const kProxyPort = @"ProxyPort";
 NSString * const kSourceIndex = @"SourceIndex";
 NSString * const kDestinationIndex = @"DestinationIndex";
 
-NSString * const AKPreferenceControllerDidAddAccountNotification
-  = @"AKPreferenceControllerDidAddAccount";
 NSString * const AKPreferenceControllerDidRemoveAccountNotification
   = @"AKPreferenceControllerDidRemoveAccount";
 NSString * const AKPreferenceControllerDidChangeAccountEnabledNotification
@@ -94,13 +96,10 @@ NSString * const AKPreferenceControllerDidSwapAccountsNotification
 NSString * const AKPreferenceControllerDidChangeNetworkSettingsNotification
   = @"AKPreferenceControllerDidChangeNetworkSettings";
 
-// Pasteboard type.
-static NSString * const kAKSIPAccountPboardType = @"AKSIPAccountPboardType";
-
 @implementation PreferenceController
 
 @synthesize delegate = delegate_;
-@dynamic generalPreferencesController;
+@dynamic generalPreferencesViewController;
 @dynamic accountPreferencesViewController;
 @dynamic soundPreferencesViewController;
 @dynamic networkPreferencesViewController;
@@ -121,12 +120,6 @@ static NSString * const kAKSIPAccountPboardType = @"AKSIPAccountPboardType";
     [notificationCenter removeObserver:delegate_ name:nil object:self];
   
   if (aDelegate != nil) {
-    if ([aDelegate respondsToSelector:@selector(preferenceControllerDidAddAccount:)])
-      [notificationCenter addObserver:aDelegate
-                             selector:@selector(preferenceControllerDidAddAccount:)
-                                 name:AKPreferenceControllerDidAddAccountNotification
-                               object:self];
-    
     if ([aDelegate respondsToSelector:@selector(preferenceControllerDidRemoveAccount:)])
       [notificationCenter addObserver:aDelegate
                              selector:@selector(preferenceControllerDidRemoveAccount:)
@@ -155,12 +148,12 @@ static NSString * const kAKSIPAccountPboardType = @"AKSIPAccountPboardType";
   delegate_ = aDelegate;
 }
 
-- (GeneralPreferencesViewController *)generalPreferencesController {
-  if (generalPreferencesController_ == nil) {
-    generalPreferencesController_
+- (GeneralPreferencesViewController *)generalPreferencesViewController {
+  if (generalPreferencesViewController_ == nil) {
+    generalPreferencesViewController_
       = [[GeneralPreferencesViewController alloc] init];
   }
-  return generalPreferencesController_;
+  return generalPreferencesViewController_;
 }
 
 - (AccountPreferencesViewController *)accountPreferencesViewController {
@@ -183,6 +176,7 @@ static NSString * const kAKSIPAccountPboardType = @"AKSIPAccountPboardType";
   if (networkPreferencesViewController_ == nil) {
     networkPreferencesViewController_
       = [[NetworkPreferencesViewController alloc] init];
+    [networkPreferencesViewController_ setPreferencesController:self];
   }
   return networkPreferencesViewController_;
 }
@@ -195,7 +189,7 @@ static NSString * const kAKSIPAccountPboardType = @"AKSIPAccountPboardType";
 
 - (void)dealloc {
   [self setDelegate:nil];
-  [generalPreferencesController_ release];
+  [generalPreferencesViewController_ release];
   [accountPreferencesViewController_ release];
   [soundPreferencesViewController_ release];
   [networkPreferencesViewController_ release];
@@ -216,46 +210,8 @@ static NSString * const kAKSIPAccountPboardType = @"AKSIPAccountPboardType";
   [[self toolbar] setSelectedItemIdentifier:
    [[self generalToolbarItem] itemIdentifier]];
   [[self window] ak_resizeAndSwapToContentView:
-   [[self generalPreferencesController] view]];
-  [[self window] setTitle:[[self generalPreferencesController] title]];
-  
-  // Show transport port in the network preferences as a placeholder string.
-  if ([[[NSApp delegate] userAgent] isStarted]) {
-    [[[self transportPortField] cell] setPlaceholderString:
-     [[NSNumber numberWithUnsignedInteger:
-       [[[NSApp delegate] userAgent] transportPort]] stringValue]];
-  }
-  
-  NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-  
-  if ([defaults integerForKey:kTransportPort] > 0) {
-    [[self transportPortField] setIntegerValue:
-     [defaults integerForKey:kTransportPort]];
-  }
-  
-  [[self STUNServerHostField] setStringValue:
-   [defaults stringForKey:kSTUNServerHost]];
-  
-  if ([defaults integerForKey:kSTUNServerPort] > 0) {
-    [[self STUNServerPortField] setIntegerValue:
-     [defaults integerForKey:kSTUNServerPort]];
-  }
-  
-  [[self useICECheckBox] setState:[defaults integerForKey:kUseICE]];
-  
-  [[self useDNSSRVCheckBox] setState:[defaults integerForKey:kUseDNSSRV]];
-  
-  [[self outboundProxyHostField] setStringValue:
-   [defaults stringForKey:kOutboundProxyHost]];
-  
-  if ([defaults integerForKey:kOutboundProxyPort] > 0) {
-    [[self outboundProxyPortField] setIntegerValue:
-     [defaults integerForKey:kOutboundProxyPort]];
-  }
-  
-  NSInteger row = [[self accountsTable] selectedRow];
-  if (row != -1)
-    [self populateFieldsForAccountAtIndex:row];
+   [[self generalPreferencesViewController] view]];
+  [[self window] setTitle:[[self generalPreferencesViewController] title]];
 }
 
 - (IBAction)changeView:(id)sender {
@@ -264,9 +220,11 @@ static NSString * const kAKSIPAccountPboardType = @"AKSIPAccountPboardType";
   NSView *contentView = [[self window] contentView];
   NSView *networkPreferencesView
     = [[self networkPreferencesViewController] view];
+  
   if ([contentView isEqual:networkPreferencesView] &&
       [sender tag] != kNetworkPreferencesTag) {
-    if ([self checkForNetworkSettingsChanges:sender]) {
+    if ([[self networkPreferencesViewController]
+         checkForNetworkSettingsChanges:sender]) {
       return;
     }
   }
@@ -277,8 +235,8 @@ static NSString * const kAKSIPAccountPboardType = @"AKSIPAccountPboardType";
   
   switch ([sender tag]) {
     case kGeneralPreferencesTag:
-      view = [[self generalPreferencesController] view];
-      title = [[self generalPreferencesController] title];
+      view = [[self generalPreferencesViewController] view];
+      title = [[self generalPreferencesViewController] title];
       firstResponderView = nil;
       break;
     case kAccountsPreferencesTag:
