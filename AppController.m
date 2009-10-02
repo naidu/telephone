@@ -46,6 +46,7 @@
 #import "iTunes.h"
 
 #import "AccountController.h"
+#import "AccountPreferencesViewController.h"
 #import "AccountSetupController.h"
 #import "ActiveAccountViewController.h"
 #import "AuthenticationFailureController.h"
@@ -124,6 +125,7 @@ static void NameserversChanged(SCDynamicStoreRef store,
 @synthesize accountControllers = accountControllers_;
 @dynamic enabledAccountControllers;
 @synthesize preferenceController = preferenceController_;
+@dynamic accountSetupController;
 @synthesize audioDevices = audioDevices_;
 @synthesize soundInputDeviceIndex = soundInputDeviceIndex_;
 @synthesize soundOutputDeviceIndex = soundOutputDeviceIndex_;
@@ -149,6 +151,13 @@ static void NameserversChanged(SCDynamicStoreRef store,
 - (NSArray *)enabledAccountControllers {
   return [[self accountControllers] filteredArrayUsingPredicate:
           [NSPredicate predicateWithFormat:@"enabled == YES"]];
+}
+
+- (AccountSetupController *)accountSetupController {
+  if (accountSetupController_ == nil) {
+    accountSetupController_ = [[AccountSetupController alloc] init];
+  }
+  return accountSetupController_;
 }
 
 - (void)setRingtone:(NSSound *)aRingtone {
@@ -563,7 +572,7 @@ static void NameserversChanged(SCDynamicStoreRef store,
                       waitUntilDone:YES];
   
   // Update audio devices in preferences.
-  [[self preferenceController]
+  [[[self preferenceController] soundPreferencesViewController]
    performSelectorOnMainThread:@selector(updateAudioDevices)
                     withObject:nil
                  waitUntilDone:NO];
@@ -687,23 +696,23 @@ static void NameserversChanged(SCDynamicStoreRef store,
 }
 
 - (IBAction)addAccountOnFirstLaunch:(id)sender {
-  [[self preferenceController] addAccount:sender];
+  [[self accountSetupController] addAccount:sender];
   
-  if ([[[[self preferenceController] fullNameField] stringValue] length] > 0 &&
-      [[[[self preferenceController] domainField] stringValue] length] > 0 &&
-      [[[[self preferenceController] usernameField] stringValue] length] > 0 &&
-      [[[[self preferenceController] passwordField] stringValue] length] > 0) {
+  if ([[[[self accountSetupController] fullNameField] stringValue] length] > 0 &&
+      [[[[self accountSetupController] domainField] stringValue] length] > 0 &&
+      [[[[self accountSetupController] usernameField] stringValue] length] > 0 &&
+      [[[[self accountSetupController] passwordField] stringValue] length] > 0) {
     // Re-enable Preferences.
     [[self preferencesMenuItem] setAction:@selector(showPreferencePanel:)];
     
     // Change back targets and actions of addAccountWindow buttons.
-    [[[self preferenceController] defaultButton]
-     setTarget:[self preferenceController]];
-    [[[self preferenceController] defaultButton]
+    [[[self accountSetupController] defaultButton]
+     setTarget:[self accountSetupController]];
+    [[[self accountSetupController] defaultButton]
      setAction:@selector(addAccount:)];
-    [[[self preferenceController] otherButton]
-     setTarget:[self preferenceController]];
-    [[[self preferenceController] otherButton]
+    [[[self accountSetupController] otherButton]
+     setTarget:[self accountSetupController]];
+    [[[self accountSetupController] otherButton]
      setAction:@selector(closeSheet:)];
     
     // Install audio devices changes callback.
@@ -1766,12 +1775,12 @@ static void NameserversChanged(SCDynamicStoreRef store,
 #pragma mark NSWindow notifications
 
 - (void)windowWillClose:(NSNotification *)notification {
-  // User closed addAccountWindow. Terminate application.
-  if ([[notification object] isEqual:[[self preferenceController] addAccountWindow]]) {
+  // User closed Account Setup window. Terminate application.
+  if ([[notification object] isEqual:[[self accountSetupController] window]]) {
     [[NSNotificationCenter defaultCenter]
      removeObserver:self
                name:NSWindowWillCloseNotification
-             object:[[self preferenceController] addAccountWindow]];
+             object:[[self accountSetupController] window]];
     
     [NSApp terminate:self];
   }
@@ -1858,31 +1867,25 @@ static void NameserversChanged(SCDynamicStoreRef store,
     // Disable Preferences during the first account prompt.
     [[self preferencesMenuItem] setAction:NULL];
     
-    preferenceController_ = [[PreferenceController alloc] init];
-    [[self preferenceController] setDelegate:self];
-    [NSBundle loadNibNamed:@"AddAccount" owner:[self preferenceController]];
-    
     // Subscribe to addAccountWindow close to terminate application.
     [[NSNotificationCenter defaultCenter]
      addObserver:self
         selector:@selector(windowWillClose:)
             name:NSWindowWillCloseNotification
-          object:[[self preferenceController] addAccountWindow]];
+          object:[[self accountSetupController] window]];
     
     // Set different targets and actions of addAccountWindow buttons
     // to add the first account.
-    [[[self preferenceController] defaultButton]
-     setTarget:self];
-    [[[self preferenceController] defaultButton]
+    [[[self accountSetupController] defaultButton] setTarget:self];
+    [[[self accountSetupController] defaultButton]
      setAction:@selector(addAccountOnFirstLaunch:)];
-    [[[self preferenceController] otherButton]
-     setTarget:[[self preferenceController] addAccountWindow]];
-    [[[self preferenceController] otherButton]
+    [[[self accountSetupController] otherButton]
+     setTarget:[[self accountSetupController] window]];
+    [[[self accountSetupController] otherButton]
      setAction:@selector(performClose:)];
     
-    [[[self preferenceController] addAccountWindow] center];
-    [[[self preferenceController] addAccountWindow]
-     makeKeyAndOrderFront:self];
+    [[[self accountSetupController] window] center];
+    [[[self accountSetupController] window] makeKeyAndOrderFront:self];
     
     return;
   }
@@ -2120,8 +2123,11 @@ static void NameserversChanged(SCDynamicStoreRef store,
     [defaults setObject:accounts forKey:kAccounts];
     [defaults synchronize];
     
-    if ([[[self preferenceController] accountsTable] selectedRow] == index)
-      [[self preferenceController] populateFieldsForAccountAtIndex:index];
+    AccountPreferencesViewController *accountPreferencesViewController
+      = [[self preferenceController] accountPreferencesViewController];
+    if ([[accountPreferencesViewController accountsTable] selectedRow] == index) {
+      [accountPreferencesViewController populateFieldsForAccountAtIndex:index];
+    }
   }
 }
 

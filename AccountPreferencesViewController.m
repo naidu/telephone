@@ -30,6 +30,8 @@
 
 #import "AccountPreferencesViewController.h"
 
+#import "AKKeychain.h"
+
 #import "AccountSetupController.h"
 #import "PreferenceController.h"
 
@@ -38,6 +40,9 @@
 static NSString * const kAKSIPAccountPboardType = @"AKSIPAccountPboardType";
 
 @implementation AccountPreferencesViewController
+
+@synthesize preferencesController = preferencesController_;
+@dynamic accountSetupController;
 
 @synthesize accountsTable = accountsTable_;
 @synthesize accountEnabledCheckBox = accountEnabledCheckBox_;
@@ -54,6 +59,13 @@ static NSString * const kAKSIPAccountPboardType = @"AKSIPAccountPboardType";
 @synthesize proxyPortField = proxyPortField_;
 @synthesize SIPAddressField = SIPAddressField_;
 @synthesize registrarField = registrarField_;
+
+- (AccountSetupController *)accountSetupController {
+  if (accountSetupController_ == nil) {
+    accountSetupController_ = [[AccountSetupController alloc] init];
+  }
+  return accountSetupController_;
+}
 
 - (id)init {
   self = [super initWithNibName:@"AccountPreferencesView" bundle:nil];
@@ -106,23 +118,20 @@ static NSString * const kAKSIPAccountPboardType = @"AKSIPAccountPboardType";
 }
 
 - (IBAction)showAddAccountSheet:(id)sender {
-  AccountSetupController *accountSetupController
-    = [[[AccountSetupController alloc] init] autorelease];
+  [[[self accountSetupController] fullNameField] setStringValue:@""];
+  [[[self accountSetupController] domainField] setStringValue:@""];
+  [[[self accountSetupController] usernameField] setStringValue:@""];
+  [[[self accountSetupController] passwordField] setStringValue:@""];
   
-//  [[accountSetupController fullNameField] setStringValue:@""];
-//  [[accountSetupController domainField] setStringValue:@""];
-//  [[accountSetupController usernameField] setStringValue:@""];
-//  [[accountSetupController passwordField] setStringValue:@""];
-//  
-//  [[accountSetupController fullNameInvalidDataView] setHidden:YES];
-//  [[accountSetupController domainInvalidDataView] setHidden:YES];
-//  [[accountSetupController usernameInvalidDataView] setHidden:YES];
-//  [[accountSetupController passwordInvalidDataView] setHidden:YES];
+  [[[self accountSetupController] fullNameInvalidDataView] setHidden:YES];
+  [[[self accountSetupController] domainInvalidDataView] setHidden:YES];
+  [[[self accountSetupController] usernameInvalidDataView] setHidden:YES];
+  [[[self accountSetupController] passwordInvalidDataView] setHidden:YES];
   
-  [[accountSetupController window] makeFirstResponder:
-   [accountSetupController fullNameField]];
+  [[[self accountSetupController] window] makeFirstResponder:
+   [[self accountSetupController] fullNameField]];
   
-  [NSApp beginSheet:[accountSetupController window]
+  [NSApp beginSheet:[[self accountSetupController] window]
      modalForWindow:[[self view] window]
       modalDelegate:nil
      didEndSelector:NULL
@@ -180,7 +189,7 @@ static NSString * const kAKSIPAccountPboardType = @"AKSIPAccountPboardType";
   
   [[NSNotificationCenter defaultCenter]
    postNotificationName:AKPreferenceControllerDidRemoveAccountNotification
-                 object:self
+                 object:[self preferencesController]
                userInfo:[NSDictionary
                          dictionaryWithObject:[NSNumber numberWithInteger:index]
                                        forKey:kAccountIndex]];
@@ -584,8 +593,8 @@ static NSString * const kAKSIPAccountPboardType = @"AKSIPAccountPboardType";
   
   [[NSNotificationCenter defaultCenter]
    postNotificationName:AKPreferenceControllerDidChangeAccountEnabledNotification
-   object:self
-   userInfo:userInfo];
+                 object:[self preferencesController]
+               userInfo:userInfo];
 }
 
 - (IBAction)changeSubstitutePlusCharacter:(id)sender {
@@ -706,7 +715,7 @@ writeRowsWithIndexes:(NSIndexSet *)rowIndexes
   
   [[NSNotificationCenter defaultCenter]
    postNotificationName:AKPreferenceControllerDidSwapAccountsNotification
-                 object:self
+                 object:[self preferencesController]
                userInfo:[NSDictionary dictionaryWithObjectsAndKeys:
                          [NSNumber numberWithInteger:draggingRow], kSourceIndex,
                          [NSNumber numberWithInteger:row], kDestinationIndex,

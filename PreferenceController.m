@@ -30,10 +30,7 @@
 
 #import "PreferenceController.h"
 
-#import "AKKeychain.h"
 #import "AKNSWindow+Resizing.h"
-#import "AKSIPAccount.h"
-#import "AKSIPUserAgent.h"
 
 #import "AccountPreferencesViewController.h"
 #import "AppController.h"
@@ -160,6 +157,7 @@ NSString * const AKPreferenceControllerDidChangeNetworkSettingsNotification
   if (accountPreferencesViewController_ == nil) {
     accountPreferencesViewController_
       = [[AccountPreferencesViewController alloc] init];
+    [accountPreferencesViewController_ setPreferencesController:self];
   }
   return accountPreferencesViewController_;
 }
@@ -287,7 +285,8 @@ NSString * const AKPreferenceControllerDidChangeNetworkSettingsNotification
 #pragma mark NSWindow delegate
 
 - (BOOL)windowShouldClose:(id)window {
-  BOOL networkSettingsChanged = [self checkForNetworkSettingsChanges:window];
+  BOOL networkSettingsChanged = [[self networkPreferencesViewController]
+                                 checkForNetworkSettingsChanges:window];
   if (networkSettingsChanged)
     return NO;
   

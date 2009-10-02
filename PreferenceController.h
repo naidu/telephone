@@ -88,22 +88,22 @@ extern NSString * const kDestinationIndex;
 // Notifications.
 //
 // Sent when preference controller removes an accont.
-// Key: AKAccountIndex.
+// |userInfo| dictionary key: AKAccountIndex.
 extern NSString * const AKPreferenceControllerDidRemoveAccountNotification;
 //
 // Sent when preference controller enables or disables an account.
-// Key: AKAccountIndex.
+// |userInfo| dictionary key: AKAccountIndex.
 extern NSString * const AKPreferenceControllerDidChangeAccountEnabledNotification;
 //
 // Sent when preference controller changes account order.
-// Keys: AKSourceIndex, AKDestinationIndex.
+// |userInfo| dictionary keys: AKSourceIndex, AKDestinationIndex.
 extern NSString * const AKPreferenceControllerDidSwapAccountsNotification;
 //
 // Sent when preference controller changes network settings.
 extern NSString * const AKPreferenceControllerDidChangeNetworkSettingsNotification;
 
-@class AccountPreferencesViewController, SoundPreferencesViewController;
-@class NetworkPreferencesViewController;
+@class GeneralPreferencesViewController, AccountPreferencesViewController;
+@class SoundPreferencesViewController, NetworkPreferencesViewController;
 
 // A preference controler.
 @interface PreferenceController : NSWindowController {

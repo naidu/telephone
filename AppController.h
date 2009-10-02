@@ -46,6 +46,7 @@ extern NSString * const kGrowlNotificationIncomingCall;
 extern NSString * const kGrowlNotificationCallEnded;
 
 @class AKSIPUserAgent, PreferenceController, CallController;
+@class AccountSetupController;
 
 // Application controller and NSApplication delegate.
 @interface AppController : NSObject <AKSIPUserAgentDelegate, GrowlApplicationBridgeDelegate> {
@@ -53,6 +54,7 @@ extern NSString * const kGrowlNotificationCallEnded;
   AKSIPUserAgent *userAgent_;
   NSMutableArray *accountControllers_;
   PreferenceController *preferenceController_;
+  AccountSetupController *accountSetupController_;
   NSArray *audioDevices_;
   NSInteger soundInputDeviceIndex_;
   NSInteger soundOutputDeviceIndex_;
@@ -83,6 +85,9 @@ extern NSString * const kGrowlNotificationCallEnded;
 
 // Preference controller.
 @property(nonatomic, retain) PreferenceController *preferenceController;
+
+// Account setup controller.
+@property(nonatomic, readonly) AccountSetupController *accountSetupController;
 
 // An array of audio devices available in the system.
 @property(retain) NSArray *audioDevices;

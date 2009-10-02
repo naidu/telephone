@@ -57,4 +57,7 @@
 @property(nonatomic, retain) IBOutlet NSTextField *outboundProxyHostField;
 @property(nonatomic, retain) IBOutlet NSTextField *outboundProxyPortField;
 
+// Returns YES if network settings have been changed.
+- (BOOL)checkForNetworkSettingsChanges:(id)sender;
+
 @end

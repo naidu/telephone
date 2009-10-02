@@ -36,14 +36,10 @@
 
 @interface NetworkPreferencesViewController ()
 
-// Returns YES if network settings have been changed.
-- (BOOL)checkForNetworkSettingsChanges:(id)sender;
-
 // Method to be called when an alert about network changes is dismissed.
 - (void)networkSettingsChangeAlertDidEnd:(NSAlert *)alert
                               returnCode:(int)returnCode
                              contextInfo:(void *)contextInfo;
-
 @end
 
 @implementation NetworkPreferencesViewController
@@ -146,9 +142,8 @@
       ![[defaults stringForKey:kOutboundProxyHost] isEqualToString:newOutboundProxyHost] ||
       [defaults integerForKey:kOutboundProxyPort] != newOutboundProxyPort) {
     // Explicitly select Network toolbar item.
-    [[[self preferencesController] toolbar]
-     setSelectedItemIdentifier:[[self networkToolbarItem]
-                                itemIdentifier]];
+    [[[self preferencesController] toolbar] setSelectedItemIdentifier:
+     [[[self preferencesController] networkToolbarItem] itemIdentifier]];
     
     NSAlert *alert = [[[NSAlert alloc] init] autorelease];
     [alert addButtonWithTitle:NSLocalizedString(@"Save", @"Save button.")];
@@ -164,7 +159,7 @@
                        "accounts will be reconnected.",
                        @"Network settings change confirmation informative text.")];
     
-    [alert beginSheetModalForWindow:[self window]
+    [alert beginSheetModalForWindow:[[self preferencesController] window]
                       modalDelegate:self
                      didEndSelector:@selector(networkSettingsChangeAlertDidEnd:returnCode:contextInfo:)
                         contextInfo:sender];

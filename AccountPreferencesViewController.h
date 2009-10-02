@@ -31,9 +31,14 @@
 #import <Cocoa/Cocoa.h>
 
 
+@class PreferenceController, AccountSetupController;
+
 // A view controller to manage account preferences.
 @interface AccountPreferencesViewController : NSViewController {
  @private
+  PreferenceController *preferencesController_;
+  AccountSetupController *accountSetupController_;
+  
   NSTableView *accountsTable_;
   NSButton *accountEnabledCheckBox_;
   NSTextField *accountDescriptionField_;
@@ -50,6 +55,9 @@
   NSTextField *SIPAddressField_;
   NSTextField *registrarField_;
 }
+
+@property(nonatomic, assign) PreferenceController *preferencesController;
+@property(nonatomic, readonly) AccountSetupController *accountSetupController;
 
 @property(nonatomic, retain) IBOutlet NSTableView *accountsTable;
 @property(nonatomic, retain) IBOutlet NSButton *accountEnabledCheckBox;
