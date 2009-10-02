@@ -56,9 +56,13 @@
   NSTextField *registrarField_;
 }
 
+// Preferences controller the receiver belongs to.
 @property(nonatomic, assign) PreferencesController *preferencesController;
+
+// Account setup controller.
 @property(nonatomic, readonly) AccountSetupController *accountSetupController;
 
+// Outlets.
 @property(nonatomic, retain) IBOutlet NSTableView *accountsTable;
 @property(nonatomic, retain) IBOutlet NSButton *accountEnabledCheckBox;
 @property(nonatomic, retain) IBOutlet NSTextField *accountDescriptionField;

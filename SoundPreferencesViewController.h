@@ -40,6 +40,7 @@
   NSPopUpButton *ringtonePopUp_;
 }
 
+// Outlets.
 @property(nonatomic, retain) IBOutlet NSPopUpButton *soundInputPopUp;
 @property(nonatomic, retain) IBOutlet NSPopUpButton *soundOutputPopUp;
 @property(nonatomic, retain) IBOutlet NSPopUpButton *ringtoneOutputPopUp;

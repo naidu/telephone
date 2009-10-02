@@ -614,7 +614,6 @@ static NSString * const kAKSIPAccountPboardType = @"AKSIPAccountPboardType";
 
 - (NSInteger)numberOfRowsInTableView:(NSTableView *)aTableView {
   NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-  
   return [[defaults arrayForKey:kAccounts] count];
 }
 
@@ -730,7 +729,6 @@ writeRowsWithIndexes:(NSIndexSet *)rowIndexes
 
 - (void)tableViewSelectionDidChange:(NSNotification *)aNotification {
   NSInteger row = [[self accountsTable] selectedRow];
-  
   [self populateFieldsForAccountAtIndex:row];
 }
 

@@ -47,8 +47,10 @@
   NSTextField *outboundProxyPortField_;
 }
 
+// Preferences controller the receiver belongs to.
 @property(nonatomic, assign) PreferencesController *preferencesController;
 
+// Outlets.
 @property(nonatomic, retain) IBOutlet NSTextField *transportPortField;
 @property(nonatomic, retain) IBOutlet NSTextField *STUNServerHostField;
 @property(nonatomic, retain) IBOutlet NSTextField *STUNServerPortField;

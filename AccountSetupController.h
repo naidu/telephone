@@ -51,6 +51,7 @@ extern NSString * const AKAccountSetupControllerDidAddAccountNotification;
   NSButton *otherButton_;
 }
 
+// Outlets.
 @property(nonatomic, retain) IBOutlet NSTextField *fullNameField;
 @property(nonatomic, retain) IBOutlet NSTextField *domainField;
 @property(nonatomic, retain) IBOutlet NSTextField *usernameField;
