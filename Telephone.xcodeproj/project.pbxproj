@@ -51,6 +51,12 @@
 		AABA3A740F8A2B93009E1005 /* AKSIPAccount.m in Sources */ = {isa = PBXBuildFile; fileRef = AA4BD4DD0E07C51E005A71B2 /* AKSIPAccount.m */; };
 		AABAD7ED0E0C171A00CB5930 /* PreferencesController.m in Sources */ = {isa = PBXBuildFile; fileRef = AABAD7EC0E0C171A00CB5930 /* PreferencesController.m */; };
 		AACD92D00ED434DD00AF8D17 /* AKActiveCallView.m in Sources */ = {isa = PBXBuildFile; fileRef = AACD92CF0ED434DD00AF8D17 /* AKActiveCallView.m */; };
+		AAD92132107A5E9F00F142A4 /* ActiveCallViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AAD92131107A5E9F00F142A4 /* ActiveCallViewController.m */; };
+		AAD92136107A607C00F142A4 /* IncomingCallViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AAD92135107A607C00F142A4 /* IncomingCallViewController.m */; };
+		AAD92139107A608B00F142A4 /* EndedCallViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AAD92138107A608B00F142A4 /* EndedCallViewController.m */; };
+		AADAA2C3107E569200789F2D /* IncomingCallView.xib in Resources */ = {isa = PBXBuildFile; fileRef = AADAA2C2107E569200789F2D /* IncomingCallView.xib */; };
+		AADAA2CD107E56FD00789F2D /* ActiveCallView.xib in Resources */ = {isa = PBXBuildFile; fileRef = AADAA2CC107E56FD00789F2D /* ActiveCallView.xib */; };
+		AADAA2D1107E572300789F2D /* EndedCallView.xib in Resources */ = {isa = PBXBuildFile; fileRef = AADAA2D0107E572300789F2D /* EndedCallView.xib */; };
 		AAEA9A810E08198800E3AB2D /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AAEA9A800E08198800E3AB2D /* CoreAudio.framework */; };
 		AAEA9A870E0819BB00E3AB2D /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AAEA9A840E0819BB00E3AB2D /* AudioToolbox.framework */; };
 		AAEA9A880E0819BB00E3AB2D /* AudioUnit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AAEA9A850E0819BB00E3AB2D /* AudioUnit.framework */; };
@@ -223,6 +229,21 @@
 		AABAD7EF0E0C184200CB5930 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/Preferences.xib; sourceTree = "<group>"; };
 		AACD92CE0ED434DD00AF8D17 /* AKActiveCallView.h */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 2; lastKnownFileType = sourcecode.c.h; path = AKActiveCallView.h; sourceTree = "<group>"; tabWidth = 2; };
 		AACD92CF0ED434DD00AF8D17 /* AKActiveCallView.m */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 2; lastKnownFileType = sourcecode.c.objc; path = AKActiveCallView.m; sourceTree = "<group>"; tabWidth = 2; };
+		AAD92130107A5E9F00F142A4 /* ActiveCallViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 2; lastKnownFileType = sourcecode.c.h; path = ActiveCallViewController.h; sourceTree = "<group>"; tabWidth = 2; };
+		AAD92131107A5E9F00F142A4 /* ActiveCallViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 2; lastKnownFileType = sourcecode.c.objc; path = ActiveCallViewController.m; sourceTree = "<group>"; tabWidth = 2; };
+		AAD92134107A607C00F142A4 /* IncomingCallViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 2; lastKnownFileType = sourcecode.c.h; path = IncomingCallViewController.h; sourceTree = "<group>"; tabWidth = 2; };
+		AAD92135107A607C00F142A4 /* IncomingCallViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 2; lastKnownFileType = sourcecode.c.objc; path = IncomingCallViewController.m; sourceTree = "<group>"; tabWidth = 2; };
+		AAD92137107A608B00F142A4 /* EndedCallViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 2; lastKnownFileType = sourcecode.c.h; path = EndedCallViewController.h; sourceTree = "<group>"; tabWidth = 2; };
+		AAD92138107A608B00F142A4 /* EndedCallViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 2; lastKnownFileType = sourcecode.c.objc; path = EndedCallViewController.m; sourceTree = "<group>"; tabWidth = 2; };
+		AADAA1A0107CE9D000789F2D /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/IncomingCallView.xib; sourceTree = "<group>"; };
+		AADAA1A9107CEAD800789F2D /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/ActiveCallView.xib; sourceTree = "<group>"; };
+		AADAA1AB107CEB5A00789F2D /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/EndedCallView.xib; sourceTree = "<group>"; };
+		AADAA2C4107E569900789F2D /* Russian */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Russian; path = Russian.lproj/IncomingCallView.xib; sourceTree = "<group>"; };
+		AADAA2C5107E569C00789F2D /* German */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = German; path = German.lproj/IncomingCallView.xib; sourceTree = "<group>"; };
+		AADAA2CE107E570400789F2D /* Russian */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Russian; path = Russian.lproj/ActiveCallView.xib; sourceTree = "<group>"; };
+		AADAA2CF107E570800789F2D /* German */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = German; path = German.lproj/ActiveCallView.xib; sourceTree = "<group>"; };
+		AADAA2D2107E572800789F2D /* Russian */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Russian; path = Russian.lproj/EndedCallView.xib; sourceTree = "<group>"; };
+		AADAA2D3107E572B00789F2D /* German */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = German; path = German.lproj/EndedCallView.xib; sourceTree = "<group>"; };
 		AAEA9A800E08198800E3AB2D /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = /System/Library/Frameworks/CoreAudio.framework; sourceTree = "<absolute>"; };
 		AAEA9A840E0819BB00E3AB2D /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = /System/Library/Frameworks/AudioToolbox.framework; sourceTree = "<absolute>"; };
 		AAEA9A850E0819BB00E3AB2D /* AudioUnit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioUnit.framework; path = /System/Library/Frameworks/AudioUnit.framework; sourceTree = "<absolute>"; };
@@ -309,8 +330,7 @@
 			isa = PBXGroup;
 			children = (
 				AAF9CBC60E685A2D005DD9C6 /* Model */,
-				AACD92CA0ED4318F00AF8D17 /* View */,
-				AAF9CBC70E685A3F005DD9C6 /* Controller */,
+				AACD92CA0ED4318F00AF8D17 /* View and Controller */,
 				AAECDE8C0E70700B00CEAE7B /* Categories */,
 			);
 			name = Classes;
@@ -388,16 +408,6 @@
 				AA167A1C0F07BF9E00AF8B71 /* SIPResponses.strings */,
 				AA3A153E0F30A49C00C45739 /* AddressBookLabels.strings */,
 				1DDD58140DA1D0A300B32029 /* MainMenu.xib */,
-				AA2ED99B0F05B362004A13C6 /* Account.xib */,
-				AA34ACC2106E229A00FA38F7 /* ActiveAccountView.xib */,
-				AA2ED99F0F05B3B5004A13C6 /* Call.xib */,
-				AA2ED9A40F05B5C6004A13C6 /* Preferences.xib */,
-				AAFC002B1074D0B50018C7DA /* GeneralPreferencesView.xib */,
-				AAFC00271074D0B50018C7DA /* AccountPreferencesView.xib */,
-				AAFC00291074D0B50018C7DA /* SoundPreferencesView.xib */,
-				AAFC00251074D0B50018C7DA /* NetworkPreferencesView.xib */,
-				AA2ED9AB0F05BA11004A13C6 /* AccountSetup.xib */,
-				AA2ED9B10F05BB5D004A13C6 /* AuthenticationFailure.xib */,
 				AAFA9B970EE2BFC4009A45CB /* Sound.tiff */,
 				AA2D599C0EF924F800F65074 /* dsa_pub.pem */,
 				AA51FC6E0F1D6700003CE94C /* Growl Registration Ticket.growlRegDict */,
@@ -414,19 +424,84 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		AACD92CA0ED4318F00AF8D17 /* View */ = {
+		AACD92CA0ED4318F00AF8D17 /* View and Controller */ = {
 			isa = PBXGroup;
 			children = (
-				AACD92CE0ED434DD00AF8D17 /* AKActiveCallView.h */,
-				AACD92CF0ED434DD00AF8D17 /* AKActiveCallView.m */,
-				AAF639F40FEFF13A0089DA3A /* AKResponsiveProgressIndicator.h */,
-				AAF639F50FEFF13A0089DA3A /* AKResponsiveProgressIndicator.m */,
+				AA4BD4D60E07C305005A71B2 /* AppController.h */,
+				AA4BD4D70E07C305005A71B2 /* AppController.m */,
+				AADAA302107E5AA200789F2D /* Account */,
+				AADAA2FF107E59FC00789F2D /* Call */,
+				AADAA303107E5AD400789F2D /* Preferences */,
 				AAFA9B1B0EE1D8FC009A45CB /* AKSIPURIFormatter.h */,
 				AAFA9B1C0EE1D8FC009A45CB /* AKSIPURIFormatter.m */,
 				AAFA9C3B0EE411BA009A45CB /* AKTelephoneNumberFormatter.h */,
 				AAFA9C3C0EE411BA009A45CB /* AKTelephoneNumberFormatter.m */,
+				AA3F65681072C926000511E8 /* AuthenticationFailureController.h */,
+				AA3F65691072C926000511E8 /* AuthenticationFailureController.m */,
+				AA2ED9B10F05BB5D004A13C6 /* AuthenticationFailure.xib */,
+				AAFCFFBB1074BFCA0018C7DA /* AccountSetupController.h */,
+				AAFCFFBC1074BFCA0018C7DA /* AccountSetupController.m */,
+				AA2ED9AB0F05BA11004A13C6 /* AccountSetup.xib */,
 			);
-			name = View;
+			name = "View and Controller";
+			sourceTree = "<group>";
+		};
+		AADAA2FF107E59FC00789F2D /* Call */ = {
+			isa = PBXGroup;
+			children = (
+				AA3578B40E4070AD00021989 /* CallController.h */,
+				AA3578B50E4070AD00021989 /* CallController.m */,
+				AA2ED99F0F05B3B5004A13C6 /* Call.xib */,
+				AAD92134107A607C00F142A4 /* IncomingCallViewController.h */,
+				AAD92135107A607C00F142A4 /* IncomingCallViewController.m */,
+				AADAA2C2107E569200789F2D /* IncomingCallView.xib */,
+				AAD92130107A5E9F00F142A4 /* ActiveCallViewController.h */,
+				AAD92131107A5E9F00F142A4 /* ActiveCallViewController.m */,
+				AADAA2CC107E56FD00789F2D /* ActiveCallView.xib */,
+				AAD92137107A608B00F142A4 /* EndedCallViewController.h */,
+				AAD92138107A608B00F142A4 /* EndedCallViewController.m */,
+				AADAA2D0107E572300789F2D /* EndedCallView.xib */,
+				AACD92CE0ED434DD00AF8D17 /* AKActiveCallView.h */,
+				AACD92CF0ED434DD00AF8D17 /* AKActiveCallView.m */,
+				AAF639F40FEFF13A0089DA3A /* AKResponsiveProgressIndicator.h */,
+				AAF639F50FEFF13A0089DA3A /* AKResponsiveProgressIndicator.m */,
+			);
+			name = Call;
+			sourceTree = "<group>";
+		};
+		AADAA302107E5AA200789F2D /* Account */ = {
+			isa = PBXGroup;
+			children = (
+				AA3578B10E40709900021989 /* AccountController.h */,
+				AA3578B20E40709900021989 /* AccountController.m */,
+				AA2ED99B0F05B362004A13C6 /* Account.xib */,
+				AAF633681056FEA600CF6C3B /* ActiveAccountViewController.h */,
+				AAF633691056FEA600CF6C3B /* ActiveAccountViewController.m */,
+				AA34ACC2106E229A00FA38F7 /* ActiveAccountView.xib */,
+			);
+			name = Account;
+			sourceTree = "<group>";
+		};
+		AADAA303107E5AD400789F2D /* Preferences */ = {
+			isa = PBXGroup;
+			children = (
+				AABAD7EB0E0C171A00CB5930 /* PreferencesController.h */,
+				AABAD7EC0E0C171A00CB5930 /* PreferencesController.m */,
+				AA2ED9A40F05B5C6004A13C6 /* Preferences.xib */,
+				AA34AF811073BF5D00FA38F7 /* GeneralPreferencesViewController.h */,
+				AA34AF821073BF5D00FA38F7 /* GeneralPreferencesViewController.m */,
+				AAFC002B1074D0B50018C7DA /* GeneralPreferencesView.xib */,
+				AA34AF3C1073B7C700FA38F7 /* AccountPreferencesViewController.h */,
+				AA34AF3D1073B7C700FA38F7 /* AccountPreferencesViewController.m */,
+				AAFC00271074D0B50018C7DA /* AccountPreferencesView.xib */,
+				AA34AF461073B81500FA38F7 /* SoundPreferencesViewController.h */,
+				AA34AF471073B81500FA38F7 /* SoundPreferencesViewController.m */,
+				AAFC00291074D0B50018C7DA /* SoundPreferencesView.xib */,
+				AA34AF491073B84700FA38F7 /* NetworkPreferencesViewController.h */,
+				AA34AF4A1073B84700FA38F7 /* NetworkPreferencesViewController.m */,
+				AAFC00251074D0B50018C7DA /* NetworkPreferencesView.xib */,
+			);
+			name = Preferences;
 			sourceTree = "<group>";
 		};
 		AAECDE8C0E70700B00CEAE7B /* Categories */ = {
@@ -481,35 +556,6 @@
 				AAAC618B0FE6A42900FBE053 /* AKNetworkReachability.m */,
 			);
 			name = Model;
-			sourceTree = "<group>";
-		};
-		AAF9CBC70E685A3F005DD9C6 /* Controller */ = {
-			isa = PBXGroup;
-			children = (
-				AA4BD4D60E07C305005A71B2 /* AppController.h */,
-				AA4BD4D70E07C305005A71B2 /* AppController.m */,
-				AA3578B10E40709900021989 /* AccountController.h */,
-				AA3578B20E40709900021989 /* AccountController.m */,
-				AAF633681056FEA600CF6C3B /* ActiveAccountViewController.h */,
-				AAF633691056FEA600CF6C3B /* ActiveAccountViewController.m */,
-				AA3F65681072C926000511E8 /* AuthenticationFailureController.h */,
-				AA3F65691072C926000511E8 /* AuthenticationFailureController.m */,
-				AA3578B40E4070AD00021989 /* CallController.h */,
-				AA3578B50E4070AD00021989 /* CallController.m */,
-				AABAD7EB0E0C171A00CB5930 /* PreferencesController.h */,
-				AABAD7EC0E0C171A00CB5930 /* PreferencesController.m */,
-				AA34AF811073BF5D00FA38F7 /* GeneralPreferencesViewController.h */,
-				AA34AF821073BF5D00FA38F7 /* GeneralPreferencesViewController.m */,
-				AA34AF3C1073B7C700FA38F7 /* AccountPreferencesViewController.h */,
-				AA34AF3D1073B7C700FA38F7 /* AccountPreferencesViewController.m */,
-				AA34AF461073B81500FA38F7 /* SoundPreferencesViewController.h */,
-				AA34AF471073B81500FA38F7 /* SoundPreferencesViewController.m */,
-				AA34AF491073B84700FA38F7 /* NetworkPreferencesViewController.h */,
-				AA34AF4A1073B84700FA38F7 /* NetworkPreferencesViewController.m */,
-				AAFCFFBB1074BFCA0018C7DA /* AccountSetupController.h */,
-				AAFCFFBC1074BFCA0018C7DA /* AccountSetupController.m */,
-			);
-			name = Controller;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -623,6 +669,9 @@
 				AAFC00281074D0B50018C7DA /* AccountPreferencesView.xib in Resources */,
 				AAFC002A1074D0B50018C7DA /* SoundPreferencesView.xib in Resources */,
 				AAFC00261074D0B50018C7DA /* NetworkPreferencesView.xib in Resources */,
+				AADAA2C3107E569200789F2D /* IncomingCallView.xib in Resources */,
+				AADAA2CD107E56FD00789F2D /* ActiveCallView.xib in Resources */,
+				AADAA2D1107E572300789F2D /* EndedCallView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -680,6 +729,9 @@
 				AA34AF4B1073B84700FA38F7 /* NetworkPreferencesViewController.m in Sources */,
 				AA34AF831073BF5D00FA38F7 /* GeneralPreferencesViewController.m in Sources */,
 				AAFCFFBD1074BFCA0018C7DA /* AccountSetupController.m in Sources */,
+				AAD92132107A5E9F00F142A4 /* ActiveCallViewController.m in Sources */,
+				AAD92136107A607C00F142A4 /* IncomingCallViewController.m in Sources */,
+				AAD92139107A608B00F142A4 /* EndedCallViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -824,6 +876,36 @@
 				AA5100020F1FE32F003CE94C /* German */,
 			);
 			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+		AADAA2C2107E569200789F2D /* IncomingCallView.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				AADAA1A0107CE9D000789F2D /* English */,
+				AADAA2C4107E569900789F2D /* Russian */,
+				AADAA2C5107E569C00789F2D /* German */,
+			);
+			name = IncomingCallView.xib;
+			sourceTree = "<group>";
+		};
+		AADAA2CC107E56FD00789F2D /* ActiveCallView.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				AADAA1A9107CEAD800789F2D /* English */,
+				AADAA2CE107E570400789F2D /* Russian */,
+				AADAA2CF107E570800789F2D /* German */,
+			);
+			name = ActiveCallView.xib;
+			sourceTree = "<group>";
+		};
+		AADAA2D0107E572300789F2D /* EndedCallView.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				AADAA1AB107CEB5A00789F2D /* English */,
+				AADAA2D2107E572800789F2D /* Russian */,
+				AADAA2D3107E572B00789F2D /* German */,
+			);
+			name = EndedCallView.xib;
 			sourceTree = "<group>";
 		};
 		AAF29A420F5759F7007B5036 /* Localizable.strings */ = {

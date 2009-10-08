@@ -449,7 +449,7 @@ static void NameserversChanged(SCDynamicStoreRef store,
   // Force ended state for all calls and remove accounts from the user agent.
   for (AccountController *anAccountController in [self enabledAccountControllers]) {
     for (CallController *aCallController in [anAccountController callControllers])
-      [aCallController hangUpCall:nil];
+      [aCallController hangUpCall];
     
     [anAccountController removeAccountFromUserAgent];
   }

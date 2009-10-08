@@ -289,10 +289,12 @@ NSString * const AKPreferencesControllerDidChangeNetworkSettingsNotification
 #pragma mark NSWindow delegate
 
 - (BOOL)windowShouldClose:(id)window {
-  BOOL networkSettingsChanged = [[self networkPreferencesViewController]
-                                 checkForNetworkSettingsChanges:window];
-  if (networkSettingsChanged)
-    return NO;
+  if (networkPreferencesViewController_ != nil) {
+    BOOL networkSettingsChanged = [[self networkPreferencesViewController]
+                                   checkForNetworkSettingsChanges:window];
+    if (networkSettingsChanged)
+      return NO;
+  }
   
   return YES;
 }

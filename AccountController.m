@@ -47,9 +47,11 @@
 #import "AKTelephoneNumberFormatter.h"
 
 #import "ActiveAccountViewController.h"
+#import "ActiveCallViewController.h"
 #import "AppController.h"
 #import "AuthenticationFailureController.h"
 #import "CallController.h"
+#import "IncomingCallViewController.h"
 #import "PreferencesController.h"
 
 
@@ -411,7 +413,17 @@ NSString * const kEmailSIPLabel = @"sip";
   // Set URI for redial.
   [aCallController setRedialURI:destinationURI];
   
-  [[aCallController window] setContentView:[aCallController activeCallView]];
+  [[aCallController window] setContentView:
+   [[aCallController activeCallViewController] view]];
+  
+  // Insert |activeCallViewController| into the responder chain.
+  if (![[[[aCallController activeCallViewController] view] nextResponder] isEqual:
+        [aCallController activeCallViewController]]) {
+    [[aCallController activeCallViewController] setNextResponder:
+     [[[aCallController activeCallViewController] view] nextResponder]];
+    [[[aCallController activeCallViewController] view] setNextResponder:
+     [aCallController activeCallViewController]];
+  }
   
   if ([phoneLabel length] > 0) {
     [aCallController setStatus:
@@ -426,7 +438,8 @@ NSString * const kEmailSIPLabel = @"sip";
   }
   
   [aCallController showWindow:nil];
-  [[aCallController callProgressIndicator] startAnimation:self];
+  [[[aCallController activeCallViewController] callProgressIndicator]
+   startAnimation:self];
   
   // Finally, make a call.
   AKSIPCall *aCall = [[self account] makeCallTo:destinationURI];
@@ -434,7 +447,8 @@ NSString * const kEmailSIPLabel = @"sip";
     [aCallController setCall:aCall];
     [aCallController setCallActive:YES];
   } else {
-    [[aCallController window] setContentView:[aCallController endedCallView]];
+    [[aCallController window] setContentView:
+     [[aCallController endedCallViewController] view]];
     [aCallController setStatus:NSLocalizedString(@"Call Failed",
                                                  @"Call failed.")];
   }
@@ -521,7 +535,7 @@ NSString * const kEmailSIPLabel = @"sip";
   
   [[self window] setContentView:[[self activeAccountViewController] view]];
   
-  // Insert ActiveViewController in the responder chain.
+  // Insert |activeAccountViewController| into the responder chain.
   if (![[[[self activeAccountViewController] view] nextResponder] isEqual:
         [self activeAccountViewController]]) {
     [[self activeAccountViewController] setNextResponder:
@@ -562,7 +576,7 @@ NSString * const kEmailSIPLabel = @"sip";
   
   [[self window] setContentView:[[self activeAccountViewController] view]];
   
-  // Insert ActiveViewController in the responder chain.
+  // Insert |activeAccountViewController| into the responder chain.
   if (![[[[self activeAccountViewController] view] nextResponder] isEqual:
         [self activeAccountViewController]]) {
     [[self activeAccountViewController] setNextResponder:
@@ -1039,7 +1053,16 @@ NSString * const kEmailSIPLabel = @"sip";
   [aCallController setStatus:finalStatus];
   [aCallController setRedialURI:finalRedialURI];
   [[aCallController window] ak_resizeAndSwapToContentView:
-   [aCallController incomingCallView]];
+   [[aCallController incomingCallViewController] view]];
+  
+  // Insert |incomingCallViewController| into the responder chain.
+  if (![[[[aCallController incomingCallViewController] view] nextResponder] isEqual:
+        [aCallController incomingCallViewController]]) {
+    [[aCallController incomingCallViewController] setNextResponder:
+     [[[aCallController incomingCallViewController] view] nextResponder]];
+    [[[aCallController incomingCallViewController] view] setNextResponder:
+     [aCallController incomingCallViewController]];
+  }
   
   [aCallController showWindow:nil];
   
