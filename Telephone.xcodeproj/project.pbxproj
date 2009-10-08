@@ -332,6 +332,7 @@
 				AAF9CBC60E685A2D005DD9C6 /* Model */,
 				AACD92CA0ED4318F00AF8D17 /* View and Controller */,
 				AAECDE8C0E70700B00CEAE7B /* Categories */,
+				AAF298D70F57477C007B5036 /* PlugIns */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -378,7 +379,6 @@
 			isa = PBXGroup;
 			children = (
 				080E96DDFE201D6D7F000001 /* Classes */,
-				AAF298D70F57477C007B5036 /* PlugIns */,
 				29B97315FDCFA39411CA2CEA /* Other Sources */,
 				29B97317FDCFA39411CA2CEA /* Resources */,
 				29B97323FDCFA39411CA2CEA /* Frameworks */,
