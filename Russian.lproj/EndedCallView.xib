@@ -26,7 +26,7 @@
 				<string key="NSClassName">NSApplication</string>
 			</object>
 			<object class="NSCustomView" id="599993001">
-				<reference key="NSNextResponder"/>
+				<nil key="NSNextResponder"/>
 				<int key="NSvFlags">268</int>
 				<array class="NSMutableArray" key="NSSubviews">
 					<object class="NSTextField" id="492662476">
@@ -34,7 +34,6 @@
 						<int key="NSvFlags">268</int>
 						<string key="NSFrame">{{17, 53}, {244, 18}}</string>
 						<reference key="NSSuperview" ref="599993001"/>
-						<reference key="NSWindow"/>
 						<bool key="NSEnabled">YES</bool>
 						<object class="NSTextFieldCell" key="NSCell" id="883216001">
 							<int key="NSCellFlags">68288064</int>
@@ -71,7 +70,6 @@
 						<int key="NSvFlags">268</int>
 						<string key="NSFrame">{{17, 22}, {266, 28}}</string>
 						<reference key="NSSuperview" ref="599993001"/>
-						<reference key="NSWindow"/>
 						<bool key="NSEnabled">YES</bool>
 						<object class="NSTextFieldCell" key="NSCell" id="525711534">
 							<int key="NSCellFlags">67239424</int>
@@ -92,7 +90,6 @@
 						<int key="NSvFlags">268</int>
 						<string key="NSFrame">{{264, 52}, {16, 18}}</string>
 						<reference key="NSSuperview" ref="599993001"/>
-						<reference key="NSWindow"/>
 						<bool key="NSEnabled">YES</bool>
 						<object class="NSButtonCell" key="NSCell" id="167906077">
 							<int key="NSCellFlags">67239424</int>
@@ -118,29 +115,11 @@
 					</object>
 				</array>
 				<string key="NSFrameSize">{300, 91}</string>
-				<reference key="NSSuperview"/>
-				<reference key="NSWindow"/>
 				<string key="NSClassName">NSView</string>
 			</object>
 		</array>
 		<object class="IBObjectContainer" key="IBDocument.Objects">
 			<array class="NSMutableArray" key="connectionRecords">
-				<object class="IBConnectionRecord">
-					<object class="IBOutletConnection" key="connection">
-						<string key="label">endedCallDisplayedNameField</string>
-						<reference key="source" ref="937089292"/>
-						<reference key="destination" ref="492662476"/>
-					</object>
-					<int key="connectionID">117</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBOutletConnection" key="connection">
-						<string key="label">endedCallStatusField</string>
-						<reference key="source" ref="937089292"/>
-						<reference key="destination" ref="1031292236"/>
-					</object>
-					<int key="connectionID">123</int>
-				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBOutletConnection" key="connection">
 						<string key="label">redialButton</string>
@@ -196,6 +175,22 @@
 						</object>
 					</object>
 					<int key="connectionID">134</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">displayedNameField</string>
+						<reference key="source" ref="937089292"/>
+						<reference key="destination" ref="492662476"/>
+					</object>
+					<int key="connectionID">135</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">statusField</string>
+						<reference key="source" ref="937089292"/>
+						<reference key="destination" ref="1031292236"/>
+					</object>
+					<int key="connectionID">137</int>
 				</object>
 			</array>
 			<object class="IBMutableOrderedSet" key="objectRecords">
@@ -299,7 +294,7 @@
 			<nil key="activeLocalization"/>
 			<dictionary class="NSMutableDictionary" key="localizations"/>
 			<nil key="sourceID"/>
-			<int key="maxID">134</int>
+			<int key="maxID">137</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<array class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -311,9 +306,9 @@
 						<string key="NS.object.0">id</string>
 					</object>
 					<dictionary class="NSMutableDictionary" key="outlets">
-						<string key="endedCallDisplayedNameField">NSTextField</string>
-						<string key="endedCallStatusField">NSTextField</string>
+						<string key="displayedNameField">NSTextField</string>
 						<string key="redialButton">NSButton</string>
+						<string key="statusField">NSTextField</string>
 					</dictionary>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBProjectSource</string>

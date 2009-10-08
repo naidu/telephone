@@ -26,7 +26,7 @@
 				<string key="NSClassName">NSApplication</string>
 			</object>
 			<object class="NSCustomView" id="687997186">
-				<reference key="NSNextResponder"/>
+				<nil key="NSNextResponder"/>
 				<int key="NSvFlags">268</int>
 				<array class="NSMutableArray" key="NSSubviews">
 					<object class="NSButton" id="995578658">
@@ -34,7 +34,6 @@
 						<int key="NSvFlags">289</int>
 						<string key="NSFrame">{{106, 19}, {83, 25}}</string>
 						<reference key="NSSuperview" ref="687997186"/>
-						<reference key="NSWindow"/>
 						<bool key="NSEnabled">YES</bool>
 						<object class="NSButtonCell" key="NSCell" id="117838585">
 							<int key="NSCellFlags">-2080244224</int>
@@ -59,7 +58,6 @@
 						<int key="NSvFlags">289</int>
 						<string key="NSFrame">{{197, 19}, {83, 25}}</string>
 						<reference key="NSSuperview" ref="687997186"/>
-						<reference key="NSWindow"/>
 						<bool key="NSEnabled">YES</bool>
 						<object class="NSButtonCell" key="NSCell" id="971083405">
 							<int key="NSCellFlags">-2080244224</int>
@@ -80,7 +78,6 @@
 						<int key="NSvFlags">268</int>
 						<string key="NSFrame">{{17, 68}, {266, 18}}</string>
 						<reference key="NSSuperview" ref="687997186"/>
-						<reference key="NSWindow"/>
 						<bool key="NSEnabled">YES</bool>
 						<object class="NSTextFieldCell" key="NSCell" id="152176181">
 							<int key="NSCellFlags">67239488</int>
@@ -117,7 +114,6 @@
 						<int key="NSvFlags">268</int>
 						<string key="NSFrame">{{17, 51}, {266, 14}}</string>
 						<reference key="NSSuperview" ref="687997186"/>
-						<reference key="NSWindow"/>
 						<bool key="NSEnabled">YES</bool>
 						<object class="NSTextFieldCell" key="NSCell" id="637873011">
 							<int key="NSCellFlags">68288064</int>
@@ -135,8 +131,6 @@
 					</object>
 				</array>
 				<string key="NSFrameSize">{300, 106}</string>
-				<reference key="NSSuperview"/>
-				<reference key="NSWindow"/>
 				<string key="NSClassName">NSView</string>
 			</object>
 		</array>
@@ -173,22 +167,6 @@
 						<reference key="destination" ref="995578658"/>
 					</object>
 					<int key="connectionID">118</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBOutletConnection" key="connection">
-						<string key="label">incomingCallDisplayedNameField</string>
-						<reference key="source" ref="429195086"/>
-						<reference key="destination" ref="530544379"/>
-					</object>
-					<int key="connectionID">120</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBOutletConnection" key="connection">
-						<string key="label">incomingCallStatusField</string>
-						<reference key="source" ref="429195086"/>
-						<reference key="destination" ref="696790173"/>
-					</object>
-					<int key="connectionID">121</int>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBOutletConnection" key="connection">
@@ -229,6 +207,22 @@
 						</object>
 					</object>
 					<int key="connectionID">124</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">displayedNameField</string>
+						<reference key="source" ref="429195086"/>
+						<reference key="destination" ref="530544379"/>
+					</object>
+					<int key="connectionID">125</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">statusField</string>
+						<reference key="source" ref="429195086"/>
+						<reference key="destination" ref="696790173"/>
+					</object>
+					<int key="connectionID">126</int>
 				</object>
 			</array>
 			<object class="IBMutableOrderedSet" key="objectRecords">
@@ -340,7 +334,7 @@
 			<nil key="activeLocalization"/>
 			<dictionary class="NSMutableDictionary" key="localizations"/>
 			<nil key="sourceID"/>
-			<int key="maxID">124</int>
+			<int key="maxID">126</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<array class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -354,8 +348,8 @@
 					<dictionary class="NSMutableDictionary" key="outlets">
 						<string key="acceptCallButton">NSButton</string>
 						<string key="declineCallButton">NSButton</string>
-						<string key="incomingCallDisplayedNameField">NSTextField</string>
-						<string key="incomingCallStatusField">NSTextField</string>
+						<string key="displayedNameField">NSTextField</string>
+						<string key="statusField">NSTextField</string>
 					</dictionary>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBProjectSource</string>

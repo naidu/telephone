@@ -44,8 +44,8 @@
 @synthesize enteredDTMF = enteredDTMF_;
 @synthesize callProgressIndicatorTrackingArea = callProgressIndicatorTrackingArea_;
 
-@synthesize activeCallDisplayedNameField = activeCallDisplayedNameField_;
-@synthesize activeCallStatusField = activeCallStatusField_;
+@synthesize displayedNameField = displayedNameField_;
+@synthesize statusField = statusField_;
 @synthesize callProgressIndicator = callProgressIndicator_;
 @synthesize hangUpButton = hangUpButton_;
 
@@ -61,8 +61,8 @@
   [enteredDTMF_ release];
   [callProgressIndicatorTrackingArea_ release];
   
-  [activeCallDisplayedNameField_ release];
-  [activeCallStatusField_ release];
+  [displayedNameField_ release];
+  [statusField_ release];
   [callProgressIndicator_ release];
   [hangUpButton_ release];
   
@@ -70,11 +70,8 @@
 }
 
 - (void)awakeFromNib {
-  [[[self activeCallDisplayedNameField] cell]
-   setBackgroundStyle:NSBackgroundStyleRaised];
-  
-  [[[self activeCallStatusField] cell]
-   setBackgroundStyle:NSBackgroundStyleRaised];
+  [[[self displayedNameField] cell] setBackgroundStyle:NSBackgroundStyleRaised];
+  [[[self statusField] cell] setBackgroundStyle:NSBackgroundStyleRaised];
   
   // Set hang-up button origin manually.
   NSRect hangUpButtonFrame = [[self hangUpButton] frame];
@@ -103,10 +100,6 @@
   // Add support for clicking call progress indicator to hang-up.
   [[self callProgressIndicator] setTarget:self];
   [[self callProgressIndicator] setAction:@selector(hangUpCall:)];
-}
-
-- (BOOL)acceptsFirstResponder {
-  return YES;
 }
 
 - (IBAction)hangUpCall:(id)sender {
@@ -186,11 +179,11 @@
       [[self enteredDTMF] appendString:aString];
       [[[self view] window] setTitle:[[self callController] displayedName]];
       
-      if ([[[self activeCallDisplayedNameField] cell] lineBreakMode]
+      if ([[[self displayedNameField] cell] lineBreakMode]
           != NSLineBreakByTruncatingHead) {
-        [[[self activeCallDisplayedNameField] cell]
+        [[[self displayedNameField] cell]
          setLineBreakMode:NSLineBreakByTruncatingHead];
-        [[[[self callController] endedCallViewController] endedCallDisplayedNameField]
+        [[[[self callController] endedCallViewController] displayedNameField]
          setSelectable:YES];
       }
       

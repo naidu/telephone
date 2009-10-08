@@ -43,8 +43,8 @@
   NSMutableString *enteredDTMF_;
   NSTrackingArea *callProgressIndicatorTrackingArea_;
   
-  NSTextField *activeCallDisplayedNameField_;
-  NSTextField *activeCallStatusField_;
+  NSTextField *displayedNameField_;
+  NSTextField *statusField_;
   AKResponsiveProgressIndicator *callProgressIndicator_;
   NSButton *hangUpButton_;
 }
@@ -64,10 +64,10 @@
 
 
 // Display Name field outlet.
-@property(nonatomic, retain) IBOutlet NSTextField *activeCallDisplayedNameField;
+@property(nonatomic, retain) IBOutlet NSTextField *displayedNameField;
 
 // Status field outlet.
-@property(nonatomic, retain) IBOutlet NSTextField *activeCallStatusField;
+@property(nonatomic, retain) IBOutlet NSTextField *statusField;
 
 // Call progress indicator outlet.
 @property(nonatomic, retain) IBOutlet AKResponsiveProgressIndicator *callProgressIndicator;

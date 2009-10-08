@@ -26,7 +26,7 @@
 				<string key="NSClassName">NSApplication</string>
 			</object>
 			<object class="NSCustomView" id="437478143">
-				<reference key="NSNextResponder"/>
+				<nil key="NSNextResponder"/>
 				<int key="NSvFlags">268</int>
 				<array class="NSMutableArray" key="NSSubviews">
 					<object class="NSProgressIndicator" id="959457030">
@@ -35,7 +35,6 @@
 						<object class="NSPSMatrix" key="NSDrawMatrix"/>
 						<string key="NSFrame">{{264, 53}, {16, 16}}</string>
 						<reference key="NSSuperview" ref="437478143"/>
-						<reference key="NSWindow"/>
 						<int key="NSpiFlags">28938</int>
 						<double key="NSMinValue">16</double>
 						<double key="NSMaxValue">100</double>
@@ -45,7 +44,6 @@
 						<int key="NSvFlags">268</int>
 						<string key="NSFrame">{{17, 53}, {242, 18}}</string>
 						<reference key="NSSuperview" ref="437478143"/>
-						<reference key="NSWindow"/>
 						<bool key="NSEnabled">YES</bool>
 						<object class="NSTextFieldCell" key="NSCell" id="673303597">
 							<int key="NSCellFlags">67239488</int>
@@ -82,7 +80,6 @@
 						<int key="NSvFlags">268</int>
 						<string key="NSFrame">{{17, 36}, {266, 14}}</string>
 						<reference key="NSSuperview" ref="437478143"/>
-						<reference key="NSWindow"/>
 						<bool key="NSEnabled">YES</bool>
 						<object class="NSTextFieldCell" key="NSCell" id="780125752">
 							<int key="NSCellFlags">68288064</int>
@@ -100,8 +97,6 @@
 					</object>
 				</array>
 				<string key="NSFrameSize">{300, 91}</string>
-				<reference key="NSSuperview"/>
-				<reference key="NSWindow"/>
 				<string key="NSClassName">AKActiveCallView</string>
 			</object>
 			<object class="NSButton" id="627322493">
@@ -149,22 +144,6 @@
 						<reference key="destination" ref="257325002"/>
 					</object>
 					<int key="connectionID">101</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBOutletConnection" key="connection">
-						<string key="label">activeCallDisplayedNameField</string>
-						<reference key="source" ref="257325002"/>
-						<reference key="destination" ref="823407504"/>
-					</object>
-					<int key="connectionID">119</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBOutletConnection" key="connection">
-						<string key="label">activeCallStatusField</string>
-						<reference key="source" ref="257325002"/>
-						<reference key="destination" ref="619396215"/>
-					</object>
-					<int key="connectionID">121</int>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBOutletConnection" key="connection">
@@ -221,6 +200,22 @@
 						</object>
 					</object>
 					<int key="connectionID">128</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">displayedNameField</string>
+						<reference key="source" ref="257325002"/>
+						<reference key="destination" ref="823407504"/>
+					</object>
+					<int key="connectionID">129</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">statusField</string>
+						<reference key="source" ref="257325002"/>
+						<reference key="destination" ref="619396215"/>
+					</object>
+					<int key="connectionID">130</int>
 				</object>
 			</array>
 			<object class="IBMutableOrderedSet" key="objectRecords">
@@ -336,7 +331,7 @@
 			<nil key="activeLocalization"/>
 			<dictionary class="NSMutableDictionary" key="localizations"/>
 			<nil key="sourceID"/>
-			<int key="maxID">128</int>
+			<int key="maxID">130</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<array class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -388,10 +383,10 @@
 						<string key="NS.object.0">id</string>
 					</object>
 					<dictionary class="NSMutableDictionary" key="outlets">
-						<string key="activeCallDisplayedNameField">NSTextField</string>
-						<string key="activeCallStatusField">NSTextField</string>
 						<string key="callProgressIndicator">AKResponsiveProgressIndicator</string>
+						<string key="displayedNameField">NSTextField</string>
 						<string key="hangUpButton">NSButton</string>
+						<string key="statusField">NSTextField</string>
 					</dictionary>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBProjectSource</string>

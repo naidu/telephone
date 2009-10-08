@@ -37,8 +37,8 @@
 
 @synthesize callController = callController_;
 
-@synthesize endedCallDisplayedNameField = endedCallDisplayedNameField_;
-@synthesize endedCallStatusField = endedCallStatusField_;
+@synthesize displayedNameField = displayedNameField_;
+@synthesize statusField = statusField_;
 @synthesize redialButton = redialButton_;
 
 - (id)init {
@@ -47,23 +47,16 @@
 }
 
 - (void)dealloc {
-  [endedCallDisplayedNameField_ release];
-  [endedCallStatusField_ release];
+  [displayedNameField_ release];
+  [statusField_ release];
   [redialButton_ release];
   
   [super dealloc];
 }
 
 - (void)awakeFromNib {
-  [[[self endedCallDisplayedNameField] cell]
-   setBackgroundStyle:NSBackgroundStyleRaised];
-  
-  [[[self endedCallStatusField] cell]
-   setBackgroundStyle:NSBackgroundStyleRaised];
-}
-
-- (BOOL)acceptsFirstResponder {
-  return YES;
+  [[[self displayedNameField] cell] setBackgroundStyle:NSBackgroundStyleRaised];
+  [[[self statusField] cell] setBackgroundStyle:NSBackgroundStyleRaised];
 }
 
 - (IBAction)redial:(id)sender {

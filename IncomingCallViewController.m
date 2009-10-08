@@ -38,8 +38,8 @@
 
 @synthesize callController = callController_;
 
-@synthesize incomingCallDisplayedNameField = incomingCallDisplayedNameField_;
-@synthesize incomingCallStatusField = incomingCallStatusField_;
+@synthesize displayedNameField = displayedNameField_;
+@synthesize statusField = statusField_;
 @synthesize acceptCallButton = acceptCallButton_;
 @synthesize declineCallButton = declineCallButton_;
 
@@ -49,8 +49,8 @@
 }
 
 - (void)dealloc {
-  [incomingCallDisplayedNameField_ release];
-  [incomingCallStatusField_ release];
+  [displayedNameField_ release];
+  [statusField_ release];
   [acceptCallButton_ release];
   [declineCallButton_ release];
   
@@ -58,15 +58,8 @@
 }
 
 - (void)awakeFromNib {
-  [[[self incomingCallDisplayedNameField] cell]
-   setBackgroundStyle:NSBackgroundStyleRaised];
-  
-  [[[self incomingCallStatusField] cell]
-   setBackgroundStyle:NSBackgroundStyleRaised];
-}
-
-- (BOOL)acceptsFirstResponder {
-  return YES;
+  [[[self displayedNameField] cell] setBackgroundStyle:NSBackgroundStyleRaised];
+  [[[self statusField] cell] setBackgroundStyle:NSBackgroundStyleRaised];
 }
 
 - (IBAction)acceptCall:(id)sender {

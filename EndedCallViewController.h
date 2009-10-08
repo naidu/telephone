@@ -37,8 +37,8 @@
  @private
   CallController *callController_;
   
-  NSTextField *endedCallDisplayedNameField_;
-  NSTextField *endedCallStatusField_;
+  NSTextField *displayedNameField_;
+  NSTextField *statusField_;
   NSButton *redialButton_;
 }
 
@@ -47,10 +47,10 @@
 
 
 // Display Name field outlet.
-@property(nonatomic, retain) IBOutlet NSTextField *endedCallDisplayedNameField;
+@property(nonatomic, retain) IBOutlet NSTextField *displayedNameField;
 
 // Status field outlet.
-@property(nonatomic, retain) IBOutlet NSTextField *endedCallStatusField;
+@property(nonatomic, retain) IBOutlet NSTextField *statusField;
 
 // Redial button outlet.
 @property(nonatomic, retain) IBOutlet NSButton *redialButton;
