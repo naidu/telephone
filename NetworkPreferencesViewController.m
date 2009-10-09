@@ -132,7 +132,7 @@
   BOOL newUseICE = ([[self useICECheckBox] state] == NSOnState) ? YES : NO;
   BOOL newUseDNSSRV = ([[self useDNSSRVCheckBox] state] == NSOnState) ? YES : NO;
   NSString *newOutboundProxyHost = [[self outboundProxyHostField] stringValue];
-  NSInteger newOutboundProxyPort = [[self outboundProxyHostField] integerValue];
+  NSInteger newOutboundProxyPort = [[self outboundProxyPortField] integerValue];
   
   if ([defaults integerForKey:kTransportPort] != newTransportPort ||
       ![[defaults stringForKey:kSTUNServerHost] isEqualToString:newSTUNServerHost] ||
