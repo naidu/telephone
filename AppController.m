@@ -807,7 +807,7 @@ static void NameserversChanged(SCDynamicStoreRef store,
   
   if ([self didPauseITunes] && ![self hasActiveCallControllers]) {
     if ([iTunes playerState] == iTunesEPlSPaused) {
-      [iTunes playpause];
+      [[iTunes currentTrack] playOnce:NO];
     }
     
     [self setDidPauseITunes:NO];
@@ -2258,7 +2258,6 @@ static void NameserversChanged(SCDynamicStoreRef store,
 
 - (void)handleGetURLEvent:(NSAppleEventDescriptor *)event
            withReplyEvent:(NSAppleEventDescriptor *)replyEvent {
-  // Do nithing if there are no accounts in use.
   if ([[self enabledAccountControllers] count] == 0)
     return;
   
