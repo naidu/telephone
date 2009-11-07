@@ -30,10 +30,12 @@
 
 #import <Cocoa/Cocoa.h>
 
+#import "XSViewController.h"
+
 
 @class CallController;
 
-@interface EndedCallViewController : NSViewController {
+@interface EndedCallViewController : XSViewController {
  @private
   CallController *callController_;
   
@@ -55,6 +57,10 @@
 // Redial button outlet.
 @property(nonatomic, retain) IBOutlet NSButton *redialButton;
 
+
+// Designated initializer.
+// Initializes an EndedCallViewController object with a given call controller.
+- (id)initWithCallController:(CallController *)callController;
 
 // Redials a call.
 - (IBAction)redial:(id)sender;

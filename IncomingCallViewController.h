@@ -30,10 +30,12 @@
 
 #import <Cocoa/Cocoa.h>
 
+#import "XSViewController.h"
+
 
 @class CallController;
 
-@interface IncomingCallViewController : NSViewController {
+@interface IncomingCallViewController : XSViewController {
  @private
   CallController *callController_;
   
@@ -57,6 +59,11 @@
 
 // Decline Call button outlet.
 @property(nonatomic, retain) IBOutlet NSButton *declineCallButton;
+
+// Designated initializer.
+// Initializes an IncomingCallViewController object with a given call
+// controller.
+- (id)initWithCallController:(CallController *)callController;
 
 // Accepts an incoming call.
 - (IBAction)acceptCall:(id)sender;

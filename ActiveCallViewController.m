@@ -49,12 +49,24 @@
 @synthesize callProgressIndicator = callProgressIndicator_;
 @synthesize hangUpButton = hangUpButton_;
 
-- (id)init {
-  self = [super initWithNibName:@"ActiveCallView" bundle:nil];
+- (id)initWithCallController:(CallController *)callController {
+  self = [super initWithNibName:@"ActiveCallView"
+                         bundle:nil
+               windowController:callController];
   if (self != nil) {
     enteredDTMF_ = [[NSMutableString alloc] init];
   }
   return self;
+}
+
+- (id)init {
+  [self dealloc];
+  NSString *reason
+    = @"Initialize IncomingCallViewController with initWithCallController:";
+  @throw [NSException exceptionWithName:@"AKBadInitCall"
+                                 reason:reason
+                               userInfo:nil];
+  return nil;
 }
 
 - (void)dealloc {

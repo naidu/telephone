@@ -41,9 +41,21 @@
 @synthesize statusField = statusField_;
 @synthesize redialButton = redialButton_;
 
-- (id)init {
-  self = [super initWithNibName:@"EndedCallView" bundle:nil];
+- (id)initWithCallController:(CallController *)callController {
+  self = [super initWithNibName:@"EndedCallView"
+                         bundle:nil
+               windowController:callController];
   return self;
+}
+
+- (id)init {
+  [self dealloc];
+  NSString *reason
+    = @"Initialize EndedCallViewController with initWithCallController:";
+  @throw [NSException exceptionWithName:@"AKBadInitCall"
+                                 reason:reason
+                               userInfo:nil];
+  return nil;
 }
 
 - (void)dealloc {

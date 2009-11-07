@@ -43,9 +43,21 @@
 @synthesize acceptCallButton = acceptCallButton_;
 @synthesize declineCallButton = declineCallButton_;
 
-- (id)init {
-  self = [super initWithNibName:@"IncomingCallView" bundle:nil];
+- (id)initWithCallController:(CallController *)callController {
+  self = [super initWithNibName:@"IncomingCallView"
+                         bundle:nil
+               windowController:callController];
   return self;
+}
+
+- (id)init {
+  [self dealloc];
+  NSString *reason
+    = @"Initialize IncomingCallViewController with initWithCallController:";
+  @throw [NSException exceptionWithName:@"AKBadInitCall"
+                                 reason:reason
+                               userInfo:nil];
+  return nil;
 }
 
 - (void)dealloc {

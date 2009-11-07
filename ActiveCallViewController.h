@@ -31,12 +31,12 @@
 #import <Cocoa/Cocoa.h>
 
 #import "AKActiveCallView.h"
-
+#import "XSViewController.h"
 
 
 @class AKResponsiveProgressIndicator, CallController;
 
-@interface ActiveCallViewController : NSViewController <AKActiveCallViewDelegate> {
+@interface ActiveCallViewController : XSViewController <AKActiveCallViewDelegate> {
  @private
   CallController *callController_;
   NSTimer *callTimer_;
@@ -75,6 +75,10 @@
 // Hang-up button outlet.
 @property(nonatomic, retain) IBOutlet NSButton *hangUpButton;
 
+
+// Designated initializer.
+// Initializes an ActiveCallViewController object with a given call controller.
+- (id)initWithCallController:(CallController *)callController;
 
 // Hangs up call.
 - (IBAction)hangUpCall:(id)sender;

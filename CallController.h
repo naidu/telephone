@@ -30,6 +30,8 @@
 
 #import <Cocoa/Cocoa.h>
 
+#import "XSWindowController.h"
+
 
 // Notifications.
 //
@@ -42,7 +44,7 @@ extern NSString * const AKCallWindowWillCloseNotification;
 @class EndedCallViewController;
 
 // A call controller.
-@interface CallController : NSWindowController {
+@interface CallController : XSWindowController {
  @private
   NSString *identifier_;
   AKSIPCall *call_;
