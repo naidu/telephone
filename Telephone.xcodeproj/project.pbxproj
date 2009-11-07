@@ -408,6 +408,19 @@
 				AA167A1C0F07BF9E00AF8B71 /* SIPResponses.strings */,
 				AA3A153E0F30A49C00C45739 /* AddressBookLabels.strings */,
 				1DDD58140DA1D0A300B32029 /* MainMenu.xib */,
+				AA2ED99B0F05B362004A13C6 /* Account.xib */,
+				AA34ACC2106E229A00FA38F7 /* ActiveAccountView.xib */,
+				AA2ED99F0F05B3B5004A13C6 /* Call.xib */,
+				AADAA2C2107E569200789F2D /* IncomingCallView.xib */,
+				AADAA2CC107E56FD00789F2D /* ActiveCallView.xib */,
+				AADAA2D0107E572300789F2D /* EndedCallView.xib */,
+				AA2ED9A40F05B5C6004A13C6 /* Preferences.xib */,
+				AAFC002B1074D0B50018C7DA /* GeneralPreferencesView.xib */,
+				AAFC00271074D0B50018C7DA /* AccountPreferencesView.xib */,
+				AAFC00291074D0B50018C7DA /* SoundPreferencesView.xib */,
+				AAFC00251074D0B50018C7DA /* NetworkPreferencesView.xib */,
+				AA2ED9B10F05BB5D004A13C6 /* AuthenticationFailure.xib */,
+				AA2ED9AB0F05BA11004A13C6 /* AccountSetup.xib */,
 				AAFA9B970EE2BFC4009A45CB /* Sound.tiff */,
 				AA2D599C0EF924F800F65074 /* dsa_pub.pem */,
 				AA51FC6E0F1D6700003CE94C /* Growl Registration Ticket.growlRegDict */,
@@ -438,10 +451,8 @@
 				AAFA9C3C0EE411BA009A45CB /* AKTelephoneNumberFormatter.m */,
 				AA3F65681072C926000511E8 /* AuthenticationFailureController.h */,
 				AA3F65691072C926000511E8 /* AuthenticationFailureController.m */,
-				AA2ED9B10F05BB5D004A13C6 /* AuthenticationFailure.xib */,
 				AAFCFFBB1074BFCA0018C7DA /* AccountSetupController.h */,
 				AAFCFFBC1074BFCA0018C7DA /* AccountSetupController.m */,
-				AA2ED9AB0F05BA11004A13C6 /* AccountSetup.xib */,
 			);
 			name = "View and Controller";
 			sourceTree = "<group>";
@@ -451,16 +462,12 @@
 			children = (
 				AA3578B40E4070AD00021989 /* CallController.h */,
 				AA3578B50E4070AD00021989 /* CallController.m */,
-				AA2ED99F0F05B3B5004A13C6 /* Call.xib */,
 				AAD92134107A607C00F142A4 /* IncomingCallViewController.h */,
 				AAD92135107A607C00F142A4 /* IncomingCallViewController.m */,
-				AADAA2C2107E569200789F2D /* IncomingCallView.xib */,
 				AAD92130107A5E9F00F142A4 /* ActiveCallViewController.h */,
 				AAD92131107A5E9F00F142A4 /* ActiveCallViewController.m */,
-				AADAA2CC107E56FD00789F2D /* ActiveCallView.xib */,
 				AAD92137107A608B00F142A4 /* EndedCallViewController.h */,
 				AAD92138107A608B00F142A4 /* EndedCallViewController.m */,
-				AADAA2D0107E572300789F2D /* EndedCallView.xib */,
 				AACD92CE0ED434DD00AF8D17 /* AKActiveCallView.h */,
 				AACD92CF0ED434DD00AF8D17 /* AKActiveCallView.m */,
 				AAF639F40FEFF13A0089DA3A /* AKResponsiveProgressIndicator.h */,
@@ -474,10 +481,8 @@
 			children = (
 				AA3578B10E40709900021989 /* AccountController.h */,
 				AA3578B20E40709900021989 /* AccountController.m */,
-				AA2ED99B0F05B362004A13C6 /* Account.xib */,
 				AAF633681056FEA600CF6C3B /* ActiveAccountViewController.h */,
 				AAF633691056FEA600CF6C3B /* ActiveAccountViewController.m */,
-				AA34ACC2106E229A00FA38F7 /* ActiveAccountView.xib */,
 			);
 			name = Account;
 			sourceTree = "<group>";
@@ -487,19 +492,14 @@
 			children = (
 				AABAD7EB0E0C171A00CB5930 /* PreferencesController.h */,
 				AABAD7EC0E0C171A00CB5930 /* PreferencesController.m */,
-				AA2ED9A40F05B5C6004A13C6 /* Preferences.xib */,
 				AA34AF811073BF5D00FA38F7 /* GeneralPreferencesViewController.h */,
 				AA34AF821073BF5D00FA38F7 /* GeneralPreferencesViewController.m */,
-				AAFC002B1074D0B50018C7DA /* GeneralPreferencesView.xib */,
 				AA34AF3C1073B7C700FA38F7 /* AccountPreferencesViewController.h */,
 				AA34AF3D1073B7C700FA38F7 /* AccountPreferencesViewController.m */,
-				AAFC00271074D0B50018C7DA /* AccountPreferencesView.xib */,
 				AA34AF461073B81500FA38F7 /* SoundPreferencesViewController.h */,
 				AA34AF471073B81500FA38F7 /* SoundPreferencesViewController.m */,
-				AAFC00291074D0B50018C7DA /* SoundPreferencesView.xib */,
 				AA34AF491073B84700FA38F7 /* NetworkPreferencesViewController.h */,
 				AA34AF4A1073B84700FA38F7 /* NetworkPreferencesViewController.m */,
-				AAFC00251074D0B50018C7DA /* NetworkPreferencesView.xib */,
 			);
 			name = Preferences;
 			sourceTree = "<group>";
