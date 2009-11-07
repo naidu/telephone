@@ -45,6 +45,9 @@
   self = [super initWithNibName:@"EndedCallView"
                          bundle:nil
                windowController:callController];
+  if (self != nil) {
+    [self setCallController:callController];
+  }
   return self;
 }
 

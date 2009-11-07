@@ -415,17 +415,10 @@ NSString * const kEmailSIPLabel = @"sip";
   // Set URI for redial.
   [aCallController setRedialURI:destinationURI];
   
+  [aCallController addViewController:
+   [aCallController activeCallViewController]];
   [[aCallController window] setContentView:
    [[aCallController activeCallViewController] view]];
-  
-  // Insert |activeCallViewController| into the responder chain.
-  if (![[[[aCallController activeCallViewController] view] nextResponder] isEqual:
-        [aCallController activeCallViewController]]) {
-    [[aCallController activeCallViewController] setNextResponder:
-     [[[aCallController activeCallViewController] view] nextResponder]];
-    [[[aCallController activeCallViewController] view] setNextResponder:
-     [aCallController activeCallViewController]];
-  }
   
   if ([phoneLabel length] > 0) {
     [aCallController setStatus:
@@ -1043,17 +1036,11 @@ NSString * const kEmailSIPLabel = @"sip";
   [aCallController setDisplayedName:finalDisplayedName];
   [aCallController setStatus:finalStatus];
   [aCallController setRedialURI:finalRedialURI];
+  
+  [aCallController addViewController:
+   [aCallController incomingCallViewController]];
   [[aCallController window] ak_resizeAndSwapToContentView:
    [[aCallController incomingCallViewController] view]];
-  
-  // Insert |incomingCallViewController| into the responder chain.
-  if (![[[[aCallController incomingCallViewController] view] nextResponder] isEqual:
-        [aCallController incomingCallViewController]]) {
-    [[aCallController incomingCallViewController] setNextResponder:
-     [[[aCallController incomingCallViewController] view] nextResponder]];
-    [[[aCallController incomingCallViewController] view] setNextResponder:
-     [aCallController incomingCallViewController]];
-  }
   
   [aCallController showWindow:nil];
   
@@ -1090,10 +1077,12 @@ NSString * const kEmailSIPLabel = @"sip";
     notificationTitle = [[aCall remoteURI] displayName];
     notificationDescription
       = [NSString stringWithFormat:
-         NSLocalizedString(@"calling from %@", @"John Smith calling from 1234567. "
+         NSLocalizedString(@"calling from %@",
+                           @"John Smith calling from 1234567. "
                            "Somebody is calling us right now from some source. "
-                           "Growl notification description. Deliberately in lower case, "
-                           "translators should do the same, if possible."),
+                           "Growl notification description. Deliberately in "
+                           "lower case, translators should do the same, if "
+                           "possible."),
          callSource];
   } else {
     notificationTitle = callSource;

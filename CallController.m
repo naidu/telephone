@@ -121,8 +121,8 @@ static const NSTimeInterval kRedialButtonReenableTime = 1.0;
 
 - (IncomingCallViewController *)incomingCallViewController {
   if (incomingCallViewController_ == nil) {
-    incomingCallViewController_ = [[IncomingCallViewController alloc] init];
-    [incomingCallViewController_ setCallController:self];
+    incomingCallViewController_
+      = [[IncomingCallViewController alloc] initWithCallController:self];
     [incomingCallViewController_ setRepresentedObject:[self call]];
   }
   return incomingCallViewController_;
@@ -130,8 +130,8 @@ static const NSTimeInterval kRedialButtonReenableTime = 1.0;
 
 - (ActiveCallViewController *)activeCallViewController {
   if (activeCallViewController_ == nil) {
-    activeCallViewController_ = [[ActiveCallViewController alloc] init];
-    [activeCallViewController_ setCallController:self];
+    activeCallViewController_
+      = [[ActiveCallViewController alloc] initWithCallController:self];
     [activeCallViewController_ setRepresentedObject:[self call]];
   }
   return activeCallViewController_;
@@ -139,8 +139,8 @@ static const NSTimeInterval kRedialButtonReenableTime = 1.0;
 
 - (EndedCallViewController *)endedCallViewController {
   if (endedCallViewController_ == nil) {
-    endedCallViewController_ = [[EndedCallViewController alloc] init];
-    [endedCallViewController_ setCallController:self];
+    endedCallViewController_
+      = [[EndedCallViewController alloc] initWithCallController:self];
     [endedCallViewController_ setRepresentedObject:[self call]];
   }
   return endedCallViewController_;
@@ -216,17 +216,13 @@ static const NSTimeInterval kRedialButtonReenableTime = 1.0;
   [[self call] hangUp];
   
   [self setStatus:NSLocalizedString(@"call ended", @"Call ended.")];
+  
+  [self removeObjectFromViewControllersAtIndex:0];
+  [self addViewController:[self endedCallViewController]];
   [[self window]
    ak_resizeAndSwapToContentView:[[self endedCallViewController] view]
                          animate:YES];
-  // Insert |endedCallViewController| into the responder chain.
-  if (![[[[self endedCallViewController] view] nextResponder] isEqual:
-        [self endedCallViewController]]) {
-    [[self endedCallViewController] setNextResponder:
-     [[[self endedCallViewController] view] nextResponder]];
-    [[[self endedCallViewController] view] setNextResponder:
-     [self endedCallViewController]];
-  }
+  
   [[[self activeCallViewController] callProgressIndicator] stopAnimation:self];
   [[[self activeCallViewController] hangUpButton] setEnabled:NO];
   [[[self incomingCallViewController] acceptCallButton] setEnabled:NO];
@@ -423,17 +419,13 @@ static const NSTimeInterval kRedialButtonReenableTime = 1.0;
                                       @"Outgoing call in progress.")];
   }
   
-  [[self window]
-   ak_resizeAndSwapToContentView:[[self activeCallViewController] view]
-                         animate:YES];
-  
-  // Insert |activeCallViewController| into the responder chain.
-  if (![[[[self activeCallViewController] view] nextResponder] isEqual:
+  if (![[self objectInViewControllersAtIndex:0] isEqual:
         [self activeCallViewController]]) {
-    [[self activeCallViewController] setNextResponder:
-     [[[self activeCallViewController] view] nextResponder]];
-    [[[self activeCallViewController] view] setNextResponder:
-     [self activeCallViewController]];
+    [self removeObjectFromViewControllersAtIndex:0];
+    [self addViewController:[self activeCallViewController]];
+    [[self window]
+     ak_resizeAndSwapToContentView:[[self activeCallViewController] view]
+                           animate:YES];
   }
 }
 
@@ -460,17 +452,13 @@ static const NSTimeInterval kRedialButtonReenableTime = 1.0;
       [self setStatus:NSLocalizedString(@"ringing", @"Remote party ringing.")];
     }
     
-    [[self window]
-     ak_resizeAndSwapToContentView:[[self activeCallViewController] view]
-                           animate:YES];
-    
-    // Insert |activeCallViewController| into the responder chain.
-    if (![[[[self activeCallViewController] view] nextResponder] isEqual:
+    if (![[self objectInViewControllersAtIndex:0] isEqual:
           [self activeCallViewController]]) {
-      [[self activeCallViewController] setNextResponder:
-       [[[self activeCallViewController] view] nextResponder]];
-      [[[self activeCallViewController] view] setNextResponder:
-       [self activeCallViewController]];
+      [self removeObjectFromViewControllersAtIndex:0];
+      [self addViewController:[self activeCallViewController]];
+      [[self window]
+       ak_resizeAndSwapToContentView:[[self activeCallViewController] view]
+                             animate:YES];
     }
   }
 }
@@ -494,17 +482,13 @@ static const NSTimeInterval kRedialButtonReenableTime = 1.0;
   
   [[self activeCallViewController] startCallTimer];
   
-  [[self window]
-   ak_resizeAndSwapToContentView:[[self activeCallViewController] view]
-                         animate:YES];
-  
-  // Insert |activeCallViewController| into the responder chain.
-  if (![[[[self activeCallViewController] view] nextResponder] isEqual:
+  if (![[self objectInViewControllersAtIndex:0] isEqual:
         [self activeCallViewController]]) {
-    [[self activeCallViewController] setNextResponder:
-     [[[self activeCallViewController] view] nextResponder]];
-    [[[self activeCallViewController] view] setNextResponder:
-     [self activeCallViewController]];
+    [self removeObjectFromViewControllersAtIndex:0];
+    [self addViewController:[self activeCallViewController]];
+    [[self window]
+     ak_resizeAndSwapToContentView:[[self activeCallViewController] view]
+                           animate:YES];
   }
   
   if ([[[self activeCallViewController] view] acceptsFirstResponder])
@@ -570,17 +554,13 @@ static const NSTimeInterval kRedialButtonReenableTime = 1.0;
   // Don't forget to re-enable it below!
   [[[self endedCallViewController] redialButton] setEnabled:NO];
   
-  [[self window]
-   ak_resizeAndSwapToContentView:[[self endedCallViewController] view]
-                         animate:YES];
-  
-  // Insert |endedCallViewController| into the responder chain.
-  if (![[[[self endedCallViewController] view] nextResponder] isEqual:
+  if (![[self objectInViewControllersAtIndex:0] isEqual:
         [self endedCallViewController]]) {
-    [[self endedCallViewController] setNextResponder:
-     [[[self endedCallViewController] view] nextResponder]];
-    [[[self endedCallViewController] view] setNextResponder:
-     [self endedCallViewController]];
+    [self removeObjectFromViewControllersAtIndex:0];
+    [self addViewController:[self endedCallViewController]];
+    [[self window]
+     ak_resizeAndSwapToContentView:[[self endedCallViewController] view]
+                           animate:YES];
   }
   
   [[[self activeCallViewController] callProgressIndicator] stopAnimation:self];

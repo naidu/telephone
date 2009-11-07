@@ -55,6 +55,7 @@
                windowController:callController];
   if (self != nil) {
     enteredDTMF_ = [[NSMutableString alloc] init];
+    [self setCallController:callController];
   }
   return self;
 }
@@ -62,7 +63,7 @@
 - (id)init {
   [self dealloc];
   NSString *reason
-    = @"Initialize IncomingCallViewController with initWithCallController:";
+    = @"Initialize ActiveCallViewController with initWithCallController:";
   @throw [NSException exceptionWithName:@"AKBadInitCall"
                                  reason:reason
                                userInfo:nil];
