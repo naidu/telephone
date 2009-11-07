@@ -31,6 +31,7 @@
 #import <Cocoa/Cocoa.h>
 
 #import "AKSIPAccount.h"
+#import "XSWindowController.h"
 
 
 // Account states.
@@ -47,7 +48,7 @@ extern NSString * const kEmailSIPLabel;
 @class ActiveAccountViewController, AuthenticationFailureController;
 
 // A SIP account controller.
-@interface AccountController : NSWindowController <AKSIPAccountDelegate> {
+@interface AccountController : XSWindowController <AKSIPAccountDelegate> {
  @private
   BOOL enabled_;
   AKSIPAccount *account_;

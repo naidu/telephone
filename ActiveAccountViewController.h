@@ -30,9 +30,13 @@
 
 #import <Cocoa/Cocoa.h>
 
+#import "XSViewController.h"
+
+
+@class AccountController;
 
 // An active account view controller.
-@interface ActiveAccountViewController : NSViewController {
+@interface ActiveAccountViewController : XSViewController {
  @private 
   NSTokenField *callDestinationField_;
   NSUInteger callDestinationURIIndex_;
@@ -41,6 +45,11 @@
 // Call destination token field outlet.
 @property(nonatomic, retain) IBOutlet NSTokenField *callDestinationField;
 
+
+// Designated initializer.
+// Initializes an ActiveAccountViewController object with a given account
+// controller.
+- (id)initWithAccountController:(AccountController *)accountController;
 
 // Makes a call.
 - (IBAction)makeCall:(id)sender;

@@ -57,8 +57,21 @@ static NSString * const kPhoneLabel = @"PhoneLabel";
 @synthesize callDestinationField = callDestinationField_;
 @synthesize callDestinationURIIndex = callDestinationURIIndex_;
 
+- (id)initWithAccountController:(AccountController *)accountController {
+  self = [super initWithNibName:@"ActiveAccountView"
+                         bundle:nil
+               windowController:accountController];
+  return self;
+}
+
 - (id)init {
-  return [super initWithNibName:@"ActiveAccountView" bundle:nil];
+  [self dealloc];
+  NSString *reason
+    = @"Initialize ActiveAccountViewController with initWithAccountController:";
+  @throw [NSException exceptionWithName:@"AKBadInitCall"
+                                 reason:reason
+                               userInfo:nil];
+  return nil;
 }
 
 - (void)awakeFromNib {

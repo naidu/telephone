@@ -222,8 +222,10 @@ NSString * const kEmailSIPLabel = @"sip";
 }
 
 - (ActiveAccountViewController *)activeAccountViewController {
-  if (activeAccountViewController_ == nil)
-    activeAccountViewController_ = [[ActiveAccountViewController alloc] init];
+  if (activeAccountViewController_ == nil) {
+    activeAccountViewController_
+      = [[ActiveAccountViewController alloc] initWithAccountController:self];
+  }
   
   return activeAccountViewController_;
 }
@@ -533,21 +535,15 @@ NSString * const kEmailSIPLabel = @"sip";
   [[[[self accountStatePopUp] menu]
     itemWithTag:kSIPAccountUnavailable] setState:NSOffState];
   
-  [[self window] setContentView:[[self activeAccountViewController] view]];
+  if ([self countOfViewControllers] == 0) {
+    [self addViewController:[self activeAccountViewController]];
+    [[self window] setContentView:[[self activeAccountViewController] view]];
   
-  // Insert |activeAccountViewController| into the responder chain.
-  if (![[[[self activeAccountViewController] view] nextResponder] isEqual:
-        [self activeAccountViewController]]) {
-    [[self activeAccountViewController] setNextResponder:
-     [[[self activeAccountViewController] view] nextResponder]];
-    [[[self activeAccountViewController] view] setNextResponder:
-     [self activeAccountViewController]];
-  }
-  
-  if ([[[self activeAccountViewController] callDestinationField]
-       acceptsFirstResponder]) {
-    [[self window] makeFirstResponder:
-     [[self activeAccountViewController] callDestinationField]];
+    if ([[[self activeAccountViewController] callDestinationField]
+         acceptsFirstResponder]) {
+      [[self window] makeFirstResponder:
+       [[self activeAccountViewController] callDestinationField]];
+    }
   }
 }
 
@@ -574,21 +570,15 @@ NSString * const kEmailSIPLabel = @"sip";
   [[[[self accountStatePopUp] menu]
     itemWithTag:kSIPAccountUnavailable] setState:NSOnState];
   
-  [[self window] setContentView:[[self activeAccountViewController] view]];
-  
-  // Insert |activeAccountViewController| into the responder chain.
-  if (![[[[self activeAccountViewController] view] nextResponder] isEqual:
-        [self activeAccountViewController]]) {
-    [[self activeAccountViewController] setNextResponder:
-     [[[self activeAccountViewController] view] nextResponder]];
-    [[[self activeAccountViewController] view] setNextResponder:
-     [self activeAccountViewController]];
-  }
-  
-  if ([[[self activeAccountViewController] callDestinationField]
-       acceptsFirstResponder]) {
-    [[self window] makeFirstResponder:
-     [[self activeAccountViewController] callDestinationField]];
+  if ([self countOfViewControllers] == 0) {
+    [self addViewController:[self activeAccountViewController]];
+    [[self window] setContentView:[[self activeAccountViewController] view]];
+    
+    if ([[[self activeAccountViewController] callDestinationField]
+         acceptsFirstResponder]) {
+      [[self window] makeFirstResponder:
+       [[self activeAccountViewController] callDestinationField]];
+    }
   }
 }
 
@@ -615,6 +605,7 @@ NSString * const kEmailSIPLabel = @"sip";
   [[[[self accountStatePopUp] menu]
     itemWithTag:kSIPAccountUnavailable] setState:NSOffState];
   
+  [self removeViewController:[self activeAccountViewController]];
   NSRect frame = [[[self window] contentView] frame];
   NSView *emptyView = [[[NSView alloc] initWithFrame:frame] autorelease];
   NSUInteger autoresizingMask = NSViewWidthSizable | NSViewHeightSizable;
