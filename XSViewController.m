@@ -78,7 +78,10 @@
 // ---------------------------------
 - (id)initWithNibName:(NSString *)name bundle:(NSBundle *)bundle;
 {
-	[NSException raise:@"XSViewControllerException" format:[NSString stringWithFormat:@"An instance of an XSViewController concrete subclass was initialized using the NSViewController method -initWithNibName:bundle: all view controllers in the enusing tree will have no reference to an XSWindowController object and cannot be automatically added to the responder chain"]];
+//	[NSException raise:@"XSViewControllerException" format:[NSString stringWithFormat:@"An instance of an XSViewController concrete subclass was initialized using the NSViewController method -initWithNibName:bundle: all view controllers in the enusing tree will have no reference to an XSWindowController object and cannot be automatically added to the responder chain"]];
+    @throw [NSException exceptionWithName:@"XSViewControllerException"
+                                   reason:@"An instance of an XSViewController concrete subclass was initialized using the NSViewController method -initWithNibName:bundle: all view controllers in the enusing tree will have no reference to an XSWindowController object and cannot be automatically added to the responder chain"
+                                 userInfo:nil];
 	return nil;
 }
 

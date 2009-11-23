@@ -72,6 +72,12 @@
   [super dealloc];
 }
 
+- (void)removeObservations {
+  [[self displayedNameField] unbind:NSValueBinding];
+  [[self statusField] unbind:NSValueBinding];
+  [super removeObservations];
+}
+
 - (void)awakeFromNib {
   [[[self displayedNameField] cell] setBackgroundStyle:NSBackgroundStyleRaised];
   [[[self statusField] cell] setBackgroundStyle:NSBackgroundStyleRaised];
