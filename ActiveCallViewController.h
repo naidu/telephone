@@ -83,6 +83,12 @@
 // Hangs up call.
 - (IBAction)hangUpCall:(id)sender;
 
+// Toggles call hold.
+- (IBAction)toggleCallHold:(id)sender;
+
+// Toggles microphone mute.
+- (IBAction)toggleMicrophoneMute:(id)sender;
+
 // Starts call timer.
 - (void)startCallTimer;
 

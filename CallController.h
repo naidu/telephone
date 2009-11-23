@@ -136,10 +136,10 @@ extern NSString * const AKCallWindowWillCloseNotification;
 - (void)redial;
 
 // Toggles call hold.
-- (IBAction)toggleCallHold:(id)sender;
+- (void)toggleCallHold;
 
 // Toggles microphone mute.
-- (IBAction)toggleMicrophoneMute:(id)sender;
+- (void)toggleMicrophoneMute;
 
 // Sets intermediate call status. This status appears for the short period of
 // time and then is being replaced with the current call status.

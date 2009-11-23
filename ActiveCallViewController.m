@@ -125,6 +125,14 @@
   [[self callController] hangUpCall];
 }
 
+- (IBAction)toggleCallHold:(id)sender {
+  [[self callController] toggleCallHold];
+}
+
+- (IBAction)toggleMicrophoneMute:(id)sender {
+  [[self callController] toggleMicrophoneMute];
+}
+
 - (void)startCallTimer {
   if ([self callTimer] != nil && [[self callTimer] isValid])
     return;
@@ -213,8 +221,47 @@
       [[self callController] setDisplayedName:[self enteredDTMF]];
     }
     
-    [[self representedObject] sendDTMFDigits:aString];
+    [[[self callController] call] sendDTMFDigits:aString];
   }
+}
+
+
+#pragma mark -
+#pragma mark NSMenuValidation protocol
+
+- (BOOL)validateMenuItem:(NSMenuItem *)menuItem {
+  if ([menuItem action] == @selector(toggleMicrophoneMute:)) {
+    if ([[[self callController] call] isMicrophoneMuted]) {
+      [menuItem setTitle:NSLocalizedString(@"Unmute",
+                                           @"Unmute. Call menu item.")];
+    } else {
+      [menuItem setTitle:NSLocalizedString(@"Mute", @"Mute. Call menu item.")];
+    }
+    
+    if ([[[self callController] call] state] == kAKSIPCallConfirmedState) {
+      return YES;
+    } else {
+      return NO;
+    }
+    
+  } else if ([menuItem action] == @selector(toggleCallHold:)) {
+    if ([[[self callController] call] state] == kAKSIPCallConfirmedState &&
+        [[[self callController] call] isOnLocalHold]) {
+      [menuItem setTitle:NSLocalizedString(@"Resume",
+                                           @"Resume. Call menu item.")];
+    } else {
+      [menuItem setTitle:NSLocalizedString(@"Hold", @"Hold. Call menu item.")];
+    }
+    
+    if ([[[self callController] call] state] == kAKSIPCallConfirmedState &&
+        ![[[self callController] call] isOnRemoteHold]) {
+      return YES;
+    } else {
+      return NO;
+    }
+  }
+  
+  return YES;
 }
 
 @end

@@ -311,13 +311,13 @@ static const NSTimeInterval kRedialButtonReenableTime = 1.0;
   }
 }
 
-- (IBAction)toggleCallHold:(id)sender {
+- (void)toggleCallHold {
   if ([[self call] state] == kAKSIPCallConfirmedState &&
       ![[self call] isOnRemoteHold])
   [[self call] toggleHold];
 }
 
-- (IBAction)toggleMicrophoneMute:(id)sender {
+- (void)toggleMicrophoneMute {
   if ([[self call] state] != kAKSIPCallConfirmedState)
     return;
   
@@ -653,44 +653,6 @@ static const NSTimeInterval kRedialButtonReenableTime = 1.0;
   [[self activeCallViewController] stopCallTimer];
   [self setStatus:NSLocalizedString(@"on remote hold",
                                     @"Call on remote hold status text.")];
-}
-
-
-#pragma mark -
-#pragma mark NSMenuValidation protocol
-
-- (BOOL)validateMenuItem:(NSMenuItem *)menuItem {
-  if ([menuItem action] == @selector(toggleMicrophoneMute:)) {
-    if ([[self call] isMicrophoneMuted]) {
-      [menuItem setTitle:NSLocalizedString(@"Unmute",
-                                           @"Unmute. Call menu item.")];
-    } else {
-      [menuItem setTitle:NSLocalizedString(@"Mute", @"Mute. Call menu item.")];
-    }
-    
-    if ([[self call] state] == kAKSIPCallConfirmedState)
-      return YES;
-    
-    return NO;
-    
-  } else if ([menuItem action] == @selector(toggleCallHold:)) {
-    if ([[self call] state] == kAKSIPCallConfirmedState &&
-        [[self call] isOnLocalHold]) {
-      [menuItem setTitle:NSLocalizedString(@"Resume",
-                                           @"Resume. Call menu item.")];
-    } else {
-      [menuItem setTitle:NSLocalizedString(@"Hold", @"Hold. Call menu item.")];
-    }
-    
-    if ([[self call] state] == kAKSIPCallConfirmedState &&
-        ![[self call] isOnRemoteHold]) {
-      return YES;
-    }
-    
-    return NO; 
-  }
-  
-  return YES;
 }
 
 @end
