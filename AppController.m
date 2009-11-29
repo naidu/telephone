@@ -428,8 +428,9 @@ static void NameserversChanged(SCDynamicStoreRef store,
   [userAgent_ dealloc];
   [accountControllers_ release];
   
-  if ([[[self preferencesController] delegate] isEqual:self])
-    [[self preferencesController] setDelegate:nil];
+  if ([[preferencesController_ delegate] isEqual:self]) {
+    [preferencesController_ setDelegate:nil];
+  }
   [preferencesController_ release];
   
   [audioDevices_ release];
