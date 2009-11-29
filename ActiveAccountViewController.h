@@ -37,10 +37,14 @@
 
 // An active account view controller.
 @interface ActiveAccountViewController : XSViewController {
- @private 
+ @private
+  AccountController *accountController_;
   NSTokenField *callDestinationField_;
   NSUInteger callDestinationURIIndex_;
 }
+
+// Account controller the receiver belongs to.
+@property(nonatomic, assign) AccountController *accountController;
 
 // Call destination token field outlet.
 @property(nonatomic, retain) IBOutlet NSTokenField *callDestinationField;
@@ -49,7 +53,7 @@
 // Designated initializer.
 // Initializes an ActiveAccountViewController object with a given account
 // controller.
-- (id)initWithAccountController:(AccountController *)accountController;
+- (id)initWithAccountController:(AccountController *)anAccountController;
 
 // Makes a call.
 - (IBAction)makeCall:(id)sender;

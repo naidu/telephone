@@ -54,13 +54,17 @@ static NSString * const kPhoneLabel = @"PhoneLabel";
 
 @implementation ActiveAccountViewController
 
+@synthesize accountController = accountController_;
 @synthesize callDestinationField = callDestinationField_;
 @synthesize callDestinationURIIndex = callDestinationURIIndex_;
 
-- (id)initWithAccountController:(AccountController *)accountController {
+- (id)initWithAccountController:(AccountController *)anAccountController {
   self = [super initWithNibName:@"ActiveAccountView"
                          bundle:nil
-               windowController:accountController];
+               windowController:anAccountController];
+  if (self != nil) {
+    [self setAccountController:anAccountController];
+  }
   return self;
 }
 
@@ -104,9 +108,7 @@ static NSString * const kPhoneLabel = @"PhoneLabel";
   
   if ([uri isKindOfClass:[AKSIPURI class]] &&
       [[uri user] length] > 0) {
-    AccountController *accountController
-      = [[[self view] window] windowController];
-    [accountController makeCallToURI:uri phoneLabel:phoneLabel];
+    [[self accountController] makeCallToURI:uri phoneLabel:phoneLabel];
   }
 }
 
