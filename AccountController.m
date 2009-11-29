@@ -292,7 +292,7 @@ NSString * const kEmailSIPLabel = @"sip";
   [[NSNotificationCenter defaultCenter] removeObserver:self];
   
   // Close authentication failure sheet if it's raised.
-  [[[self authenticationFailureController] cancelButton] performClick:nil];
+  [[authenticationFailureController_ cancelButton] performClick:nil];
   
   [account_ release];
   [callControllers_ release];
