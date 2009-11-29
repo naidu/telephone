@@ -51,6 +51,7 @@
 #import "AppController.h"
 #import "AuthenticationFailureController.h"
 #import "CallController.h"
+#import "EndedCallViewController.h"
 #import "IncomingCallViewController.h"
 #import "PreferencesController.h"
 
@@ -442,6 +443,9 @@ NSString * const kEmailSIPLabel = @"sip";
     [aCallController setCall:aCall];
     [aCallController setCallActive:YES];
   } else {
+    [aCallController removeObjectFromViewControllersAtIndex:0];
+    [aCallController addViewController:
+     [aCallController endedCallViewController]];
     [[aCallController window] setContentView:
      [[aCallController endedCallViewController] view]];
     [aCallController setStatus:NSLocalizedString(@"Call Failed",
